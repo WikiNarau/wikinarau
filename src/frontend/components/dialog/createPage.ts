@@ -1,0 +1,59 @@
+import { html, css, LitElement } from "lit";
+import { customElement, query } from "lit/decorators.js";
+import { typographicStyles } from "../styles/typographic";
+import { titleToURI } from "../../../common/tuid";
+import { updateContentRevision } from "../../rpc";
+
+@customElement("i6q-dialog-create-page")
+export class DialogCreatePage extends LitElement {
+	static styles = [
+		typographicStyles,
+		css`
+
+`,
+	];
+
+	@query("sl-dialog")
+	dialog: any;
+
+	@query(`sl-input[name="title"]`)
+	inputTitle?: HTMLInputElement;
+
+	public show() {
+		if (this.dialog && this.dialog.show) {
+			this.dialog.show();
+		}
+	}
+
+	public close() {
+		if (this.dialog && this.dialog.hide) {
+			this.dialog.hide();
+		}
+	}
+
+	private async create() {
+		const title = this.inputTitle?.value || "";
+		if (!title) {
+			return;
+		}
+		const uri = "/wiki/" + titleToURI(title);
+		if (uri.length < 5) {
+			return;
+		}
+
+		await updateContentRevision(uri, '[{"T":"StemCell"}]', title);
+		document.location.replace(`${uri}#edit`);
+	}
+
+	render() {
+		return html`
+<sl-dialog label="Create a new page">
+	How should this new page be called?
+	<sl-input placeholder="Title" name="title" style="margin-top:1rem;"></sl-input>
+	<sl-button-group slot="footer">
+		<sl-button variant="warning" @click=${this.close}>Close</sl-button>
+		<sl-button variant="success" @click=${this.create}>Create</sl-button>
+	</sl-button-group>
+</sl-dialog>`;
+	}
+}

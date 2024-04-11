@@ -1,0 +1,111 @@
+/* This file contains rules for the overall layout to workout, personalization probably shouldn't happen here, since
+ * values that are expected to be customized are declared as variables in vars.css
+ */
+
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	display: block;
+	height: 100%;
+}
+
+body {
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+}
+
+main {
+	padding-top: 2.75rem;
+	margin:0 auto;
+	position: relative;
+	width: 100%;
+	max-width: 1260px;
+}
+
+main > .left {
+	float: left;
+}
+
+main > .right {
+	float: right;
+}
+
+main > aside {
+	width: 156px;
+	margin-top: 1rem;
+}
+
+main > section {
+	margin:0 auto;
+	position: relative;
+	width: 100%;
+	padding:1rem 2rem 1rem;
+	background: var(--color-background-light);
+	box-shadow: 0px 0px 4px 1px var(--color-background-dark);
+	max-width: 920px;
+}
+
+main > section > i6q-code + i6q-frame,
+main > section > i6q-editor + i6q-frame {
+	display: none;
+}
+
+main::after {
+	content: '';
+	clear: both;
+	display: block;
+}
+
+footer {
+	clear: both;
+	background: var(--color-background-dark);
+	margin-top: 4rem;
+	width: 100%;
+	display: block;
+	border-top: solid 2px var(--color-primary);
+}
+
+#footer {
+	margin:0 auto;
+	width: 100%;
+	padding:1rem 2rem;
+	max-width: 960px;
+	text-align: center;
+}
+
+h1 {
+	font-size: 3rem;
+	margin: 0 0 0rem;
+}
+
+h2 {
+	font-size: 2.4rem;
+	margin: 0 0 1rem;
+}
+
+h3 {
+	font-size: 2rem;
+	margin: 0 0 1rem;
+}
+
+h1,h2,h3 {
+	font-family: var(--header-font-family);
+	font-weight: 300;
+}
+h4,h5,h6,p,ul,ol {
+	font-family: var(--font-family);
+}
+
+a {
+	text-decoration: none;
+	color: var(--color-primary);
+}
+
+p {
+	font-size: 1.1rem;
+	line-height: 1.35em;
+}

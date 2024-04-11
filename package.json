@@ -1,0 +1,39 @@
+{
+	"name": "wikinarau",
+	"version": "0.0.1",
+	"type": "module",
+	"author": "Benjamin Vincent Schulenburg <bennyschulenburg@gmx.de>",
+	"license": "EUPL-1.2",
+	"scripts": {
+		"dev": "NODE_ENV=development tsx --watch --watch-path=./src/backend/ ./src/backend/index.ts",
+		"dev:old": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+		"dev:backend": "tsx --watch ./src/backend/index.ts",
+		"dev:frontend": "vite",
+
+		"check": "tsc -p ./tsconfig.json --noEmit",
+
+		"format": "npx @biomejs/biome format --write ./src",
+		"preview:frontend": "vite preview",
+
+		"build": "tsc && vite build",
+		"start": "tsx ./src/backend/index.ts"
+	},
+	"dependencies": {
+		"@shoelace-style/shoelace": "latest",
+		"better-sqlite3": "latest",
+		"express": "latest",
+		"lit": "latest",
+		"tsx": "latest",
+		"ws": "latest"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "latest",
+		"@types/better-sqlite3": "latest",
+		"@types/express": "latest",
+		"@types/node": "latest",
+		"@types/ws": "latest",
+		"concurrently": "latest",
+		"typescript": "latest",
+		"vite": "latest"
+	}
+}

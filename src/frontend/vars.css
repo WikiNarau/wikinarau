@@ -1,0 +1,48 @@
+/* This file contains default variables that are used within other stylesheets as well as the components themselves.
+ * If you want to personalize an instance, this file is the best place to start!
+ */
+
+:root {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color: var(--color-text);
+	background-color: var(--color-background);
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	--font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	--header-font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif;
+
+
+	--color-text: #242424;
+	--color-background: #EEE;
+	--color-background-light: #FFF;
+	--color-background-dark: #DDD;
+
+	--color-primary: #37B;
+	--color-primary-dark: #1c4773;
+	--color-primary-light: #72a0d1;
+	--color-primary-text: #FFF;
+
+	--color-secondary: #bb33a4;
+	--color-secondary-dark: #5c1450;
+	--color-secondary-light: #dc8bc9;
+	--color-secondary-text: #242424;
+
+	--color-correct: #3B7;
+	--color-correct-dark: #1A4;
+	--color-correct-light: #5FA;
+
+	--color-wrong: #B73;
+	--color-wrong-dark: #A41;
+	--color-wrong-light: #FA5;
+
+	--color-error: #E41;
+	--color-error-dark: #D20;
+	--color-error-light: #F41;
+}
