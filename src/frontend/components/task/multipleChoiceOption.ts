@@ -87,7 +87,7 @@ export class MultipleChoiceOption extends EditableElement {
 	}
 
 	render() {
-		if (this.edit) {
+		if (this.frameState === "edit") {
 			if (!this.editValue) {
 				this.editValue = this.innerHTML.trim();
 			}

@@ -137,7 +137,6 @@ export class Entry {
 	public renderHTML() {
 		const html = this.renderContent();
 		const content = `<h1>${this.title}</h1>
-		<i6q-page-bar></i6q-page-bar>
 		<i6q-frame section="main">${html}</i6q-frame>`;
 		return Entry.renderTemplate(this.title, content);
 	}

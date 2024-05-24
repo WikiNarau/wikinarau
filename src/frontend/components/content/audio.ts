@@ -32,7 +32,7 @@ export class Audio extends EditableElement {
 	}
 
 	render() {
-		if (this.edit) {
+		if (this.frameState === "edit") {
 			return this.renderEdit();
 		}
 		return this.src ? html`<audio src="${this.src}" controls></audio>` : html``;

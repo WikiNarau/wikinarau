@@ -1,11 +1,14 @@
 import { LitElement } from "lit";
-import { property } from "lit/decorators.js";
 import { generateTypeUID } from "../../../common/tuid";
 import { SerializedElement } from "../../../common/contentTypes";
+import { consume } from "@lit/context";
+import { type FrameState, frameStateContext } from "../context";
+import { property } from "lit/decorators.js";
 
 export abstract class EditableElement extends LitElement {
-	@property({ type: Boolean })
-	protected edit = false;
+	@consume({context: frameStateContext, subscribe: true})
+	@property({attribute: false})
+	protected frameState?: FrameState;
 
 	static tagName(): string {
 		return "error";
@@ -182,27 +185,18 @@ export abstract class EditableElement extends LitElement {
 
 	connectedCallback() {
 		super.connectedCallback();
-		let ele = this.parentElement;
-		while (ele) {
-			if (ele.tagName === "I6Q-EDITOR") {
-				this.edit = true;
-				break;
-			}
-			ele = ele.parentElement;
-		}
-		if (this.edit) {
-			this.addEventListener("remove", this._removeHandler);
-			this.addEventListener("moveUp", this._moveUpHandler);
-			this.addEventListener("moveDown", this._moveDownHandler);
-			this.addEventListener("newElement", this._newElementHandler);
 
-			this.setAttribute("droppable", "true");
-			this.addEventListener("dragstart", this._dragStart);
-			this.addEventListener("dragend", this._dragEnd);
+		this.addEventListener("remove", this._removeHandler);
+		this.addEventListener("moveUp", this._moveUpHandler);
+		this.addEventListener("moveDown", this._moveDownHandler);
+		this.addEventListener("newElement", this._newElementHandler);
 
-			this.addEventListener("dragover", this._dragOver);
-			this.addEventListener("drop", this._drop);
-		}
+		this.setAttribute("droppable", "true");
+		this.addEventListener("dragstart", this._dragStart);
+		this.addEventListener("dragend", this._dragEnd);
+
+		this.addEventListener("dragover", this._dragOver);
+		this.addEventListener("drop", this._drop);
 	}
 
 	disconnectedCallback() {
@@ -210,6 +204,12 @@ export abstract class EditableElement extends LitElement {
 		this.removeEventListener("moveUp", this._moveUpHandler);
 		this.removeEventListener("moveDown", this._moveDownHandler);
 		this.removeEventListener("newElement", this._newElementHandler);
+
+		this.removeEventListener("dragstart", this._dragStart);
+		this.removeEventListener("dragend", this._dragEnd);
+
+		this.removeEventListener("dragover", this._dragOver);
+		this.removeEventListener("drop", this._drop);
 	}
 
 	dispatchEditEvent() {

@@ -9,16 +9,14 @@
 		"dev:old": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
 		"dev:backend": "tsx --watch ./src/backend/index.ts",
 		"dev:frontend": "vite",
-
 		"check": "tsc -p ./tsconfig.json --noEmit",
-
 		"format": "npx @biomejs/biome format --write ./src",
 		"preview:frontend": "vite preview",
-
 		"build": "tsc && vite build",
 		"start": "tsx ./src/backend/index.ts"
 	},
 	"dependencies": {
+		"@lit/context": "^1.1.1",
 		"@shoelace-style/shoelace": "latest",
 		"better-sqlite3": "latest",
 		"express": "latest",

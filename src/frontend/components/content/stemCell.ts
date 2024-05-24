@@ -21,7 +21,7 @@ export class StemCell extends EditableElement {
 	}
 
 	render() {
-		if (this.edit) {
+		if (this.frameState === "edit") {
 			return this.renderEdit();
 		}
 		return html``;

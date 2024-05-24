@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 
 @customElement("i6q-page-bar")
 export class PageBar extends LitElement {
-	@property({ type: String, reflect: true })
+	@property({ type: String })
 	public activeSection = "main";
 
 	private _onHashChange: () => void;
@@ -40,6 +40,8 @@ export class PageBar extends LitElement {
 		if (this.activeSection === "main") {
 			return;
 		}
+		this.dispatchEvent(new CustomEvent("sectionChange", {detail: "main", bubbles: true, composed: true}));
+		/*
 		this.activeSection = "main";
 		window.location.hash = "";
 
@@ -49,12 +51,15 @@ export class PageBar extends LitElement {
 		}
 		main.querySelector("i6q-editor")?.remove();
 		main.querySelector("i6q-code")?.remove();
+		*/
 	}
 
 	private switchToEdit() {
 		if (this.activeSection === "edit") {
 			return;
 		}
+		this.dispatchEvent(new CustomEvent("sectionChange", {detail: "edit", bubbles: true, composed: true}));
+		/*
 		this.switchToMain();
 		this.activeSection = "edit";
 		window.location.hash = "edit";
@@ -71,12 +76,16 @@ export class PageBar extends LitElement {
 		const editor = document.createElement("i6q-editor");
 		editor.innerHTML = mainFrame.innerHTML;
 		mainFrame.parentElement?.insertBefore(editor, mainFrame);
+		*/
 	}
 
 	private switchToCode() {
 		if (this.activeSection === "code") {
 			return;
 		}
+		this.dispatchEvent(new CustomEvent("sectionChange", {detail: "code", bubbles: true, composed: true}));
+
+		/*
 		this.switchToMain();
 		this.activeSection = "code";
 		window.location.hash = "code";
@@ -93,6 +102,7 @@ export class PageBar extends LitElement {
 		const editor = document.createElement("i6q-code");
 		editor.innerHTML = mainFrame.innerHTML;
 		mainFrame.parentElement?.insertBefore(editor, mainFrame);
+		*/
 	}
 
 	render() {

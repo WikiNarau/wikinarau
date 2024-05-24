@@ -32,7 +32,7 @@ export class Video extends EditableElement {
 	}
 
 	render() {
-		if (this.edit) {
+		if (this.frameState === "edit") {
 			return this.renderEdit();
 		}
 		return this.src ? html`<video src="${this.src}" controls></video>` : html``;

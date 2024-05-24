@@ -40,7 +40,7 @@ export class Img extends EditableElement {
 	}
 
 	render() {
-		if (this.edit) {
+		if (this.frameState === "edit") {
 			return this.renderEdit();
 		}
 		return html`<img src="${this.src}" width="${this.width}" height="${this.height}" />`;

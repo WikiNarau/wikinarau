@@ -1,7 +1,6 @@
-import { LitElement, PropertyValueMap, html } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { updateContentRevision } from "../../rpc";
-import type { Frame } from "../context";
 
 @customElement("i6q-code")
 export class Code extends LitElement {
@@ -23,16 +22,6 @@ export class Code extends LitElement {
 		}
 	}
 
-	firstUpdated(props: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
-		super.firstUpdated(props);
-		const mainFrame = document.body.querySelector<Frame>(
-			"main > section > i6q-frame",
-		);
-		if (mainFrame && !this.value) {
-			this.value = JSON.stringify(mainFrame.serialize());
-		}
-	}
-
 	async save() {
 		const uri = window.location.pathname;
 
@@ -45,8 +34,8 @@ export class Code extends LitElement {
 
 	render() {
 		return html`
-		<i6q-edit-bar @save=${this.save} />
-		<sl-textarea rows=25 @input=${this.editCB} value=${this.value}></textarea>`;
+		<i6q-edit-bar @save=${this.save}></i6q-edit-bar>
+		<sl-textarea rows=25 @input=${this.editCB} value=${this.value}></sl-textarea>`;
 	}
 }
 

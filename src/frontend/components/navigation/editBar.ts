@@ -46,8 +46,7 @@ export class EditBar extends LitElement {
 					</sl-button>
 				</sl-button-group>
 			</div>
-		</div>
-		<slot></slot>`;
+		</div>`;
 	}
 
 	static styles = css`
