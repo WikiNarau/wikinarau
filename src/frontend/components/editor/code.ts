@@ -13,12 +13,6 @@ export class Code extends LitElement {
 	private editCB(e: Event) {
 		if (e.target) {
 			this.value = (e.target as any).value;
-			const mainFrame = document.body.querySelector(
-				"main > section > i6q-frame",
-			);
-			if (mainFrame) {
-				//mainFrame.innerHTML = this.value;
-			}
 		}
 	}
 
@@ -36,11 +30,5 @@ export class Code extends LitElement {
 		return html`
 		<i6q-edit-bar @save=${this.save}></i6q-edit-bar>
 		<sl-textarea rows=25 @input=${this.editCB} value=${this.value}></sl-textarea>`;
-	}
-}
-
-declare global {
-	interface HTMLElementTagNameMap {
-		"i6q-code": Code;
 	}
 }

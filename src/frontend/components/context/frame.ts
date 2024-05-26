@@ -19,6 +19,10 @@ export class Frame extends LitElement {
 	private code = '';
 
 	private changeSection(sec: string) {
+		if(sec === this.activeSection){
+			return;
+		}
+
 		this.activeSection = sec;
 		if(sec === "main"){
 			const url = window.location.pathname + window.location.search;
@@ -35,7 +39,7 @@ export class Frame extends LitElement {
 	}
 
 	sectionChange(e: CustomEvent) {
-		const sec = e.detail || '';
+		const sec = e.detail || 'main';
 		if(sec){
 			this.changeSection(sec);
 		}

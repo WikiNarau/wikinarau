@@ -6,103 +6,16 @@ export class PageBar extends LitElement {
 	@property({ type: String })
 	public activeSection = "main";
 
-	private _onHashChange: () => void;
-	private onHashChange() {
-		this.switchToSection((document.location.hash || "#main").substring(1));
-	}
-
-	private switchToSection(section: string) {
-		switch (section) {
-			case "main":
-				this.switchToMain();
-				break;
-			case "code":
-				this.switchToCode();
-				break;
-			case "edit":
-				this.switchToEdit();
-				break;
-		}
-	}
-
-	constructor() {
-		super();
-		this._onHashChange = this.onHashChange.bind(this);
-		this.onHashChange();
-	}
-
-	connectedCallback(): void {
-		super.connectedCallback();
-		window.addEventListener("hashchange", this._onHashChange);
-	}
-
 	private switchToMain() {
-		if (this.activeSection === "main") {
-			return;
-		}
 		this.dispatchEvent(new CustomEvent("sectionChange", {detail: "main", bubbles: true, composed: true}));
-		/*
-		this.activeSection = "main";
-		window.location.hash = "";
-
-		const main = document.querySelector("main");
-		if (!main) {
-			throw new Error("Can't find <main>");
-		}
-		main.querySelector("i6q-editor")?.remove();
-		main.querySelector("i6q-code")?.remove();
-		*/
 	}
 
 	private switchToEdit() {
-		if (this.activeSection === "edit") {
-			return;
-		}
 		this.dispatchEvent(new CustomEvent("sectionChange", {detail: "edit", bubbles: true, composed: true}));
-		/*
-		this.switchToMain();
-		this.activeSection = "edit";
-		window.location.hash = "edit";
-
-		const main = document.querySelector("main");
-		if (!main) {
-			throw new Error("Can't find <main>");
-		}
-
-		const mainFrame = main.querySelector("i6q-frame");
-		if (!mainFrame) {
-			throw new Error("Can't find <i6q-frame>");
-		}
-		const editor = document.createElement("i6q-editor");
-		editor.innerHTML = mainFrame.innerHTML;
-		mainFrame.parentElement?.insertBefore(editor, mainFrame);
-		*/
 	}
 
 	private switchToCode() {
-		if (this.activeSection === "code") {
-			return;
-		}
 		this.dispatchEvent(new CustomEvent("sectionChange", {detail: "code", bubbles: true, composed: true}));
-
-		/*
-		this.switchToMain();
-		this.activeSection = "code";
-		window.location.hash = "code";
-
-		const main = document.querySelector("main");
-		if (!main) {
-			throw new Error("Can't find <main>");
-		}
-
-		const mainFrame = main.querySelector("i6q-frame");
-		if (!mainFrame) {
-			throw new Error("Can't find <i6q-frame>");
-		}
-		const editor = document.createElement("i6q-code");
-		editor.innerHTML = mainFrame.innerHTML;
-		mainFrame.parentElement?.insertBefore(editor, mainFrame);
-		*/
 	}
 
 	render() {
