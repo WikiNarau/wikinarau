@@ -73,8 +73,8 @@ export class Button extends LitElement {
   width: 100%;
   height: 2px;
   background: var(--sl-color-primary-600);
-  transition: transform 300ms ease-in-out;
   transform: scaleX(0);
+  transition: transform 300ms;
 }
 
 :host(.active)::after {

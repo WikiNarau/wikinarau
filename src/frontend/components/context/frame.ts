@@ -101,22 +101,15 @@ export class Frame extends LitElement {
 	}
 
 	render() {
-		const pageBar = html`<i6q-page-bar activeSection=${this.activeSection} @sectionChange=${this.sectionChange}></i6q-page-bar>`;
-		switch(this.activeSection){
-		default:
-		case "main":
-			return html`${pageBar}<slot></slot>`;
-		case "code":
-			return html`${pageBar}<slot name="code"></slot>`;
-		case "edit":
-			return html`${pageBar}
-			<i6q-edit-bar @save=${this.save}></i6q-edit-bar>
-			<slot></slot>
-			<sl-button variant="success" @click=${this.newElement}>
-				<sl-icon slot="prefix" name="plus-lg"></sl-icon>
-				New element
-			</sl-button>`;
-		}
+		return html`
+		<i6q-page-bar activeSection=${this.activeSection} @sectionChange=${this.sectionChange}></i6q-page-bar>
+		${this.activeSection === "edit" ? html`<i6q-edit-bar @save=${this.save}></i6q-edit-bar>` : html``}
+		<slot name="${this.activeSection === "code" ? "code" : ""}"></slot>
+		${this.activeSection === "edit" ? html`<sl-button variant="success" @click=${this.newElement}>
+		<sl-icon slot="prefix" name="plus-lg"></sl-icon>
+		New element
+	</sl-button>` : html``}
+		`;
 	}
 
 	static styles = css`
