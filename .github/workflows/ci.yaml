@@ -37,6 +37,6 @@ jobs:
       - name: Build docker image
         run: export DOCKER_BUILDKIT=1 && docker build -t wikinarau:${{ github.ref_name }} .
       - name: Tag image
-        run: docker tag wikinarau:${{ github.ref_name }} ghcr.io/WikiNarau/wikinarau:${{ github.ref_name }}
+        run: docker tag wikinarau:${{ github.ref_name }} ghcr.io/wikinarau/wikinarau:${{ github.ref_name }}
       - name: Push image
-        run: docker push ghcr.io/WikiNarau/wikinarau:${{ github.ref_name }}
+        run: docker push ghcr.io/wikinarau/wikinarau:${{ github.ref_name }}
