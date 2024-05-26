@@ -25,6 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Build docker image
     needs: test
+    permissions:
+      contents: read
+      packages: write
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v3
