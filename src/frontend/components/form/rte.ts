@@ -131,16 +131,32 @@ export class RichTextEditor extends LitElement {
 		return html`
 		<div class="wrap">
 			<div class="topBar">
-				<sl-icon-button name="type-bold" label="Bold" @click=${this.bold}></sl-icon-button>
-				<sl-icon-button name="type-italic" label="Italic" @click=${this.italic}></sl-icon-button>
-				<sl-icon-button name="type-underline" label="Underline" @click=${this.underline}></sl-icon-button>
-				<sl-icon-button name="type-strikethrough" label="Strikethrough" @click=${this.strikethrough}></sl-icon-button>
-				<sl-icon-button name="superscript" label="Superscript" @click=${this.superscript}></sl-icon-button>
-				<sl-icon-button name="subscript" label="Subscript" @click=${this.subscript}></sl-icon-button>
+				<sl-tooltip content="Bold">
+					<sl-icon-button name="type-bold" label="Bold" @click=${this.bold}></sl-icon-button>
+				</sl-tooltip>
+				<sl-tooltip content="Italic">
+					<sl-icon-button name="type-italic" label="Italic" @click=${this.italic}></sl-icon-button>
+				</sl-tooltip>
+				<sl-tooltip content="Underline">
+					<sl-icon-button name="type-underline" label="Underline" @click=${this.underline}></sl-icon-button>
+				</sl-tooltip>
+				<sl-tooltip content="StrikeThrough">
+					<sl-icon-button name="type-strikethrough" label="Strikethrough" @click=${this.strikethrough}></sl-icon-button>
+				</sl-tooltip>
+				<sl-tooltip content="Superscript">
+					<sl-icon-button name="superscript" label="Superscript" @click=${this.superscript}></sl-icon-button>
+				</sl-tooltip>
+				<sl-tooltip content="Subscript">
+					<sl-icon-button name="subscript" label="Subscript" @click=${this.subscript}></sl-icon-button>
+				</sl-tooltip>
 
 				<sl-input size="small" style="display:inline-block; width: 16rem; margin-left: 1.5rem; position: relative; top:-0.3rem;" placeholder="Link URL" @sl-input=${this.editCurHref} value=${this.curHref}></sl-input>
-				<sl-icon-button name="link-45deg" label="Link" @click=${this.link}></sl-icon-button>
-				<sl-icon-button name="x-lg" label="Unlink" @click=${this.unlink}></sl-icon-button>
+				<sl-tooltip content="Add Link">
+					<sl-icon-button name="link-45deg" label="Link" @click=${this.link}></sl-icon-button>
+				</sl-tooltip>
+				<sl-tooltip content="Remove Link">
+					<sl-icon-button name="x-lg" label="Unlink" @click=${this.unlink}></sl-icon-button>
+				</sl-tooltip>
 			</div>
 			<div @input=${this.change} class="editor" contenteditable>${unsafeHTML(this.value)}</div>
 		</div>
