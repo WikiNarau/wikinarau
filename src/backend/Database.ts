@@ -182,10 +182,10 @@ format = "JSON"
 
 	createRevision(content: string, previousRevision = 0) {
 		const insert = this.db.prepare(
-			`INSERT INTO revision (createdAt, modifiedAt, previousRevision, content) VALUES (?, ?, ?, ?);`,
+			`INSERT INTO revision (createdAt, previousRevision, content) VALUES (?, ?, ?);`,
 		);
 		const now = Math.floor(+new Date() / 1000);
-		const res = insert.run(now, now, previousRevision, content);
+		const res = insert.run(now, previousRevision, content);
 		return res.lastInsertRowid;
 	}
 

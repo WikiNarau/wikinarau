@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS content (
     deletedAt INTEGER,
 
     uri TEXT,
-
     contentRevision INTEGER
 );
 CREATE INDEX content_uri ON content (uri);
@@ -14,7 +13,6 @@ CREATE INDEX content_uri ON content (uri);
 CREATE TABLE IF NOT EXISTS revision (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     createdAt INTEGER,
-    modifiedAt INTEGER,
     previousRevision INTEGER,
 
     content TEXT
