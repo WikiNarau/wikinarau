@@ -12,7 +12,7 @@ export class StemCell extends EditableElement {
 </sl-button>`,
 		);
 		return html`
-<i6q-edit-box typeName="Choose a Type">
+<i6q-edit-box typeName="Choose a Type" icon="box">
 	<sl-button-group>
 		${T}
 	</sl-button-group>
