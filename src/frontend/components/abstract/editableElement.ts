@@ -5,6 +5,15 @@ import { consume } from "@lit/context";
 import { type FrameState, frameStateContext } from "../context";
 import { property } from "lit/decorators.js";
 
+export interface ContentTypeDefinition {
+	cons: () => EditableElement;
+	name: string;
+	icon: string;
+}
+
+export const contentTypes = new Set<ContentTypeDefinition>();
+
+
 export abstract class EditableElement extends LitElement {
 	@consume({context: frameStateContext, subscribe: true})
 	@property({attribute: false})

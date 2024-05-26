@@ -1,7 +1,6 @@
 import { css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { EditableElement } from "../abstract";
-import { contentTypes } from "../../../common/contentTypes";
+import { contentTypes, EditableElement } from "../abstract";
 
 @customElement("i6q-box")
 export class Box extends EditableElement {

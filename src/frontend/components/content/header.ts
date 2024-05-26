@@ -1,8 +1,7 @@
 import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { EditableElement } from "../abstract";
+import { contentTypes, EditableElement } from "../abstract";
 import { typographicStyles } from "../styles/typographic";
-import { contentTypes } from "../../../common/contentTypes";
 
 @customElement("i6q-header")
 export class Header extends EditableElement {

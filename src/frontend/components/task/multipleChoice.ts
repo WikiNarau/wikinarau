@@ -1,9 +1,8 @@
 import { HTMLTemplateResult, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { MultipleChoiceOption } from "./multipleChoiceOption";
-import { EditableElement } from "../abstract";
+import { contentTypes, EditableElement } from "../abstract";
 import { generateTypeUID } from "../../../common/tuid";
-import { contentTypes } from "../../../common/contentTypes";
 
 @customElement("i6q-multiple-choice")
 export class MultipleChoice extends EditableElement {
