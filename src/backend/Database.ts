@@ -159,12 +159,12 @@ format = "JSON"
 		const update = this.db.prepare(
 			`UPDATE content SET modifiedAt = ?, contentRevision = ? WHERE uri = ?;`,
 		);
-		if (!uri.startsWith("/wiki/")) {
-			throw "Uris must start with a /";
-		}
 
 		const old = this.getContent(uri);
 		if (!old) {
+			if (!uri.startsWith("/wiki/")) {
+				throw "Uris must start with a /";
+			}
 			const rev = this.createRevision(content, 0);
 			this.createContent(uri, rev as number);
 			return rev;
