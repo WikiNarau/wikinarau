@@ -9,7 +9,7 @@ const messageHandler = (v: any) => {
 
 const flushHandler = (packet: RPCPacket) => {
 	if (!ws) {
-		ws = new WebSocket(`${location.protocol === "https:" ? "wss:" : "ws:"}://${location.host}/api-ws`);
+		ws = new WebSocket(`${location.protocol === "https:" ? "wss:" : "ws:"}//${location.host}/api-ws`);
 		ws.addEventListener("message", messageHandler);
 	}
 	if (ws.readyState !== ws.OPEN) {
