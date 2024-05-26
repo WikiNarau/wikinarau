@@ -16,12 +16,19 @@ export class ResourceList extends LitElement {
 		width: 8rem;
 		height: 8rem;
 		margin: 0.5rem;
+		position: relative;
 		cursor: pointer;
 		border: solid var(--sl-input-border-width) var(--sl-input-border-color);
 		border-radius: var(--sl-input-border-radius-medium);
 		background-color: var(--sl-input-background-color);
 		color: var(--sl-input-color);
 		transition: border-color 300ms;
+	}
+
+	.placeholder {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
 	}
 
 	.resource:hover {
@@ -64,10 +71,36 @@ export class ResourceList extends LitElement {
 		}
 	}
 
+	renderServerResource(r: ServerResource) {
+		switch(r.type){
+		case "image":
+			return html`<img src="${r.path}"/>`;
+		case "video":
+			return html`<div class="placeholder"><sl-icon name="play-btn" style="font-size: 2rem;"></sl-icon><br/><span style="font-size: 0.7rem">${r.name}.${r.ext}</span></div>`;
+		case "audio":
+			return html`<div class="placeholder"><sl-icon name="volume-up" style="font-size: 2rem;"></sl-icon><br/><span style="font-size: 0.7rem">${r.name}.${r.ext}</span></div>`;
+		default:
+			return html`<div class="placeholder"><sl-icon name="file-earmark" style="font-size: 2rem;"></sl-icon><br/><span style="font-size: 0.7rem">${r.name}.${r.ext}</span></div>`;
+		}
+	}
+
+	filterResource(r: ServerResource): boolean {
+		switch(this.accept){
+		case "image":
+			return r.type === "image";
+		case "video":
+			return r.type === "video";
+		case "audio":
+			return r.type === "audio";
+		default:
+			return true;
+		}
+	}
+
 	render() {
 		return html`
 <div class="list">
-	${ this.resources ? this.resources.map(r => html`<div class="resource" @click=${this.chooseResource} path="${r.path}" title="${r.name}.${r.ext}"><img src="${r.path}"/></div>`) : html`<sl-spinner style="font-size: 8rem;"></sl-spinner>`}
+	${ this.resources ? this.resources.filter(r => this.filterResource(r)).map(r => html`<div class="resource" @click=${this.chooseResource} path="${r.path}" title="${r.name}.${r.ext}">${this.renderServerResource(r)}</div>`) : html`<sl-spinner style="font-size: 8rem;"></sl-spinner>`}
 
 </div>
 `;
