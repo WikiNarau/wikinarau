@@ -2,11 +2,10 @@ import sqlite from "better-sqlite3";
 import type { Database as SQLiteDatabase } from "better-sqlite3";
 import fs from "node:fs";
 
-export type ContentType = "root" | "page";
+import type { ServerResource } from "../common/types";
 
 export interface Content {
 	uri: string;
-	contentType: ContentType;
 	lastRevision: number;
 	content: string;
 }
@@ -107,7 +106,6 @@ format = "JSON"
 			if (rev) {
 				ret.push({
 					uri: res.uri,
-					contentType: res.contentType,
 					lastRevision: rev.id,
 					content: rev.content,
 				});
@@ -125,7 +123,6 @@ format = "JSON"
 			if (rev) {
 				return <Content>{
 					uri: res.uri,
-					contentType: res.contentType,
 					lastRevision: rev.id,
 					content: rev.content,
 				};
@@ -138,6 +135,24 @@ format = "JSON"
 		const select = this.db.prepare(`SELECT * from revision WHERE id = ?;`);
 		const res = select.get(id) as any;
 		return res;
+	}
+
+	getResources(): ServerResource[] {
+		const ret:ServerResource[] = [];
+		const select = this.db.prepare(`SELECT * from resource;`);
+		for (const r of select.iterate()) {
+			const res = r as any;
+			ret.push({
+				id: res.id,
+				createdAt: res.createdAt,
+				ext: res.fileExt,
+				hash: res.fileHash,
+				name: res.fileName,
+				path: res.filePath,
+				type: res.fileType,
+			});
+		}
+		return ret;
 	}
 
 	updateContentRevision(uri: string, content: string) {

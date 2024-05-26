@@ -93,9 +93,3 @@ export class Button extends LitElement {
 }
 `;
 }
-
-declare global {
-	interface HTMLElementTagNameMap {
-		"i6q-button": Button;
-	}
-}

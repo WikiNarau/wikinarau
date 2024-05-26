@@ -32,3 +32,6 @@ export const updateContentRevision = (
 
 export const uploadResource = (name: string, data: string) =>
 	queue.call("uploadResource", { name, data });
+
+export const listResources = () =>
+	queue.call("listResources", { });

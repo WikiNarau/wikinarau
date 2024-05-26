@@ -19,6 +19,7 @@ export class Socket {
 			this.updateContentRevision,
 		);
 		this.queue.setCallHandler("uploadResource", this.uploadResource);
+		this.queue.setCallHandler("listResources", this.listResources);
 
 		socket.on("error", this.error.bind(this));
 		socket.on("close", this.close.bind(this));
@@ -27,6 +28,10 @@ export class Socket {
 
 	getSelf(_args: unknown) {
 		return "Someone!";
+	}
+
+	listResources(_args: unknown) {
+		return this.server.db.getResources();
 	}
 
 	uploadResource(args: unknown) {

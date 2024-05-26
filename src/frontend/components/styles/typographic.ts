@@ -53,11 +53,17 @@ a {
 
 p {
 	font-size: 1rem;
-	line-height: 1.35em;
+	line-height: 1.4em;
 	margin: 0 0 1rem;
 }
 
 p:last-child {
 	margin-bottom:0;
+}
+
+img {
+	display: block;
+	width: 100%;
+	height: auto;
 }
 `;

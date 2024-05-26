@@ -138,7 +138,7 @@ export class RichTextEditor extends LitElement {
 				<sl-icon-button name="superscript" label="Superscript" @click=${this.superscript}></sl-icon-button>
 				<sl-icon-button name="subscript" label="Subscript" @click=${this.subscript}></sl-icon-button>
 
-				<sl-input size="small" style="display:inline-block; width: 16rem; margin-left: 1.5rem; position: relative; top:-0.25rem;" placeholder="Link URL" @sl-input=${this.editCurHref} value=${this.curHref}></sl-input>
+				<sl-input size="small" style="display:inline-block; width: 16rem; margin-left: 1.5rem; position: relative; top:-0.3rem;" placeholder="Link URL" @sl-input=${this.editCurHref} value=${this.curHref}></sl-input>
 				<sl-icon-button name="link-45deg" label="Link" @click=${this.link}></sl-icon-button>
 				<sl-icon-button name="x-lg" label="Unlink" @click=${this.unlink}></sl-icon-button>
 			</div>
