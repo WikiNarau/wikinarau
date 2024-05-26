@@ -11,11 +11,19 @@ export class SiteNav extends LitElement {
 		padding:0.5rem 1rem;
 		background: var(--color-background-light);
 		box-shadow: 0px 0px 4px 1px var(--color-background-dark);
-		margin:0 0 2rem 0;
+		margin:0 0 1rem 0;
 	}
 
 	a {
 		display: block;
+		vertical-align: middle;
+		line-height: 1.4rem;
+	}
+
+	a > sl-icon {
+		position: relative;
+		top: 2px;
+		margin-right: 4px;
 	}
 `,
 	];
@@ -31,14 +39,15 @@ export class SiteNav extends LitElement {
 	render() {
 		return html`<section>
 		<h6>Navigation</h6>
-		<a href="/">Main page</a>
-		<a href="/how-to">How to</a>
-		<a href="/contact-us">Contact us</a>
+		<a href="/"><sl-icon name="house"></sl-icon> Main page</a>
+		<a href="/how-to"><sl-icon name="question-lg"></sl-icon> How to</a>
+		<a href="/contact-us"><sl-icon name="chat-dots"></sl-icon> Contact us</a>
 	</section>
 
 	<section>
 		<h6>Contribute</h6>
-		<a href="/" @click=${this.createPage}>Create a Page</a>
+		<a href="/" @click=${this.createPage}><sl-icon name="file-earmark"></sl-icon> New Page</a>
+		<a href="https://github.com/WikiNarau/wikinarau"><sl-icon name="github"></sl-icon> GitHub</a>
 		<i6q-dialog-create-page></i6q-dialog-create-page>
 	</section>`;
 	}
