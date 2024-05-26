@@ -134,9 +134,3 @@ footer {
 }
 `;
 }
-
-declare global {
-	interface HTMLElementTagNameMap {
-		"i6q-frame": Frame;
-	}
-}

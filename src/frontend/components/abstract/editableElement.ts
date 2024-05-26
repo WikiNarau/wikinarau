@@ -37,6 +37,7 @@ export abstract class EditableElement extends LitElement {
 					break;
 				}
 				case Node.ELEMENT_NODE: {
+					if((n as HTMLElement).tagName.toUpperCase() === "I6Q-CODE"){continue;}
 					ret.push(EditableElement.serializeElement(n as HTMLElement));
 					break;
 				}

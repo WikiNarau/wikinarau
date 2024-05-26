@@ -49,11 +49,6 @@ main > section {
 	max-width: 920px;
 }
 
-main > section > i6q-code + i6q-frame,
-main > section > i6q-editor + i6q-frame {
-	display: none;
-}
-
 main::after {
 	content: '';
 	clear: both;
