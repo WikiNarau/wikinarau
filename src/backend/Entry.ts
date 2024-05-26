@@ -1,21 +1,21 @@
 import type { Content, ContentType, Database } from "./Database";
 import { renderJSONList } from "../common/contentTypes";
+import * as toml from 'smol-toml'
 
 export class Entry {
 	private static template = `
 	<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title><!--TITLE--></title>
-  </head>
-  <body>
-    <h1>Can't load/transform index.html, check your server config!!!</h1>
-    <main>
-      <!--CONTENT-->
-    </main>
+<head>
+	<meta charset="UTF-8" />
+	<title><!--TITLE--></title>
+	<!--HEAD-->
+</head>
+<body>
+	<h1>Can't load/transform index.html, check your server config!!!</h1>
+	<main><!--CONTENT--></main>
 	<footer><!--FOOTER--></footer>
-  </body>
+</body>
 </html>`;
 	private static footer = ``;
 
@@ -64,20 +64,42 @@ export class Entry {
 			.replace("<!--FOOTER-->", Entry.footer);
 	}
 
-	private renderContent() {
+	private renderFrontmatterContent(content:string):[Record<string, any>, string] {
+		if(!content.startsWith("---")){
+			return [{},content];
+		}
+		const parts = content.split("---").map(s => s.trim()).filter(s => s);
+		if(parts.length !== 2){
+			return [{},content];
+		}
+		const coRaw = parts[1];
 		try {
-			return renderJSONList(JSON.parse(this.content));
-		} catch (e) {
-			console.error(e);
-			return "";
+			const fmData = toml.parse(parts[0])
+			return [fmData, coRaw];
+		} catch {
+			console.error("Invalid TOML Frontmatter");
+			console.error(parts[0]);
+			return [{},coRaw];
 		}
 	}
 
 	public renderHTML() {
-		const html = this.renderContent();
-		const content = `<h1>${this.title}</h1>
-		<i6q-frame section="main">${html}</i6q-frame>`;
-		return Entry.renderTemplate(this.title, content);
+		try {
+			console.log(this.content);
+			const [frontmatter, content] = this.renderFrontmatterContent(this.content);
+			const html = renderJSONList(JSON.parse(content));
+			const {title} = frontmatter;
+
+			const body = `<h1>${title}</h1>
+			<i6q-frame section="main" meta='${JSON.stringify(frontmatter).replace(/'/g, '&#39;')}'>
+				${html}
+				<i6q-code slot="code" value='${this.content.replace(/'/g, '&#39;')}'></i6q-code>
+			</i6q-frame>`;
+			return Entry.renderTemplate(title, body);
+		} catch (e) {
+			console.error(e);
+			return "";
+		}
 	}
 
 	public renderTeaser(i: number) {

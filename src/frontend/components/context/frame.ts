@@ -1,8 +1,8 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { EditableElement } from "../abstract";
-import { SerializedElement } from "../../../common/contentTypes";
 
+import * as toml from "smol-toml";
 import {createContext, provide} from '@lit/context';
 import { updateContentRevision } from "../../rpc";
 export type FrameState = "view" | "edit";
@@ -13,10 +13,11 @@ export class Frame extends LitElement {
 	@property({type: String})
 	activeSection = "main";
 
+	@property({type: String})
+	meta = "{}";
+
 	@provide({context: frameStateContext})
 	frameState: FrameState = "view";
-
-	private code = '';
 
 	private changeSection(sec: string) {
 		if(sec === this.activeSection){
@@ -68,12 +69,30 @@ export class Frame extends LitElement {
 		window.removeEventListener("hashchange", this._hashChange);
 	}
 
+	private getFrontmatter(): Record<string, any> {
+		return {
+			...JSON.parse(this.meta),
+			title: this.getTitle(),
+			format: "JSON"
+		};
+	}
+
+	private getContentCode(): string {
+		const elements = EditableElement.serializeNodes(this.childNodes);
+		const content = JSON.stringify(elements);
+		const frontmatter = toml.stringify(this.getFrontmatter());
+		return "---\n" + frontmatter + "\n---\n" + content;
+	}
+
+	private getTitle(): string {
+		const h = document.querySelector<HTMLElement>("main h1");
+		return h?.innerText || "New Entry";
+	}
+
 	async save() {
 		const uri = window.location.pathname;
-		const h = document.querySelector<HTMLElement>("main h1");
-		const title = h?.innerText || "New Entry";
-		const con = JSON.stringify(EditableElement.serializeNodes(this.childNodes));
-		await updateContentRevision(uri, con, title);
+
+		await updateContentRevision(uri, this.getContentCode(), this.getTitle());
 		window.location.assign(window.location.pathname);
 	}
 
@@ -87,6 +106,8 @@ export class Frame extends LitElement {
 		default:
 		case "main":
 			return html`${pageBar}<slot></slot>`;
+		case "code":
+			return html`${pageBar}<slot name="code"></slot>`;
 		case "edit":
 			return html`${pageBar}
 			<i6q-edit-bar @save=${this.save}></i6q-edit-bar>
@@ -95,17 +116,7 @@ export class Frame extends LitElement {
 				<sl-icon slot="prefix" name="plus-lg"></sl-icon>
 				New element
 			</sl-button>`;
-		case "code":
-			if(!this.code){
-				this.code = JSON.stringify(this.serialize());
-			}
-			return html`${pageBar}
-			<i6q-code value=${this.code}></i6q-code>`;
 		}
-	}
-
-	serialize(): SerializedElement[] {
-		return EditableElement.serializeNodes(this.childNodes);
 	}
 
 	static styles = css`
