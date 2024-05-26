@@ -3,6 +3,7 @@ import { customElement, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 import { titleToURI } from "../../../common/tuid";
 import { updateContentRevision } from "../../rpc";
+import * as toml from "smol-toml";
 
 @customElement("i6q-dialog-create-page")
 export class DialogCreatePage extends LitElement {
@@ -41,7 +42,13 @@ export class DialogCreatePage extends LitElement {
 			return;
 		}
 
-		await updateContentRevision(uri, '[{"T":"StemCell"}]', title);
+		const frontmatter = {
+			title,
+			format: "JSON",
+		};
+		const fm = toml.stringify(frontmatter);
+		const con = `[{"T":"StemCell"}]`;
+		await updateContentRevision(uri, "---\n" + fm + "\n---\n" + con);
 		document.location.replace(`${uri}#edit`);
 	}
 

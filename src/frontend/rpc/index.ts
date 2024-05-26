@@ -28,8 +28,7 @@ export const rpc = (fun: string, args: any): Promise<any> =>
 export const updateContentRevision = (
 	uri: string,
 	content: string,
-	title: string,
-) => queue.call("updateContentRevision", { uri, content, title });
+) => queue.call("updateContentRevision", { uri, content });
 
 export const uploadResource = (name: string, data: string) =>
 	queue.call("uploadResource", { name, data });

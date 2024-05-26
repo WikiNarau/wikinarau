@@ -92,7 +92,7 @@ export class Frame extends LitElement {
 	async save() {
 		const uri = window.location.pathname;
 
-		await updateContentRevision(uri, this.getContentCode(), this.getTitle());
+		await updateContentRevision(uri, this.getContentCode());
 		window.location.assign(window.location.pathname);
 	}
 

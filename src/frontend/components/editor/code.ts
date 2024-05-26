@@ -19,10 +19,8 @@ export class Code extends LitElement {
 	async save() {
 		const uri = window.location.pathname;
 
-		const h = document.querySelector<HTMLElement>("main h1");
-		const title = h?.innerText || "New Entry";
 		const html = this.value;
-		await updateContentRevision(uri, html, title);
+		await updateContentRevision(uri, html);
 		window.location.assign(window.location.pathname);
 	}
 

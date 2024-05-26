@@ -5,14 +5,10 @@ CREATE TABLE IF NOT EXISTS content (
     deletedAt INTEGER,
 
     uri TEXT,
-    title TEXT,
-    contentType TEXT,
 
     contentRevision INTEGER
 );
 CREATE INDEX content_uri ON content (uri);
-CREATE INDEX content_title ON content (title);
-CREATE INDEX content_contentType ON content (contentType);
 
 
 CREATE TABLE IF NOT EXISTS revision (

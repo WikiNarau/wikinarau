@@ -94,7 +94,7 @@ export class RPCQueue {
 	private handleReply(reply: RPCReply) {
 		const prom = this.promises.get(reply.id);
 		if (!prom) {
-			throw new Error(`Can't find promise for ${reply.id}`);
+			throw `Can't find promise for ${reply.id}`;
 		}
 		this.promises.delete(reply.id);
 		if (reply.error) {
@@ -114,7 +114,7 @@ export class RPCQueue {
 
 	handlePacket(packet: RPCPacket) {
 		if (packet.T !== "RPC") {
-			throw new Error("Invalid packet T");
+			throw `Invalid packet ${packet.T}`;
 		}
 		if (Array.isArray(packet.calls)) {
 			for (const call of packet.calls) {

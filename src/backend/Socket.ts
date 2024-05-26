@@ -60,12 +60,8 @@ export class Socket {
 		if (!("content" in args) || typeof args.content !== "string") {
 			throw "Invalid content";
 		}
-		if (!("title" in args) || typeof args.title !== "string") {
-			throw "Invalid title";
-		}
-		console.log(args.content);
 
-		this.server.db.updateContentRevision(args.uri, args.content, args.title);
+		this.server.db.updateContentRevision(args.uri, args.content);
 		return true;
 	}
 

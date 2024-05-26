@@ -1,4 +1,4 @@
-import type { Content, ContentType, Database } from "./Database";
+import type { Content, Database } from "./Database";
 import { renderJSONList } from "../common/contentTypes";
 import * as toml from 'smol-toml'
 
@@ -19,31 +19,23 @@ export class Entry {
 </html>`;
 	private static footer = ``;
 
-	public readonly title: string;
 	public readonly content: string;
-	public readonly contentType: ContentType;
 	public readonly lastReviion: Date;
 	public readonly uri: string;
 
 	constructor(
-		title: string,
 		content: string,
-		contentType: ContentType,
 		lastRevision: Date,
 		uri: string,
 	) {
-		this.title = title;
 		this.content = content;
-		this.contentType = contentType;
 		this.lastReviion = lastRevision;
 		this.uri = uri;
 	}
 
 	static fromContent(c: Content): Entry {
 		return new Entry(
-			c.title,
 			c.content,
-			c.contentType,
 			new Date(c.lastRevision),
 			c.uri,
 		);
@@ -85,7 +77,6 @@ export class Entry {
 
 	public renderHTML() {
 		try {
-			console.log(this.content);
 			const [frontmatter, content] = this.renderFrontmatterContent(this.content);
 			const html = renderJSONList(JSON.parse(content));
 			const {title} = frontmatter;
@@ -103,7 +94,8 @@ export class Entry {
 	}
 
 	public renderTeaser(i: number) {
-		return `<h3>${i + 1}. <a href="${this.uri}">${this.title}</a></h3>`;
+		const title = "WIP: Title";
+		return `<h3>${i + 1}. <a href="${this.uri}">${title}</a></h3>`;
 	}
 
 	static async getByURI(db: Database, uri: string): Promise<Entry | null> {
