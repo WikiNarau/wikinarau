@@ -13,10 +13,9 @@ export interface ContentTypeDefinition {
 
 export const contentTypes = new Set<ContentTypeDefinition>();
 
-
 export abstract class EditableElement extends LitElement {
-	@consume({context: frameStateContext, subscribe: true})
-	@property({attribute: false})
+	@consume({ context: frameStateContext, subscribe: true })
+	@property({ attribute: false })
 	protected frameState?: FrameState;
 
 	static tagName(): string {
@@ -37,7 +36,9 @@ export abstract class EditableElement extends LitElement {
 					break;
 				}
 				case Node.ELEMENT_NODE: {
-					if((n as HTMLElement).tagName.toUpperCase() === "I6Q-CODE"){continue;}
+					if ((n as HTMLElement).tagName.toUpperCase() === "I6Q-CODE") {
+						continue;
+					}
 					ret.push(EditableElement.serializeElement(n as HTMLElement));
 					break;
 				}

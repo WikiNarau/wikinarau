@@ -3,36 +3,36 @@ import { customElement, property } from "lit/decorators.js";
 import { EditableElement } from "../abstract";
 
 import * as toml from "smol-toml";
-import {createContext, provide} from '@lit/context';
+import { createContext, provide } from "@lit/context";
 import { updateContentRevision } from "../../rpc";
 export type FrameState = "view" | "edit";
-export const frameStateContext = createContext<FrameState>('frameState');
+export const frameStateContext = createContext<FrameState>("frameState");
 
 @customElement("i6q-frame")
 export class Frame extends LitElement {
-	@property({type: String})
+	@property({ type: String })
 	activeSection = "main";
 
-	@property({type: String})
+	@property({ type: String })
 	meta = "{}";
 
-	@provide({context: frameStateContext})
+	@provide({ context: frameStateContext })
 	frameState: FrameState = "view";
 
 	private changeSection(sec: string) {
-		if(sec === this.activeSection){
+		if (sec === this.activeSection) {
 			return;
 		}
 
 		this.activeSection = sec;
-		if(sec === "main"){
+		if (sec === "main") {
 			const url = window.location.pathname + window.location.search;
 			history.replaceState("", document.title, url);
 		} else {
 			const url = window.location.pathname + window.location.search + "#" + sec;
 			history.replaceState("", document.title, url);
 		}
-		if(this.activeSection === "edit"){
+		if (this.activeSection === "edit") {
 			this.frameState = "edit";
 		} else {
 			this.frameState = "view";
@@ -40,20 +40,20 @@ export class Frame extends LitElement {
 	}
 
 	sectionChange(e: CustomEvent) {
-		const sec = e.detail || 'main';
-		if(sec){
+		const sec = e.detail || "main";
+		if (sec) {
 			this.changeSection(sec);
 		}
 	}
 
-	_hashChange:() => void;
+	_hashChange: () => void;
 	hashChange() {
-		if(document.location.hash){
+		if (document.location.hash) {
 			this.changeSection(document.location.hash.substring(1));
 		}
 	}
 
-	constructor(){
+	constructor() {
 		super();
 		this._hashChange = this.hashChange.bind(this);
 		this.hashChange();
@@ -73,7 +73,7 @@ export class Frame extends LitElement {
 		return {
 			...JSON.parse(this.meta),
 			title: this.getTitle(),
-			format: "JSON"
+			format: "JSON",
 		};
 	}
 
@@ -102,13 +102,23 @@ export class Frame extends LitElement {
 
 	render() {
 		return html`
-		<i6q-page-bar activeSection=${this.activeSection} @sectionChange=${this.sectionChange}></i6q-page-bar>
-		${this.activeSection === "edit" ? html`<i6q-edit-bar @save=${this.save}></i6q-edit-bar>` : html``}
+		<i6q-page-bar activeSection=${this.activeSection} @sectionChange=${
+			this.sectionChange
+		}></i6q-page-bar>
+		${
+			this.activeSection === "edit"
+				? html`<i6q-edit-bar @save=${this.save}></i6q-edit-bar>`
+				: html``
+		}
 		<slot name="${this.activeSection === "code" ? "code" : ""}"></slot>
-		${this.activeSection === "edit" ? html`<sl-button variant="success" @click=${this.newElement}>
+		${
+			this.activeSection === "edit"
+				? html`<sl-button variant="success" @click=${this.newElement}>
 		<sl-icon slot="prefix" name="plus-lg"></sl-icon>
 		New element
-	</sl-button>` : html``}
+	</sl-button>`
+				: html``
+		}
 		`;
 	}
 

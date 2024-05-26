@@ -138,7 +138,7 @@ format = "JSON"
 	}
 
 	getResources(): ServerResource[] {
-		const ret:ServerResource[] = [];
+		const ret: ServerResource[] = [];
 		const select = this.db.prepare(`SELECT * from resource;`);
 		for (const r of select.iterate()) {
 			const res = r as any;
@@ -176,21 +176,12 @@ format = "JSON"
 		}
 	}
 
-	createContent(
-		uri: string,
-		contentRevision = 0,
-	) {
+	createContent(uri: string, contentRevision = 0) {
 		const insert = this.db.prepare(
 			`INSERT INTO content (createdAt, modifiedAt, deletedAt, uri, contentRevision) VALUES (?, ?, ?, ?, ?);`,
 		);
 		const now = Math.floor(+new Date() / 1000);
-		const res = insert.run(
-			now,
-			now,
-			0,
-			uri,
-			contentRevision,
-		);
+		const res = insert.run(now, now, 0, uri, contentRevision);
 		return res.lastInsertRowid;
 	}
 
@@ -203,10 +194,7 @@ format = "JSON"
 		return res.lastInsertRowid;
 	}
 
-	createContentRevision(
-		uri: string,
-		content: string,
-	) {
+	createContentRevision(uri: string, content: string) {
 		const rev = this.createRevision(content);
 		const con = this.createContent(uri, rev as number);
 		return con;

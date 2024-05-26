@@ -7,15 +7,33 @@ export class PageBar extends LitElement {
 	public activeSection = "main";
 
 	private switchToMain() {
-		this.dispatchEvent(new CustomEvent("sectionChange", {detail: "main", bubbles: true, composed: true}));
+		this.dispatchEvent(
+			new CustomEvent("sectionChange", {
+				detail: "main",
+				bubbles: true,
+				composed: true,
+			}),
+		);
 	}
 
 	private switchToEdit() {
-		this.dispatchEvent(new CustomEvent("sectionChange", {detail: "edit", bubbles: true, composed: true}));
+		this.dispatchEvent(
+			new CustomEvent("sectionChange", {
+				detail: "edit",
+				bubbles: true,
+				composed: true,
+			}),
+		);
 	}
 
 	private switchToCode() {
-		this.dispatchEvent(new CustomEvent("sectionChange", {detail: "code", bubbles: true, composed: true}));
+		this.dispatchEvent(
+			new CustomEvent("sectionChange", {
+				detail: "code",
+				bubbles: true,
+				composed: true,
+			}),
+		);
 	}
 
 	render() {

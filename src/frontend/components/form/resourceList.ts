@@ -6,7 +6,9 @@ import { ServerResource } from "../../../common/types";
 
 @customElement("i6q-resource-list")
 export class ResourceList extends LitElement {
-	static styles = [typographicStyles,css`
+	static styles = [
+		typographicStyles,
+		css`
 	.list {
 		text-align: center;
 	}
@@ -41,7 +43,8 @@ export class ResourceList extends LitElement {
 		height: 100%;
 		object-fit: contain;
 	}
-`];
+`,
+	];
 
 	@property({ type: String })
 	accept: string = "";
@@ -58,49 +61,74 @@ export class ResourceList extends LitElement {
 	chooseResource(e: Event) {
 		e.preventDefault();
 		e.stopPropagation();
-		const res = e.composedPath().find(ele => (ele as HTMLElement).tagName === "DIV" && (ele as HTMLElement).classList.contains("resource"));
+		const res = e
+			.composedPath()
+			.find(
+				(ele) =>
+					(ele as HTMLElement).tagName === "DIV" &&
+					(ele as HTMLElement).classList.contains("resource"),
+			);
 		console.log(res);
-		if(res){
-			const path = (res as HTMLElement).getAttribute("path") || '';
-			if(path){
+		if (res) {
+			const path = (res as HTMLElement).getAttribute("path") || "";
+			if (path) {
 				const detail = {
-					path
+					path,
 				};
-				this.dispatchEvent(new CustomEvent("resource-pick", {bubbles: true, composed: true, detail}))
+				this.dispatchEvent(
+					new CustomEvent("resource-pick", {
+						bubbles: true,
+						composed: true,
+						detail,
+					}),
+				);
 			}
 		}
 	}
 
 	renderServerResource(r: ServerResource) {
-		switch(r.type){
-		case "image":
-			return html`<img src="${r.path}"/>`;
-		case "video":
-			return html`<div class="placeholder"><sl-icon name="play-btn" style="font-size: 2rem;"></sl-icon><br/><span style="font-size: 0.7rem">${r.name}.${r.ext}</span></div>`;
-		case "audio":
-			return html`<div class="placeholder"><sl-icon name="volume-up" style="font-size: 2rem;"></sl-icon><br/><span style="font-size: 0.7rem">${r.name}.${r.ext}</span></div>`;
-		default:
-			return html`<div class="placeholder"><sl-icon name="file-earmark" style="font-size: 2rem;"></sl-icon><br/><span style="font-size: 0.7rem">${r.name}.${r.ext}</span></div>`;
+		switch (r.type) {
+			case "image":
+				return html`<img src="${r.path}"/>`;
+			case "video":
+				return html`<div class="placeholder"><sl-icon name="play-btn" style="font-size: 2rem;"></sl-icon><br/><span style="font-size: 0.7rem">${r.name}.${r.ext}</span></div>`;
+			case "audio":
+				return html`<div class="placeholder"><sl-icon name="volume-up" style="font-size: 2rem;"></sl-icon><br/><span style="font-size: 0.7rem">${r.name}.${r.ext}</span></div>`;
+			default:
+				return html`<div class="placeholder"><sl-icon name="file-earmark" style="font-size: 2rem;"></sl-icon><br/><span style="font-size: 0.7rem">${r.name}.${r.ext}</span></div>`;
 		}
 	}
 
 	filterResource(r: ServerResource): boolean {
-		switch(this.accept){
-		case "image":
-			return r.type === "image";
-		case "video":
-			return r.type === "video";
-		case "audio":
-			return r.type === "audio";
-		default:
-			return true;
+		switch (this.accept) {
+			case "image":
+				return r.type === "image";
+			case "video":
+				return r.type === "video";
+			case "audio":
+				return r.type === "audio";
+			default:
+				return true;
 		}
 	}
 
 	render() {
 		return html`
 <div class="list">
-	${ this.resources ? this.resources.filter(r => this.filterResource(r)).map(r => html`<div class="resource" @click=${this.chooseResource} path="${r.path}" title="${r.name}.${r.ext}">${this.renderServerResource(r)}</div>`) : html`<sl-spinner style="font-size: 8rem;"></sl-spinner>`}
+	${
+		this.resources
+			? this.resources
+					.filter((r) => this.filterResource(r))
+					.map(
+						(r) =>
+							html`<div class="resource" @click=${this.chooseResource} path="${
+								r.path
+							}" title="${r.name}.${r.ext}">${this.renderServerResource(
+								r,
+							)}</div>`,
+					)
+			: html`<sl-spinner style="font-size: 8rem;"></sl-spinner>`
+	}
 
 </div>
 `;

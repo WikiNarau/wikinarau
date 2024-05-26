@@ -1,6 +1,6 @@
 import type { Content, Database } from "./Database";
 import { renderJSONList } from "../common/contentTypes";
-import * as toml from 'smol-toml'
+import * as toml from "smol-toml";
 
 export class Entry {
 	private static template = `
@@ -23,22 +23,14 @@ export class Entry {
 	public readonly lastReviion: Date;
 	public readonly uri: string;
 
-	constructor(
-		content: string,
-		lastRevision: Date,
-		uri: string,
-	) {
+	constructor(content: string, lastRevision: Date, uri: string) {
 		this.content = content;
 		this.lastReviion = lastRevision;
 		this.uri = uri;
 	}
 
 	static fromContent(c: Content): Entry {
-		return new Entry(
-			c.content,
-			new Date(c.lastRevision),
-			c.uri,
-		);
+		return new Entry(c.content, new Date(c.lastRevision), c.uri);
 	}
 
 	static setTemplate(transformedTemplate: string) {
@@ -56,22 +48,27 @@ export class Entry {
 			.replace("<!--FOOTER-->", Entry.footer);
 	}
 
-	private splitFrontmatterContent(content:string):[Record<string, any>, string] {
-		if(!content.startsWith("---")){
-			return [{},content];
+	private splitFrontmatterContent(
+		content: string,
+	): [Record<string, any>, string] {
+		if (!content.startsWith("---")) {
+			return [{}, content];
 		}
-		const parts = content.split("---").map(s => s.trim()).filter(s => s);
-		if(parts.length !== 2){
-			return [{},content];
+		const parts = content
+			.split("---")
+			.map((s) => s.trim())
+			.filter((s) => s);
+		if (parts.length !== 2) {
+			return [{}, content];
 		}
 		const coRaw = parts[1];
 		try {
-			const fmData = toml.parse(parts[0])
+			const fmData = toml.parse(parts[0]);
 			return [fmData, coRaw];
 		} catch {
 			console.error("Invalid TOML Frontmatter");
 			console.error(parts[0]);
-			return [{},coRaw];
+			return [{}, coRaw];
 		}
 	}
 
@@ -79,12 +76,15 @@ export class Entry {
 		try {
 			const [frontmatter, content] = this.splitFrontmatterContent(this.content);
 			const html = renderJSONList(JSON.parse(content));
-			const {title} = frontmatter;
+			const { title } = frontmatter;
 
 			const body = `<h1>${title}</h1>
-			<i6q-frame section="main" meta='${JSON.stringify(frontmatter).replace(/'/g, '&#39;')}'>
+			<i6q-frame section="main" meta='${JSON.stringify(frontmatter).replace(
+				/'/g,
+				"&#39;",
+			)}'>
 				${html}
-				<i6q-code slot="code" value='${this.content.replace(/'/g, '&#39;')}'></i6q-code>
+				<i6q-code slot="code" value='${this.content.replace(/'/g, "&#39;")}'></i6q-code>
 			</i6q-frame>`;
 			return Entry.renderTemplate(title, body);
 		} catch (e) {

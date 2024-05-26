@@ -5,7 +5,9 @@ import { typographicStyles } from "../styles";
 
 @customElement("i6q-resource-picker")
 export class ResourcePicker extends LitElement {
-	static styles = [typographicStyles,css`
+	static styles = [
+		typographicStyles,
+		css`
 	input {
 		display: inline-block;
 		appearance: none;
@@ -41,7 +43,8 @@ export class ResourcePicker extends LitElement {
 		max-height: 400px;
 		object-fit: contain;
 	}
-`];
+`,
+	];
 
 	@query("sl-dialog")
 	chooseDialog?: any;
@@ -84,22 +87,22 @@ export class ResourcePicker extends LitElement {
 	}
 
 	upload() {
-		if(this.input){
+		if (this.input) {
 			this.input.click();
 		}
 	}
 
 	renderResource() {
-		if(!this.src){
+		if (!this.src) {
 			return html`<p>Please upload or pick a file</p>`;
 		}
-		switch(this.accept){
-		case "video":
-			return html`<video src=${this.src} controls></video>`;
-		case "audio":
-			return html`<audio src=${this.src} controls></audio>`;
-		case "image":
-			return html`<img src=${this.src}/>`;
+		switch (this.accept) {
+			case "video":
+				return html`<video src=${this.src} controls></video>`;
+			case "audio":
+				return html`<audio src=${this.src} controls></audio>`;
+			case "image":
+				return html`<img src=${this.src}/>`;
 		}
 	}
 
@@ -109,7 +112,7 @@ export class ResourcePicker extends LitElement {
 	}
 
 	removeUpload() {
-		this.src = '';
+		this.src = "";
 	}
 
 	closeChooseDialog() {
@@ -120,12 +123,18 @@ export class ResourcePicker extends LitElement {
 		e.stopPropagation();
 		e.preventDefault();
 		const detail = e.detail;
-		if(!detail || !detail.path){
+		if (!detail || !detail.path) {
 			return;
 		}
 		this.src = detail.path;
 		this.closeChooseDialog();
-		this.dispatchEvent(new CustomEvent("change", {bubbles: true, composed: true, detail: { uri: this.src }}));
+		this.dispatchEvent(
+			new CustomEvent("change", {
+				bubbles: true,
+				composed: true,
+				detail: { uri: this.src },
+			}),
+		);
 	}
 
 	render() {
@@ -142,7 +151,9 @@ export class ResourcePicker extends LitElement {
 		<sl-button variant="warning" @click=${this.closeChooseDialog}>Cancel</sl-button>
 	</sl-button-group>
 </sl-dialog>
-<input style="display:none;" @change=${this.change} type="file" accept="${this.accept}/*" />
+<input style="display:none;" @change=${this.change} type="file" accept="${
+			this.accept
+		}/*" />
 `;
 	}
 }

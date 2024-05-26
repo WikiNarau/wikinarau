@@ -25,13 +25,10 @@ export const rpc = (fun: string, args: any): Promise<any> =>
 
 (window as any).rpc = rpc;
 
-export const updateContentRevision = (
-	uri: string,
-	content: string,
-) => queue.call("updateContentRevision", { uri, content });
+export const updateContentRevision = (uri: string, content: string) =>
+	queue.call("updateContentRevision", { uri, content });
 
 export const uploadResource = (name: string, data: string) =>
 	queue.call("uploadResource", { name, data });
 
-export const listResources = () =>
-	queue.call("listResources", { });
+export const listResources = () => queue.call("listResources", {});
