@@ -42,7 +42,7 @@ export class PageBar extends LitElement {
 				<span class="left">
 					<i6q-button @click=${this.switchToMain} class="narrow flat ${
 						this.activeSection === "main" ? "active" : ""
-					}">🗏 Content</i6q-button>
+					}"><sl-icon name="file-text"></sl-icon> Content</i6q-button>
 				</span>
 				<span class="right">
 					<i6q-button @click=${this.switchToCode} class="narrow flat ${
@@ -50,7 +50,7 @@ export class PageBar extends LitElement {
 					}">λ Code</i6q-button>
 					<i6q-button @click=${this.switchToEdit} class="narrow flat ${
 						this.activeSection === "edit" ? "active" : ""
-					}">🖍 Edit</i6q-button>
+					}"><sl-icon name="pencil"></sl-icon> Edit</i6q-button>
 				</span>
 			</nav>
 			<div class="border"></div>
