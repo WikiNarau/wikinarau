@@ -56,7 +56,7 @@ export class Entry {
 			.replace("<!--FOOTER-->", Entry.footer);
 	}
 
-	private renderFrontmatterContent(content:string):[Record<string, any>, string] {
+	private splitFrontmatterContent(content:string):[Record<string, any>, string] {
 		if(!content.startsWith("---")){
 			return [{},content];
 		}
@@ -77,7 +77,7 @@ export class Entry {
 
 	public renderHTML() {
 		try {
-			const [frontmatter, content] = this.renderFrontmatterContent(this.content);
+			const [frontmatter, content] = this.splitFrontmatterContent(this.content);
 			const html = renderJSONList(JSON.parse(content));
 			const {title} = frontmatter;
 
@@ -94,7 +94,8 @@ export class Entry {
 	}
 
 	public renderTeaser(i: number) {
-		const title = "WIP: Title";
+		const [frontmatter, _content] = this.splitFrontmatterContent(this.content);
+		const title = frontmatter.title;
 		return `<h3>${i + 1}. <a href="${this.uri}">${title}</a></h3>`;
 	}
 

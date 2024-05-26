@@ -99,8 +99,7 @@ format = "JSON"
 
 	searchContent(sword: string): Content[] {
 		const ret: Content[] = [];
-		const select = this.db.prepare(`SELECT * from content WHERE title LIKE ?;`);
-		console.log(`Search: ${sword}`);
+		const select = this.db.prepare(`SELECT * from content WHERE uri LIKE ?;`);
 		for (const r of select.iterate(`%${sword}%`)) {
 			const res = r as any;
 			const rev =
