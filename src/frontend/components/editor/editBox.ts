@@ -29,7 +29,7 @@ export class EditBox extends LitElement {
 .bar {
 	display: table;
 	width:100%;
-	padding: 6px 12px;
+	padding: 2px 12px;
 	box-sizing: border-box;
 	cursor: move; /* fallback if grab cursor is unsupported */
 	cursor: grab;

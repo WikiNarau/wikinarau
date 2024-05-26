@@ -18,8 +18,7 @@ export class Video extends EditableElement {
 	renderEdit() {
 		return html`
 	<i6q-edit-box typeName="Video" icon="play-btn">
-		${this.src ? html`<video src="${this.src}" controls></video>` : html``}
-		<i6q-resource-picker @change=${this.resourceChange} accept="video/*"></i6q-file-uploader>
+		<i6q-resource-picker src=${this.src} @change=${this.resourceChange} accept="video"></i6q-resource-picker>
 	</i6q-edit-box>`;
 	}
 

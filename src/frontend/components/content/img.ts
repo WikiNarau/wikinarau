@@ -24,7 +24,7 @@ export class Img extends EditableElement {
 	renderEdit() {
 		return html`
 	<i6q-edit-box typeName="Image" icon="image">
-		<i6q-resource-picker src=${this.src} @change=${this.resourceChange} accept="image"></i6q-file-uploader>
+		<i6q-resource-picker src=${this.src} @change=${this.resourceChange} accept="image"></i6q-resource-picker>
 	</i6q-edit-box>`;
 	}
 

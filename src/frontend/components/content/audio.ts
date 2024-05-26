@@ -18,8 +18,7 @@ export class Audio extends EditableElement {
 	renderEdit() {
 		return html`
 	<i6q-edit-box typeName="Audio" icon="volume-up">
-		${this.src ? html`<audio src="${this.src}" controls></audio>` : html``}
-		<i6q-resource-picker @change=${this.resourceChange} accept="audio/*"></i6q-file-uploader>
+		<i6q-resource-picker src=${this.src} @change=${this.resourceChange} accept="audio"></i6q-resource-picker>
 	</i6q-edit-box>`;
 	}
 

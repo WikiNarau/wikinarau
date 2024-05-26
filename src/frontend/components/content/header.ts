@@ -37,7 +37,7 @@ export class Header extends EditableElement {
 	renderEdit() {
 		return html`
 		<i6q-edit-box typeName="Header" icon="paragraph">
-			<sl-radio-group style="margin-bottom: 1rem;" label="Style" value="${this.h}" @sl-change=${this.editSelect}>
+			<sl-radio-group style="margin-bottom: 1rem;" value="${this.h}" @sl-change=${this.editSelect}>
 				<sl-radio-button pill value="h1">Heading 1</sl-radio-button>
 				<sl-radio-button pill value="h2">Heading 2</sl-radio-button>
 				<sl-radio-button pill value="h3">Heading 3</sl-radio-button>
@@ -45,7 +45,7 @@ export class Header extends EditableElement {
 				<sl-radio-button pill value="h5">Heading 5</sl-radio-button>
 				<sl-radio-button pill value="h6">Heading 6</sl-radio-button>
 			</sl-radio-group>
-			<sl-input label="Headline" style="display: block; margin-top:1rem;" @sl-input=${this.editInput} value=${this.editValue}></sl-input>
+			<sl-input placeholder="Headline" style="display: block; margin-top:1rem;" @sl-input=${this.editInput} value=${this.editValue}></sl-input>
 		</i6q-edit-box>`;
 	}
 

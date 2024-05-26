@@ -23,6 +23,24 @@ export class ResourcePicker extends LitElement {
 		width: 100%;
 		box-sizing: border-box;
 	}
+
+	audio {
+		width: 100%;
+	}
+
+	video {
+		width: 100%;
+		height: auto;
+		max-height: 400px;
+	}
+
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+		max-height: 400px;
+		object-fit: contain;
+	}
 `];
 
 	@query("sl-dialog")
@@ -37,7 +55,7 @@ export class ResourcePicker extends LitElement {
 	@property({ type: String })
 	accept: string = "";
 
-	@property({ type: String })
+	@property({ type: String, reflect: true })
 	src: string = "";
 
 	change() {
@@ -72,7 +90,14 @@ export class ResourcePicker extends LitElement {
 	}
 
 	renderResource() {
+		if(!this.src){
+			return html`<p>Please upload or pick a file</p>`;
+		}
 		switch(this.accept){
+		case "video":
+			return html`<video src=${this.src} controls></video>`;
+		case "audio":
+			return html`<audio src=${this.src} controls></audio>`;
 		case "image":
 			return html`<img src=${this.src}/>`;
 		}
@@ -105,7 +130,7 @@ export class ResourcePicker extends LitElement {
 
 	render() {
 		return html`
-${this.renderResource()}
+<div>${this.renderResource()}</div>
 <sl-button-group style="margin-top:1rem;">
 	<sl-button variant="primary" label="Upload" @click=${this.upload}><sl-icon slot="prefix" name="upload"></sl-icon> Upload</sl-button>
 	<sl-button variant="success" label="Choose" @click=${this.chooseUpload}><sl-icon slot="prefix" name="cloud-arrow-down"></sl-icon> Use existing</sl-button>
@@ -117,7 +142,7 @@ ${this.renderResource()}
 		<sl-button variant="warning" @click=${this.closeChooseDialog}>Cancel</sl-button>
 	</sl-button-group>
 </sl-dialog>
-<input style="display:none;" @change=${this.change} type="file" accept=${this.accept} />
+<input style="display:none;" @change=${this.change} type="file" accept="${this.accept}/*" />
 `;
 	}
 }
