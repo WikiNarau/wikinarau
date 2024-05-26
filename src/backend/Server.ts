@@ -85,8 +85,9 @@ export class Server {
 			} else {
 				const content = `<h1>The page couldn't be found</h1>
 				<p>Maybe you would like to create it?</p>
-				<i6q-page-bar></i6q-page-bar>
-				<i6q-frame section="main"></i6q-frame>`;
+				<i6q-frame section="main">
+					<i6q-code slot="code"></i6q-code>
+				</i6q-frame>`;
 				const html = Entry.renderTemplate("404 - Page Not Found", content);
 				return <WebResponse>{
 					code: 404,

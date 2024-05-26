@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import { contentTypes, EditableElement } from "../abstract";
 import { typographicStyles } from "../styles";
 
@@ -7,12 +7,12 @@ import { typographicStyles } from "../styles";
 export class Text extends EditableElement {
 	static styles = [typographicStyles];
 
-	@property({ type: String })
 	editValue = "";
 
-	editInput(e: InputEvent) {
-		if (e.target) {
-			this.editValue = (e.target as any).value;
+	editInput(e: CustomEvent) {
+		e.stopPropagation();
+		if (e.detail && e.detail.value) {
+			this.editValue = e.detail.value;
 			this.innerHTML = this.editValue;
 			this.dispatchEditEvent();
 		}
@@ -27,8 +27,8 @@ export class Text extends EditableElement {
 
 	renderEdit() {
 		return html`
-<i6q-edit-box typeName="Text" icon="justify-left">
-	<sl-textarea rows=4 @sl-input=${this.editInput} value=${this.editValue}></sl-textarea>
+<i6q-edit-box typeName="Text" icon="justify-left" class="noPadding">
+	<i6q-rte @rte-edit=${this.editInput} value=${this.editValue}></i6q-rte>
 </i6q-edit-box>`;
 	}
 

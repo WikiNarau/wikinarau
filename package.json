@@ -22,6 +22,7 @@
 		"express": "latest",
 		"lit": "latest",
 		"smol-toml": "latest",
+		"trix": "latest",
 		"tsx": "latest",
 		"ws": "latest"
 	},

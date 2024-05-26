@@ -54,5 +54,10 @@ a {
 p {
 	font-size: 1rem;
 	line-height: 1.35em;
+	margin: 0 0 1rem;
+}
+
+p:last-child {
+	margin-bottom:0;
 }
 `;

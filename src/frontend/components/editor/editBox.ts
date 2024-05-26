@@ -54,6 +54,10 @@ h5 {
 	vertical-align: middle;
 	line-height: 1.6em;
 }
+
+:host(.noPadding) .content {
+	padding:0;
+}
 `,
 	];
 
@@ -103,9 +107,8 @@ h5 {
 		return html`
 <div class="edit-box
 	${this.singleLine ? "singleLine" : ""}"
-	draggable="true"
 >
-	<div class="bar">
+	<div class="bar" draggable="true">
 		<div class="left">
 			<sl-icon style="display:inline-block; vertical-align:middle; margin-right:0.25rem;" name="${
 				this.icon
