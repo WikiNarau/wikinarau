@@ -1,6 +1,5 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { WSElementSync } from "../../sync";
 import { EditableElement } from "../abstract";
 import { SerializedElement } from "../../../common/contentTypes";
 
@@ -11,8 +10,6 @@ export const frameStateContext = createContext<FrameState>('frameState');
 
 @customElement("i6q-frame")
 export class Frame extends LitElement {
-	sync?: WSElementSync;
-
 	@property({type: String})
 	activeSection = "main";
 
