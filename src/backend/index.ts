@@ -1,8 +1,10 @@
 import { Entry } from "./Entry";
 import { Server } from "./Server";
 
-const server = new Server({});
-if (process.env.NODE_ENV === "development") {
+const isDev = (process.env.NODE_ENV === "development")
+
+const server = new Server({host: isDev ? "localhost" : "0.0.0.0"});
+if (isDev) {
 	await server.devServer();
 }
 Entry.setFooter(`All content is available under the Creative Commons <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">CC BY-SA 4.0 License</a>.<br/>
