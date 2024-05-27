@@ -38,12 +38,12 @@ export class Header extends EditableElement {
 		return html`
 		<i6q-edit-box typeName="Header" icon="paragraph">
 			<sl-radio-group style="margin-bottom: 1rem;" value="${this.h}" @sl-change=${this.editSelect}>
-				<sl-radio-button pill value="h1">Heading 1</sl-radio-button>
-				<sl-radio-button pill value="h2">Heading 2</sl-radio-button>
-				<sl-radio-button pill value="h3">Heading 3</sl-radio-button>
-				<sl-radio-button pill value="h4">Heading 4</sl-radio-button>
-				<sl-radio-button pill value="h5">Heading 5</sl-radio-button>
-				<sl-radio-button pill value="h6">Heading 6</sl-radio-button>
+				<sl-radio-button pill value="h1"><span style="font-size:1.2em;">Heading 1</span></sl-radio-button>
+				<sl-radio-button pill value="h2"><span style="font-size:1.1em;">Heading 2</span></sl-radio-button>
+				<sl-radio-button pill value="h3"><span style="font-size:1em;">Heading 3</span></sl-radio-button>
+				<sl-radio-button pill value="h4"><span style="font-size:0.9em;">Heading 4</span></sl-radio-button>
+				<sl-radio-button pill value="h5"><span style="font-size:0.8em;">Heading 5</span></sl-radio-button>
+				<sl-radio-button pill value="h6"><span style="font-size:0.7em;">Heading 6</span></sl-radio-button>
 			</sl-radio-group>
 			<sl-input placeholder="Headline" style="display: block; margin-top:1rem;" @sl-input=${this.editInput} value=${this.editValue}></sl-input>
 		</i6q-edit-box>`;
