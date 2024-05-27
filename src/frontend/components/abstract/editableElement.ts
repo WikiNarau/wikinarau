@@ -150,7 +150,7 @@ export abstract class EditableElement extends LitElement {
 
 	_dragStart: (e: DragEvent) => void;
 	dragStart(e: DragEvent) {
-		if(this.frameState !== "edit"){
+		if (this.frameState !== "edit") {
 			return;
 		}
 		e.stopPropagation();
@@ -162,7 +162,7 @@ export abstract class EditableElement extends LitElement {
 
 	_dragEnd: (e: DragEvent) => void;
 	dragEnd(e: DragEvent) {
-		if(this.frameState !== "edit"){
+		if (this.frameState !== "edit") {
 			return;
 		}
 		e.stopPropagation();
@@ -176,7 +176,7 @@ export abstract class EditableElement extends LitElement {
 
 	_dragOver: (e: DragEvent) => void;
 	dragOver(e: DragEvent) {
-		if(this.frameState !== "edit"){
+		if (this.frameState !== "edit") {
 			return;
 		}
 		e.preventDefault();
@@ -187,7 +187,7 @@ export abstract class EditableElement extends LitElement {
 
 	_drop: (e: DragEvent) => void;
 	drop(e: DragEvent) {
-		if(this.frameState !== "edit"){
+		if (this.frameState !== "edit") {
 			return;
 		}
 		if (e.dataTransfer) {
@@ -224,7 +224,7 @@ export abstract class EditableElement extends LitElement {
 
 	protected updated(props: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
 		super.updated(props);
-		if(this.frameState === "edit"){
+		if (this.frameState === "edit") {
 			this.setAttribute("droppable", "true");
 		} else {
 			this.removeAttribute("droppable");

@@ -1,9 +1,9 @@
 import { Entry } from "./Entry";
 import { Server } from "./Server";
 
-const isDev = (process.env.NODE_ENV === "development")
+const isDev = process.env.NODE_ENV === "development";
 
-const server = new Server({host: isDev ? "localhost" : "0.0.0.0"});
+const server = new Server({ host: isDev ? "localhost" : "0.0.0.0" });
 if (isDev) {
 	await server.devServer();
 }
