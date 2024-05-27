@@ -1,4 +1,4 @@
-import { LitElement } from "lit";
+import { LitElement, PropertyValueMap } from "lit";
 import { generateTypeUID } from "../../../common/tuid";
 import { SerializedElement } from "../../../common/contentTypes";
 import { consume } from "@lit/context";
@@ -150,6 +150,9 @@ export abstract class EditableElement extends LitElement {
 
 	_dragStart: (e: DragEvent) => void;
 	dragStart(e: DragEvent) {
+		if(this.frameState !== "edit"){
+			return;
+		}
 		e.stopPropagation();
 		if (e.dataTransfer) {
 			e.dataTransfer.effectAllowed = "move";
@@ -159,6 +162,9 @@ export abstract class EditableElement extends LitElement {
 
 	_dragEnd: (e: DragEvent) => void;
 	dragEnd(e: DragEvent) {
+		if(this.frameState !== "edit"){
+			return;
+		}
 		e.stopPropagation();
 		console.log(e.dataTransfer);
 		if (e.dataTransfer?.dropEffect === "move") {
@@ -170,6 +176,9 @@ export abstract class EditableElement extends LitElement {
 
 	_dragOver: (e: DragEvent) => void;
 	dragOver(e: DragEvent) {
+		if(this.frameState !== "edit"){
+			return;
+		}
 		e.preventDefault();
 		if (e.dataTransfer) {
 			e.dataTransfer.dropEffect = "move";
@@ -178,6 +187,9 @@ export abstract class EditableElement extends LitElement {
 
 	_drop: (e: DragEvent) => void;
 	drop(e: DragEvent) {
+		if(this.frameState !== "edit"){
+			return;
+		}
 		if (e.dataTransfer) {
 			e.dataTransfer.dropEffect = "move";
 			const data = e.dataTransfer.getData("text/html");
@@ -208,6 +220,15 @@ export abstract class EditableElement extends LitElement {
 
 		this.addEventListener("dragover", this._dragOver);
 		this.addEventListener("drop", this._drop);
+	}
+
+	protected updated(props: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+		super.updated(props);
+		if(this.frameState === "edit"){
+			this.setAttribute("droppable", "true");
+		} else {
+			this.removeAttribute("droppable");
+		}
 	}
 
 	disconnectedCallback() {
