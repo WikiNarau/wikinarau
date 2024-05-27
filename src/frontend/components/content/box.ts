@@ -115,7 +115,7 @@ export class Box extends EditableElement {
 
 	renderEdit() {
 		return html`
-<i6q-edit-box typeName="Box" icon="card-list">
+<i6q-edit-box typeName="Box" icon="card-list" variant=${this.variant}>
 	<sl-input placeholder="Headline" style="display: block; margin-bottom: 1rem;" @sl-input=${this.editSummary} value=${this.summary}></sl-input>
 
 	<sl-radio-group style="margin-bottom: 1rem;" value="${this.variant}" @sl-change=${this.editVariant}>

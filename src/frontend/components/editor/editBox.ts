@@ -7,6 +7,9 @@ export class EditBox extends LitElement {
 	@property({ type: Boolean })
 	singleLine = false;
 
+	@property({ type: Boolean })
+	variant = false;
+
 	static styles = [
 		typographicStyles,
 		css`
@@ -35,8 +38,54 @@ export class EditBox extends LitElement {
 	cursor: grab;
 	cursor: -moz-grab;
 	cursor: -webkit-grab;
+	var(--sl-color-neutral-600);
 	background: var(--sl-input-border-color);
 	border-bottom: solid var(--sl-input-border-width) var(--sl-input-border-color);
+}
+
+:host([variant="primary"]) .edit-box {
+	border-color: var(--sl-color-primary-700);
+}
+:host([variant="primary"]) .bar {
+	background: var(--sl-color-primary-600);
+	border-color: var(--sl-color-primary-700);
+	color: #fff;
+}
+
+:host([variant="success"]) .edit-box {
+	border-color: var(--sl-color-success-700);
+}
+:host([variant="success"]) .bar {
+	background: var(--sl-color-success-600);
+	border-color: var(--sl-color-success-700);
+	color: #fff;
+}
+
+:host([variant="neutral"]) .edit-box {
+	border-color: var(--sl-color-neutral-700);
+}
+:host([variant="neutral"]) .bar {
+	background: var(--sl-color-neutral-600);
+	border-color: var(--sl-color-neutral-700);
+	color: #fff;
+}
+
+:host([variant="warning"]) .edit-box {
+	border-color: var(--sl-color-warning-700);
+}
+:host([variant="warning"]) .bar {
+	background: var(--sl-color-warning-600);
+	border-color: var(--sl-color-warning-700);
+	color: #fff;
+}
+
+:host([variant="danger"]) .edit-box {
+	border-color: var(--sl-color-danger-700);
+}
+:host([variant="danger"]) .bar {
+	background: var(--sl-color-danger-600);
+	border-color: var(--sl-color-danger-700);
+	color: #fff;
 }
 
 .singleLine .bar {
@@ -50,9 +99,13 @@ export class EditBox extends LitElement {
 
 h5 {
 	margin-bottom: 0;
-	color: var(--sl-color-neutral-600);
+	color: inherit;
 	vertical-align: middle;
 	line-height: 1.6em;
+}
+
+sl-icon-button {
+	color: inherit;
 }
 
 :host(.noPadding) .content {
