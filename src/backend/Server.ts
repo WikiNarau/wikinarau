@@ -137,7 +137,7 @@ export class Server {
 			Entry.setTemplate(await fsp.readFile("./dist/index.html", "utf-8"));
 			this.app.use(
 				"/assets",
-				express.static("./dist/assets", { maxAge: 8 * 60 * 60 * 1000 }),
+				express.static("./dist/assets", { maxAge: 7 * 24 * 60 * 60 * 1000 }),
 			);
 		}
 		this.app.use(
@@ -148,7 +148,7 @@ export class Server {
 		);
 		this.app.use(
 			"/res",
-			express.static("./data/res", { maxAge: 8 * 60 * 60 * 1000 }),
+			express.static("./data/res", { maxAge: 7 * 24 * 60 * 60 * 1000 }),
 		);
 
 		this.app.use(async (req, res) => {
