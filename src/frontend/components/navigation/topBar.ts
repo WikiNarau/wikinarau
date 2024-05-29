@@ -7,7 +7,7 @@ export class TopBar extends LitElement {
 		return html`
 			<div class="center">
 				<div class="center-left">
-					<a href="/" class="home"><img src="/assets/logo.svg" /></a>
+					<a href="/" class="home" aria-label="Home"><img src="/assets/logo.svg?v=1" alt="WikiLearn" /></a>
 				</div>
 				<div class="center-center">
 					<i6q-search-bar />
