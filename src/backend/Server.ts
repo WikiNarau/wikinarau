@@ -143,7 +143,7 @@ export class Server {
 		this.app.use(
 			"/assets/shoelace/",
 			express.static("./node_modules/@shoelace-style/shoelace/dist/", {
-				maxAge: 8 * 60 * 60 * 1000,
+				maxAge: 7 * 24 * 60 * 60 * 1000,
 			}),
 		);
 		this.app.use(
