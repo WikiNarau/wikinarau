@@ -166,7 +166,7 @@ export class Server {
 					res.status(r.code).set({ "Content-Type": r.contentType }).end(r.body);
 				}
 			} catch (error) {
-				res.status(500).end(error);
+				res.status(500).end(Entry.renderTemplate("500 - Server Error", "Something went wrong on our end, we will try to fix this issue as soon as possible."));
 			}
 		});
 		this.server = http.createServer(this.app);
