@@ -164,7 +164,7 @@ format = "JSON"
 		const old = this.getContent(uri);
 		if (!old) {
 			if (!uri.startsWith("/wiki/")) {
-				throw "Uris must start with a /";
+				throw "The URL of new pages must begin with /wiki/ for future-proofing.";
 			}
 			const rev = this.createRevision(content, 0);
 			this.createContent(uri, rev as number);

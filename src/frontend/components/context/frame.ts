@@ -5,6 +5,7 @@ import { EditableElement } from "../abstract";
 import * as toml from "smol-toml";
 import { createContext, provide } from "@lit/context";
 import { updateContentRevision } from "../../rpc";
+import { showWarning } from "../dialog/warning";
 export type FrameState = "view" | "edit";
 export const frameStateContext = createContext<FrameState>("frameState");
 
@@ -92,8 +93,17 @@ export class Frame extends LitElement {
 	async save() {
 		const uri = window.location.pathname;
 
-		await updateContentRevision(uri, this.getContentCode());
-		window.location.assign(window.location.pathname);
+		try {
+			await updateContentRevision(uri, this.getContentCode());
+			window.location.assign(window.location.pathname);
+		} catch (e) {
+			if(typeof e === "string"){
+				showWarning("Error while saving", e);
+			} else {
+				showWarning("Error while saving", "There was an error while trying to save the page, please reload or try again later.");
+			}
+
+		}
 	}
 
 	newElement() {

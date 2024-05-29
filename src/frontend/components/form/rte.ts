@@ -2,6 +2,7 @@ import { html, css, LitElement, PropertyValueMap } from "lit";
 import { customElement, query } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { typographicStyles } from "../styles";
+import { showWarning } from "../dialog/warning";
 
 @customElement("i6q-rte")
 export class RichTextEditor extends LitElement {
@@ -39,9 +40,6 @@ export class RichTextEditor extends LitElement {
 	}
 `,
 	];
-
-	@query("sl-dialog")
-	warnDialog?: any;
 
 	@query(".editor")
 	editorWrap?: HTMLElement;
@@ -114,12 +112,12 @@ export class RichTextEditor extends LitElement {
 		if (this.curHref) {
 			document.execCommand("createLink", false, this.curHref);
 		} else {
-			this.warnDialog?.show();
+			this.showLinkWarning();
 		}
 	}
 
-	closeWarnDialog() {
-		this.warnDialog?.hide();
+	private showLinkWarning() {
+		showWarning("Invalid URL", "Please enter a valid URL in the menu bar before trying to add links.");
 	}
 
 	unlink(e: Event) {
@@ -182,12 +180,6 @@ export class RichTextEditor extends LitElement {
 				this.value,
 			)}</div>
 		</div>
-		<sl-dialog label="Invalid URL">
-			Please enter a valid URL in the menu bar before trying to add links.
-			<sl-button-group slot="footer">
-				<sl-button variant="warning" @click=${this.closeWarnDialog}>Close</sl-button>
-			</sl-button-group>
-		</sl-dialog>
 		`;
 	}
 }
