@@ -12,6 +12,11 @@ export interface Content {
 
 export class Database {
 	private readonly db: SQLiteDatabase;
+	private static readonly seedEntries:Map<string, string> = new Map();
+
+	static addSeed(url: string, content: string) {
+		this.seedEntries.set(url, content);
+	}
 
 	private userVersion(): number {
 		const { user_version } = (this.db.pragma("user_version;") as any[])[0];
@@ -56,45 +61,15 @@ export class Database {
 		this.db = new sqlite("data/main.db");
 		this.db.pragma("journal_mode=WAL;");
 		this.applyMigrations();
-		if (!this.getContent("/")) {
-			this.seedDatabase();
-		}
+		this.seedDatabase();
 	}
 
 	private seedDatabase() {
-		this.createContentRevision(
-			"/",
-			`---
-title = "WikiLearn - learn, teach? both!"
-format = "JSON"
----
-[{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"WikiLearn is a platform where you can create collaborative learning materials and share it with the world. Since we believe in anonymous collaboration, every material on this platform can be changed by anyone, you don't even need any sort of account. Just click on the Edit button and you can start improving that particular material as you see fit."}]},{"T":"p","C":[{"T":"","text":"As an example of what you can build here, you can look at the following simple task:"},{"T":"a","C":[{"T":"","text":"Multiple-Choice"}],"href":"https://wikinarau.org/wiki/berry"}]}]}]
-`,
-		);
-		this.createContentRevision(
-			"/how-to",
-			`---
-title = "How to"
-format = "JSON"
----
-[{"T":"Header","C":[{"T":"","text":"Create a new page"}],"h":"h4"},{"T":"Text","C":[{"T":"","text":"The easiest way would be to use the"},{"T":"i","C":[{"T":"","text":"New Page"}]},{"T":"","text":"button on the left. After providing a title you will be redirected to the newly created page where you can use the Edit button to write content."}]},{"T":"Header","C":[{"T":"","text":"Edit a page"}],"h":"h4"},{"T":"Text","C":[{"T":"","text":"By pressing the Edit button on the top you can change any page."}]}]`,
-		);
-		this.createContentRevision(
-			"/contact-us",
-			`---
-title = "Contact us"
-format = "JSON"
----
-[{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"The best way to contact us right now is via our"},{"T":"a","C":[{"T":"","text":"Discord channel"}],"href":"https://discord.gg/qYfRfNVH"},{"T":"","text":". If you have found a bug or another technical issue you can open an issue on"},{"T":"a","C":[{"T":"","text":"GitHub"}],"href":"https://github.com/WikiNarau/wikinarau"},{"T":"","text":", if you are a programmer you can also get the source code there and open pull requests which we'd love to merge."}]}]}]`,
-		);
-		this.createContentRevision(
-			"/wiki/berry",
-			`---
-title = "Multiple-Choice example"
-format = "JSON"
----
-[{"T":"Header","C":[{"T":"","text":"Welcome!!!"}],"h":"h2"},{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"Just a simple placeholder page containing a single element."}]}]},{"T":"Img","src":"/res/db17b3f2/1631755080401.jpg","width":0,"height":0},{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"Have some boxes!"}]}]},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"primary","summary":"Testbox asd"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"success","summary":"Testbox - primary"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"neutral","summary":"Testbox"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"warning","summary":"Testbox"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"danger","summary":"Testbox"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"none","summary":"Testbox"},{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"What color does the blackcurrant berry actually have?"}]}]},{"T":"Img","src":"/res/67e37743/konachan.com - 123456 kiki.jpg","width":0,"height":0},{"T":"MultipleChoice","C":[{"T":"Option","C":[{"T":"","text":"Black"}],"correct":false},{"T":"Option","C":[{"T":"","text":"Very dark purple"}],"correct":true},{"T":"Option","C":[{"T":"","text":"Blue"}],"correct":false},{"T":"Option","C":[{"T":"","text":"asdqwe"}],"correct":false}],"multiple":false}]`,
-		);
+		for(const [uri, content] of Database.seedEntries.entries()){
+			if(!this.getContent(uri)){
+				this.createContentRevision(uri, content);
+			}
+		}
 	}
 
 	searchContent(sword: string): Content[] {

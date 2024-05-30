@@ -1,5 +1,6 @@
 import { Entry } from "./Entry";
 import { Server } from "./Server";
+import "./DatabaseSeed";
 
 const isDev = process.env.NODE_ENV === "development";
 
