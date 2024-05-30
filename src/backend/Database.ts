@@ -1,193 +1,157 @@
-import sqlite from "better-sqlite3";
-import type { Database as SQLiteDatabase } from "better-sqlite3";
+import { Level } from "level";
 import fs from "node:fs";
 
 import type { ServerResource } from "../common/types";
+import { dbSeed } from "./DatabaseSeed";
+import { utime } from "../common/util";
+import { randomBytes } from "node:crypto";
 
 export interface Content {
 	uri: string;
-	lastRevision: number;
+	content: string;
+	lastRevision: string;
+
+	createdAt: Date;
+	modifiedAt: Date;
+}
+
+
+export interface DBContent {
+	createdAt: number;
+	lastRevision: string;
+}
+
+export interface DBRevision {
+	createdAt: number;
+	previousRevision: string;
+
 	content: string;
 }
 
+export interface DBResource {
+	createdAt: number;
+	name: string;
+	type: string;
+	ext: string;
+	hash: string;
+	meta: Record<string, any>;
+}
+
+
 export class Database {
-	private readonly db: SQLiteDatabase;
-	private static readonly seedEntries:Map<string, string> = new Map();
+	private readonly db: Level<string, any>;
+	private readonly dbContent: ReturnType<typeof this.db.sublevel<string, DBContent>>;
+	private readonly dbRevision: ReturnType<typeof this.db.sublevel<string, DBRevision>>;
+	private readonly dbResource: ReturnType<typeof this.db.sublevel<string, DBResource>>;
 
-	static addSeed(url: string, content: string) {
-		this.seedEntries.set(url, content);
-	}
-
-	private userVersion(): number {
-		const { user_version } = (this.db.pragma("user_version;") as any[])[0];
-		return user_version;
-	}
-
-	private setUserVersion(v: number) {
-		this.db.pragma(`user_version = ${v};`);
-	}
-
-	applyMigrations() {
-		const migrations = fs
-			.readdirSync("./src/backend/databaseMigrations/")
-			.sort(
-				(a, b) =>
-					parseInt(a.split(".").shift() || "0") -
-					parseInt(b.split(".").shift() || "0"),
-			);
-		for (const m of migrations) {
-			const newVer = parseInt(m.split(".").shift() || "0");
-			const curVer = this.userVersion();
-			if (curVer >= newVer) {
-				continue;
-			}
-			if (newVer !== curVer + 1) {
-				throw new Error(
-					`Can't apply migrations, expected ${curVer + 1} but got ${newVer}`,
-				);
-			}
-			const sql = fs.readFileSync(
-				`./src/backend/databaseMigrations/${m}`,
-				"utf-8",
-			);
-			console.log(sql);
-			this.db.exec(sql);
-			this.setUserVersion(newVer);
-		}
-	}
 
 	constructor() {
 		fs.mkdirSync("./data/", { recursive: true });
-		this.db = new sqlite("data/main.db");
-		this.db.pragma("journal_mode=WAL;");
-		this.applyMigrations();
-		this.seedDatabase();
+		this.db = new Level('./data/wikinarau.db', { createIfMissing: true });
+		this.dbContent = this.db.sublevel<string, DBContent>("DBContent", { valueEncoding: 'json' });
+		this.dbRevision = this.db.sublevel<string, DBRevision>("DBRevision", { valueEncoding: 'json' });
+		this.dbResource = this.db.sublevel<string, DBResource>("DBResource", { valueEncoding: 'json' });
 	}
 
-	private seedDatabase() {
-		for(const [uri, content] of Database.seedEntries.entries()){
-			if(!this.getContent(uri)){
-				this.createContentRevision(uri, content);
+	async seedDatabase() {
+		for(const [uri, content] of dbSeed.entries()){
+			if(!await this.getContent(uri)){
+				await this.updateContentRevision(uri, content);
 			}
 		}
 	}
 
-	searchContent(sword: string): Content[] {
-		const ret: Content[] = [];
-		const select = this.db.prepare(`SELECT * from content WHERE uri LIKE ?;`);
-		for (const r of select.iterate(`%${sword}%`)) {
-			const res = r as any;
-			const rev =
-				res.contentRevision && this.getRevision(res.contentRevision as number);
-			if (rev) {
-				ret.push({
-					uri: res.uri,
-					lastRevision: rev.id,
-					content: rev.content,
-				});
-			}
+	searchContent(_sword: string): Content[] {
+		// Disabled for now
+		return [];
+	}
+
+	async getContent(uri: string): Promise<Content | null> {
+		try {
+			const c = await this.dbContent.get(uri);
+			const r = await this.dbRevision.get(c.lastRevision);
+			return <Content>{
+				uri,
+				lastRevision: c.lastRevision,
+				content: r.content,
+				createdAt: new Date(c.createdAt),
+				modifiedAt: new Date(r.createdAt)
+			};
+		} catch {
+			return null;
 		}
-		return ret;
 	}
 
-	getContent(uri: string): Content | null {
-		const select = this.db.prepare(`SELECT * from content WHERE uri = ?;`);
-		const res = select.get(uri) as any;
-		if (res) {
-			const rev =
-				res.contentRevision && this.getRevision(res.contentRevision as number);
-			if (rev) {
-				return <Content>{
-					uri: res.uri,
-					lastRevision: rev.id,
-					content: rev.content,
-				};
-			}
+	async getRevision(id: string): Promise<DBRevision | null> {
+		try {
+			return await this.dbRevision.get(id);
+		} catch {
+			return null;
 		}
-		return null;
 	}
 
-	getRevision(id: number): any {
-		const select = this.db.prepare(`SELECT * from revision WHERE id = ?;`);
-		const res = select.get(id) as any;
-		return res;
-	}
-
-	getResources(): ServerResource[] {
+	async getResources(): Promise<ServerResource[]> {
 		const ret: ServerResource[] = [];
-		const select = this.db.prepare(`SELECT * from resource;`);
-		for (const r of select.iterate()) {
-			const res = r as any;
+		for await (const path of this.dbResource.keys()) {
+			const r = await this.dbResource.get(path);
 			ret.push({
-				id: res.id,
-				createdAt: res.createdAt,
-				ext: res.fileExt,
-				hash: res.fileHash,
-				name: res.fileName,
-				path: res.filePath,
-				type: res.fileType,
+				...r,
+				path
 			});
 		}
 		return ret;
 	}
 
-	updateContentRevision(uri: string, content: string) {
-		const update = this.db.prepare(
-			`UPDATE content SET modifiedAt = ?, contentRevision = ? WHERE uri = ?;`,
-		);
+	static newKey(): string {
+		return randomBytes(8).toString('base64');
+	}
 
-		const old = this.getContent(uri);
-		if (!old) {
-			if (!uri.startsWith("/wiki/")) {
-				throw "The URL of new pages must begin with /wiki/ for future-proofing.";
-			}
-			const rev = this.createRevision(content, 0);
-			this.createContent(uri, rev as number);
-			return rev;
-		} else {
-			const now = Math.floor(+new Date() / 1000);
-			const n = this.createRevision(content, old?.lastRevision);
-			update.run(now, n, uri);
-			return n;
+	async updateContentRevision(uri: string, content: string) {
+		try {
+			const old = await this.dbContent.get(uri);
+			const newRev = await this.createRevision(content, old.lastRevision);
+			await this.dbContent.put(uri, { createdAt: old.createdAt, lastRevision: newRev });
+		} catch {
+			const newRev = await this.createRevision(content, "");
+			await this.dbContent.put(uri, { createdAt: utime(), lastRevision: newRev });
 		}
 	}
 
-	createContent(uri: string, contentRevision = 0) {
-		const insert = this.db.prepare(
-			`INSERT INTO content (createdAt, modifiedAt, deletedAt, uri, contentRevision) VALUES (?, ?, ?, ?, ?);`,
-		);
-		const now = Math.floor(+new Date() / 1000);
-		const res = insert.run(now, now, 0, uri, contentRevision);
-		return res.lastInsertRowid;
+	async createRevision(content: string, previousRevision = ""): Promise<string> {
+		let key = Database.newKey();
+		for(let i=0;i<10;i++){
+			const rev = await this.getRevision(key);
+			if(!rev){
+				break;
+			}
+			if(i > 8){
+				throw new Error("Can't generate Revision Key");
+			}
+		}
+		const createdAt = utime();
+		await this.dbRevision.put(key, {
+			createdAt,
+			content,
+			previousRevision,
+		});
+		return key;
 	}
 
-	createRevision(content: string, previousRevision = 0) {
-		const insert = this.db.prepare(
-			`INSERT INTO revision (createdAt, previousRevision, content) VALUES (?, ?, ?);`,
-		);
-		const now = Math.floor(+new Date() / 1000);
-		const res = insert.run(now, previousRevision, content);
-		return res.lastInsertRowid;
-	}
-
-	createContentRevision(uri: string, content: string) {
-		const rev = this.createRevision(content);
-		const con = this.createContent(uri, rev as number);
-		return con;
-	}
-
-	createResource(
+	async createResource(
 		path: string,
 		name: string,
 		ext: string,
 		hash: string,
 		type: string,
 	) {
-		const insert = this.db.prepare(
-			`INSERT INTO resource (createdAt, filePath, fileName, fileExt, fileHash, fileType) VALUES (?, ?, ?, ?, ?, ?);`,
-		);
-		const now = Math.floor(+new Date() / 1000);
-		const res = insert.run(now, path, name, ext, hash, type);
-		return res.lastInsertRowid;
+		const createdAt = utime();
+		await this.dbResource.put(path, {
+			createdAt,
+			meta: {},
+			name,
+			ext,
+			hash,
+			type
+		})
 	}
 }

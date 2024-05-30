@@ -1,5 +1,4 @@
 export interface ServerResource {
-	id: number;
 	createdAt: number;
 	ext: string;
 	path: string;

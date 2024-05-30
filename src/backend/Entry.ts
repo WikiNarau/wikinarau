@@ -100,7 +100,7 @@ export class Entry {
 	}
 
 	static async getByURI(db: Database, uri: string): Promise<Entry | null> {
-		const con = db.getContent(uri);
+		const con = await db.getContent(uri);
 		if (con) {
 			return Entry.fromContent(con);
 		} else {

@@ -1,6 +1,6 @@
 FROM node:22-alpine
 
-RUN apk add --no-cache graphicsmagick curl python3 build-base
+RUN apk add --no-cache graphicsmagick curl
 WORKDIR /app
 COPY . .
 RUN npm ci && npm run build

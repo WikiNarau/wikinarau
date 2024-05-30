@@ -20,6 +20,7 @@
 		"@shoelace-style/shoelace": "latest",
 		"better-sqlite3": "latest",
 		"express": "latest",
+		"level": "latest",
 		"lit": "latest",
 		"smol-toml": "latest",
 		"trix": "latest",
