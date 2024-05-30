@@ -60,3 +60,32 @@ export const renderJSONElement = (ele: SerializedElement): string => {
 export const renderJSONList = (list: SerializedElement[]): string => {
 	return Array.isArray(list) ? list.map(renderJSONElement).join("\n") : "";
 };
+
+export const renderJSONElementToText = (ele: SerializedElement): string => {
+	if (!ele) {
+		return "";
+	}
+
+	switch (ele.T) {
+		case "":
+			return ele.text;
+		case "Box":
+			return ele.summary + "\n" + (ele.C ? renderJSONListToText(ele.C) : "");
+		case "Header":
+			return ele.C ? renderJSONListToText(ele.C) : "";
+		case "Img":
+		case "Audio":
+		case "Video":
+		case "StemCell":
+			return "";
+		default:
+		case "MultipleChoice":
+		case "Option":
+		case "Text":
+			return ele.C ? renderJSONListToText(ele.C) : "";
+	}
+};
+
+export const renderJSONListToText = (list: SerializedElement[]): string => {
+	return Array.isArray(list) ? list.map(renderJSONElementToText).join("\n") : "";
+}

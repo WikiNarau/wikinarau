@@ -69,8 +69,7 @@ export class Server {
 		} else {
 			if (uri.startsWith("/search/")) {
 				const sword = uri.substring("/search/".length);
-				const entries = this.db
-					.searchContent(sword)
+				const entries = (await this.db.searchContent(sword))
 					.map(Entry.fromContent)
 					.map((e, i) => e.renderTeaser(i));
 				const content =
@@ -132,7 +131,7 @@ export class Server {
 	}
 
 	async listen() {
-		await this.db.seedDatabase();
+		await this.db.init();
 		await Resource.init();
 
 		if (!this.devMode) {

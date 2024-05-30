@@ -1,5 +1,5 @@
 import type { Content, Database } from "./Database";
-import { renderJSONList } from "../common/contentTypes";
+import { renderJSONList, renderJSONListToText } from "../common/contentTypes";
 import * as toml from "smol-toml";
 
 export class Entry {
@@ -91,6 +91,11 @@ export class Entry {
 			console.error(e);
 			return "";
 		}
+	}
+
+	renderText() {
+		const [_frontmatter, content] = this.splitFrontmatterContent(this.content);
+		return renderJSONListToText(JSON.parse(content));
 	}
 
 	public renderTeaser(i: number) {

@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"@lit/context": "latest",
+		"@orama/orama": "^2.0.19",
 		"@shoelace-style/shoelace": "latest",
 		"better-sqlite3": "latest",
 		"express": "latest",

@@ -5,6 +5,8 @@ import type { ServerResource } from "../common/types";
 import { dbSeed } from "./DatabaseSeed";
 import { utime } from "../common/util";
 import { randomBytes } from "node:crypto";
+import { SearchIndex } from "./Search";
+import { Entry } from "./Entry";
 
 export interface Content {
 	uri: string;
@@ -44,6 +46,8 @@ export class Database {
 	private readonly dbRevision: ReturnType<typeof this.db.sublevel<string, DBRevision>>;
 	private readonly dbResource: ReturnType<typeof this.db.sublevel<string, DBResource>>;
 
+	private index: SearchIndex;
+
 
 	constructor() {
 		fs.mkdirSync("./data/", { recursive: true });
@@ -51,19 +55,34 @@ export class Database {
 		this.dbContent  = this.db.sublevel<string,  DBContent>("DBContent",  { valueEncoding: 'json' });
 		this.dbRevision = this.db.sublevel<string, DBRevision>("DBRevision", { valueEncoding: 'json' });
 		this.dbResource = this.db.sublevel<string, DBResource>("DBResource", { valueEncoding: 'json' });
+		this.index = new SearchIndex();
 	}
 
-	async seedDatabase() {
+	async init() {
 		for(const [uri, content] of dbSeed.entries()){
 			if(!await this.getContent(uri)){
 				await this.updateContentRevision(uri, content);
 			}
 		}
+		await this.index.init();
+		for await (const uri of this.dbContent.keys()) {
+			const entry = await Entry.getByURI(this, uri);
+			if(entry){
+				await this.index.updateEntry(entry);
+			}
+		}
 	}
 
-	searchContent(_sword: string): Content[] {
-		// Disabled for now
-		return [];
+	async searchContent(sword: string): Promise<Content[]> {
+		const ret:Content[] = [];
+		const results = (await this.index.searchForEntry(sword)).sort((a,b) => b.score - a.score);
+		for(const res of results){
+			const con = await this.getContent(res.uri);
+			if(con){
+				ret.push(con);
+			}
+		}
+		return ret;
 	}
 
 	async getContent(uri: string): Promise<Content | null> {
@@ -114,6 +133,10 @@ export class Database {
 		} catch {
 			const newRev = await this.createRevision(content, "");
 			await this.dbContent.put(uri, { createdAt: utime(), lastRevision: newRev });
+		}
+		const entry = await Entry.getByURI(this, uri);
+		if(entry){
+			this.index.updateEntry(entry);
 		}
 	}
 
