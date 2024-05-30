@@ -5,7 +5,7 @@ dbSeed.set("/",
 title = "WikiLearn - learn, teach? both!"
 format = "JSON"
 ---
-[{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"WikiLearn is a platform where you can"},{"T":"b","C":[{"T":"","text":"create"}]},{"T":"","text":"collaborative learning materials and"},{"T":"b","C":[{"T":"","text":"share"}]},{"T":"","text":"it with the world. Since we believe in anonymous collaboration, every material on this platform can be changed by"},{"T":"b","C":[{"T":"","text":"anyone"}]},{"T":"","text":", you don't even need any sort of account. Just click on the Edit button and you can start improving that particular material as you see fit."}]},{"T":"p","C":[{"T":"","text":"As an example of what you can build here, you can look at the following simple task:"},{"T":"a","C":[{"T":"","text":"Multiple-Choice"}],"href":"https://wikinarau.org/wiki/berry"}]}]}]
+[{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"WikiLearn is a platform where you can"},{"T":"b","C":[{"T":"","text":"create"}]},{"T":"","text":"collaborative learning materials and"},{"T":"b","C":[{"T":"","text":"share"}]},{"T":"","text":"it with the world. Since we believe in anonymous collaboration, every material on this platform can be changed by"},{"T":"b","C":[{"T":"","text":"anyone"}]},{"T":"","text":", you don't even need any sort of account. Just click on the Edit button and you can start improving that particular material as you see fit."}]},{"T":"p","C":[{"T":"","text":"As an example of what you can build here, you can look at the following simple task:"},{"T":"a","C":[{"T":"","text":"Multiple-Choice"}],"href":"/wiki/berry"}]}]}]
 `);
 
 dbSeed.set("/how-to",

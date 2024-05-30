@@ -31,7 +31,7 @@ export class RPCQueue {
 	private _flush: () => void;
 	private flushTO?: ReturnType<typeof setTimeout>;
 	private callThis: any;
-	private callMap = new Map<string, (v: unknown) => unknown>();
+	private callMap = new Map<string, (v: unknown) => Promise<unknown>>();
 
 	constructor(private flushHandler: (packet: RPCPacket) => boolean) {
 		this._flush = this.flush.bind(this);
@@ -42,7 +42,7 @@ export class RPCQueue {
 		return this;
 	}
 
-	setCallHandler(name: string, handler: (v: unknown) => unknown) {
+	setCallHandler(name: string, handler: (v: unknown) => Promise<unknown>) {
 		this.callMap.set(name, handler);
 		return this;
 	}
@@ -104,42 +104,43 @@ export class RPCQueue {
 		}
 	}
 
-	private handleCall(call: RPCCall) {
+	private async handleCall(call: RPCCall) {
 		const handler = this.callMap.get(call.fun);
 		if (!handler) {
 			throw "Invalid funcall: fun not mapped";
 		}
-		return handler.call(this.callThis, call.args);
+		return await handler.call(this.callThis, call.args);
 	}
 
 	handlePacket(packet: RPCPacket) {
 		if (packet.T !== "RPC") {
 			throw `Invalid packet ${packet.T}`;
 		}
-		if (Array.isArray(packet.calls)) {
-			for (const call of packet.calls) {
-				if (typeof call.id !== "number") {
-					continue;
-				}
-				try {
-					if (typeof call.fun !== "string") {
-						throw "Invalid funcall: fun is not a string";
+		setTimeout(async () => {
+			if (Array.isArray(packet.calls)) {
+				for (const call of packet.calls) {
+					if (typeof call.id !== "number") {
+						continue;
 					}
-					const val = this.handleCall(call);
-					this.reply(call.id, val);
-				} catch (e) {
-					if (typeof e === "string") {
-						this.reply(call.id, undefined, e);
-					} else {
-						this.reply(call.id, undefined, "Error");
+					try {
+						if (typeof call.fun !== "string") {
+							throw "Invalid funcall: fun is not a string";
+						}
+						this.reply(call.id, await this.handleCall(call));
+					} catch (e) {
+						if (typeof e === "string") {
+							this.reply(call.id, undefined, e);
+						} else {
+							this.reply(call.id, undefined, "Error");
+						}
 					}
 				}
 			}
-		}
-		if (Array.isArray(packet.replies)) {
-			for (const reply of packet.replies) {
-				this.handleReply(reply);
+			if (Array.isArray(packet.replies)) {
+				for (const reply of packet.replies) {
+					this.handleReply(reply);
+				}
 			}
-		}
+		});
 	}
 }

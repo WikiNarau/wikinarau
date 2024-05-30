@@ -48,7 +48,7 @@ export class Database {
 	constructor() {
 		fs.mkdirSync("./data/", { recursive: true });
 		this.db = new Level('./data/wikinarau.db', { createIfMissing: true });
-		this.dbContent = this.db.sublevel<string, DBContent>("DBContent", { valueEncoding: 'json' });
+		this.dbContent  = this.db.sublevel<string,  DBContent>("DBContent",  { valueEncoding: 'json' });
 		this.dbRevision = this.db.sublevel<string, DBRevision>("DBRevision", { valueEncoding: 'json' });
 		this.dbResource = this.db.sublevel<string, DBResource>("DBResource", { valueEncoding: 'json' });
 	}
@@ -152,6 +152,7 @@ export class Database {
 			ext,
 			hash,
 			type
-		})
+		});
+		return path;
 	}
 }

@@ -50,7 +50,6 @@ export class Server {
 		this.host = host;
 		this.app = express();
 		this.db = new Database();
-		Resource.init();
 	}
 
 	async handleRequest(req: WebRequest): Promise<WebResponse> {
@@ -134,6 +133,8 @@ export class Server {
 
 	async listen() {
 		await this.db.seedDatabase();
+		await Resource.init();
+
 		if (!this.devMode) {
 			Entry.setTemplate(await fsp.readFile("./dist/index.html", "utf-8"));
 			this.app.use(

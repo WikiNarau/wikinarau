@@ -26,15 +26,15 @@ export class Socket {
 		socket.on("message", this.message.bind(this));
 	}
 
-	getSelf(_args: unknown) {
+	async getSelf(_args: unknown) {
 		return "Someone!";
 	}
 
-	listResources(_args: unknown) {
-		return this.server.db.getResources();
+	async listResources(_args: unknown) {
+		return await this.server.db.getResources();
 	}
 
-	uploadResource(args: unknown) {
+	async uploadResource(args: unknown) {
 		if (typeof args !== "object" || !args) {
 			throw "Invalid args";
 		}
@@ -55,7 +55,7 @@ export class Socket {
 		return Resource.create(this.server.db, args.name, binData);
 	}
 
-	updateContentRevision(args: unknown) {
+	async updateContentRevision(args: unknown) {
 		if (typeof args !== "object" || !args) {
 			throw "Invalid args";
 		}
@@ -66,7 +66,7 @@ export class Socket {
 			throw "Invalid content";
 		}
 
-		this.server.db.updateContentRevision(args.uri, args.content);
+		await this.server.db.updateContentRevision(args.uri, args.content);
 		return true;
 	}
 
