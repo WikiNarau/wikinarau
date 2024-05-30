@@ -24,10 +24,26 @@ format = "JSON"
 [{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"The best way to contact us right now is via our"},{"T":"a","C":[{"T":"","text":"Discord channel"}],"href":"https://discord.gg/qYfRfNVH"},{"T":"","text":". If you have found a bug or another technical issue you can open an issue on"},{"T":"a","C":[{"T":"","text":"GitHub"}],"href":"https://github.com/WikiNarau/wikinarau"},{"T":"","text":", if you are a programmer you can also get the source code there and open pull requests which we'd love to merge."}]}]}]
 `);
 
+dbSeed.set("/privacy",
+`---
+title = "Privacy policy"
+format = "JSON"
+---
+[]
+`);
+
+dbSeed.set("/terms-of-use",
+`---
+title = "Terms of use"
+format = "JSON"
+---
+[]
+`);
+
 dbSeed.set("/wiki/berry",
 `---
 title = "Multiple-Choice example"
 format = "JSON"
 ---
-[{"T":"Header","C":[{"T":"","text":"Welcome!!!"}],"h":"h2"},{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"Just a simple placeholder page containing a single element."}]}]},{"T":"Img","src":"/res/db17b3f2/1631755080401.jpg","width":0,"height":0},{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"Have some boxes!"}]}]},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"primary","summary":"Testbox asd"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"success","summary":"Testbox - primary"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"neutral","summary":"Testbox"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"warning","summary":"Testbox"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"danger","summary":"Testbox"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"none","summary":"Testbox"},{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"What color does the blackcurrant berry actually have?"}]}]},{"T":"Img","src":"/res/67e37743/konachan.com - 123456 kiki.jpg","width":0,"height":0},{"T":"MultipleChoice","C":[{"T":"Option","C":[{"T":"","text":"Black"}],"correct":false},{"T":"Option","C":[{"T":"","text":"Very dark purple"}],"correct":true},{"T":"Option","C":[{"T":"","text":"Blue"}],"correct":false},{"T":"Option","C":[{"T":"","text":"asdqwe"}],"correct":false}],"multiple":false}]
+[{"T":"Header","C":[{"T":"","text":"Welcome!!!"}],"h":"h2"},{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"Just a simple placeholder page containing a single element."}]}]},{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"Have some boxes!"}]}]},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"primary","summary":"Testbox asd"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"success","summary":"Testbox - primary"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"neutral","summary":"Testbox"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"warning","summary":"Testbox"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"danger","summary":"Testbox"},{"T":"Box","C":[{"T":"Text","C":[{"T":"","text":"Test"}]}],"variant":"none","summary":"Testbox"},{"T":"Text","C":[{"T":"p","C":[{"T":"","text":"What color does the blackcurrant berry actually have?"}]}]},{"T":"MultipleChoice","C":[{"T":"Option","C":[{"T":"","text":"Black"}],"correct":false},{"T":"Option","C":[{"T":"","text":"Very dark purple"}],"correct":true},{"T":"Option","C":[{"T":"","text":"Blue"}],"correct":false},{"T":"Option","C":[{"T":"","text":"asdqwe"}],"correct":false}],"multiple":false}]
 `);

@@ -68,7 +68,6 @@ export class ResourceList extends LitElement {
 					(ele as HTMLElement).tagName === "DIV" &&
 					(ele as HTMLElement).classList.contains("resource"),
 			);
-		console.log(res);
 		if (res) {
 			const path = (res as HTMLElement).getAttribute("path") || "";
 			if (path) {
