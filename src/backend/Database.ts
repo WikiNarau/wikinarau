@@ -65,12 +65,14 @@ export class Database {
 			}
 		}
 		await this.index.init();
-		for await (const uri of this.dbContent.keys()) {
-			const entry = await Entry.getByURI(this, uri);
-			if(entry){
-				await this.index.updateEntry(entry);
+		setTimeout(async () => {
+			for await (const uri of this.dbContent.keys()) {
+				const entry = await Entry.getByURI(this, uri);
+				if(entry){
+					await this.index.updateEntry(entry);
+				}
 			}
-		}
+		});
 	}
 
 	async searchContent(sword: string): Promise<Content[]> {
