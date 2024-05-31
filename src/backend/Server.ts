@@ -48,7 +48,7 @@ export class Server {
 			return <WebResponse>{
 				code: 200,
 				contentType: "text/html",
-				body: entry.renderHTML(),
+				body: entry.renderHTML(this.config),
 			};
 		} else {
 			if (uri.startsWith("/search/")) {

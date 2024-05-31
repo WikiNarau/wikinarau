@@ -1,6 +1,7 @@
 import type { Content, Database } from "./Database";
 import { renderJSONList, renderJSONListToText } from "../common/contentTypes";
 import * as toml from "smol-toml";
+import type { Config } from "./Config";
 
 export class Entry {
 	private static template = `
@@ -73,22 +74,24 @@ export class Entry {
 		}
 	}
 
-	private genHeadFromFrontmatter(fm: Record<string, unknown>): string {
+	private genHeadFromFrontmatter(config: Config, fm: Record<string, unknown>): string {
 		let ret:string[] = [];
 		if(fm.description && typeof fm.description === "string"){
 			const att = fm.description.replace(/'/g,"&#39;");
 			ret.push(`<meta name="description" content='${att}' />`);
 		}
+		const canonical = `${config.baseUri}${this.uri}`;
+		ret.push(`<link rel="canonical" href="${canonical}" />`);
 		return ret.join("\n");
 	}
 
-	public renderHTML() {
+	public renderHTML(config: Config) {
 		try {
 			const [frontmatter, content] = this.splitFrontmatterContent(this.content);
 			const html = renderJSONList(JSON.parse(content));
 			const { title } = frontmatter;
 
-			const head = this.genHeadFromFrontmatter(frontmatter);
+			const head = this.genHeadFromFrontmatter(config, frontmatter);
 			const body = `<h1>${title}</h1>
 			<i6q-frame section="main" meta='${JSON.stringify(frontmatter).replace(
 				/'/g,

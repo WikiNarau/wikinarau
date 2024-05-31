@@ -2,7 +2,7 @@ export class Config {
 	public devMode = false;
 	public port = 2600;
 	public bindAddress = "localhost";
-	public baseUri = "http://localhost:2600/";
+	public baseUri = "http://localhost:2600";
 
 	// This doesn't belong in Config, it should go into the DB in the long run
 	public footer = `All content is available under the Creative Commons <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">CC BY-SA 4.0 License</a>.<br/>
@@ -21,7 +21,7 @@ export class Config {
 					this.port = num;
 				}
 			} catch {
-				console.error(`Invalid PORT Environt variable: "${process.env.PORT}"`);
+				console.error(`Invalid PORT Environment variable: "${process.env.PORT}"`);
 			}
 		}
 		if(process.env.BIND_ADDRESS){
@@ -29,6 +29,9 @@ export class Config {
 		}
 		if(process.env.BASE_URI){
 			this.baseUri = process.env.BASE_URI;
+			if(this.baseUri.endsWith("/")){
+				throw new Error("Base URI's shouldn't end with a slash, please change your config!!!")
+			}
 		}
 	}
 
