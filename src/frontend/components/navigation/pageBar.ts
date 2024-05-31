@@ -110,7 +110,7 @@ export class PageBar extends LitElement {
 		margin-left:0;
 	}
 	a:last-child {
-		margin-right1:0;
+		margin-right:0;
 	}
 `;
 }

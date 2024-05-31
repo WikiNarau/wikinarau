@@ -1,83 +1,128 @@
+import { SlDrawer } from "@shoelace-style/shoelace";
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, query } from "lit/decorators.js";
 
 @customElement("i6q-topbar")
 export class TopBar extends LitElement {
+
+	@query("sl-drawer.navigation-drawer")
+	drawer?: SlDrawer;
+
+	private toggleNavigation() {
+		if(!this.drawer){
+			throw new Error("Can't query sl-drawer.navigation-drawer");
+		}
+		if(this.drawer.open){
+			this.drawer.hide();
+		} else {
+			this.drawer.show();
+		}
+	}
+
+
 	render() {
 		return html`
-			<div class="center">
-				<div class="center-left">
-					<a href="/" class="home" aria-label="Home"><img src="/assets/logo.svg?v=1" alt="WikiLearn" /></a>
-				</div>
-				<div class="center-center">
-					<i6q-search-bar />
-				</div>
-				<div class="center-right">
-
-				</div>
-			</div>
-		`;
+<div class="bar">
+	<aside class="left">
+		<a href="/" class="home" aria-label="Home">
+			<img class="logo" src="/assets/logo.svg?v=1" alt="WikiLearn" />
+		</a>
+		<sl-icon-button @click=${this.toggleNavigation} class="mobile-nav" name="list" label="Show Navigation"></sl-icon-button>
+		<sl-drawer class="navigation-drawer" label="Navigation" placement="start">
+			<a href="/" class="home" aria-label="Home">
+				<img class="logo" src="/assets/logo.svg?v=1" alt="WikiLearn" />
+			</a>
+			<br/>
+			<i6q-site-nav noBoxShadow></i6q-site-nav>
+		</sl-drawer>
+	</aside>
+	<section>
+		<i6q-search-bar></i6q-search-bar>
+	</section>
+</div>
+`;
 	}
 
 	static styles = css`
-	:host {
-		display: block;
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 3rem;
-		background: var(--color-background-light);
-		border-bottom: solid 2px var(--color-primary);
-		box-shadow: 0px 0px 4px 1px var(--color-background-dark);
-		z-index:10;
+:host {
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 3rem;
+	background: var(--color-background-light);
+	border-bottom: solid 2px var(--color-primary);
+	box-shadow: 0px 0px 4px 1px var(--color-background-dark);
+	z-index:10;
+}
+
+.bar {
+	padding: 0 1rem;
+	box-sizing: border-box;
+	margin:0 auto;
+	position: relative;
+	width: 100%;
+	max-width: 1600px;
+}
+
+.bar > .left {
+	float: left;
+}
+
+.bar > .right {
+	float: right;
+}
+
+.bar > aside {
+	width: 180px;
+}
+
+.bar > section {
+	margin:0 auto;
+	position: relative;
+	width: calc(100% - 180px - 180px - 1rem - 1rem);
+	padding:0;
+}
+
+img.logo {
+	display: block;
+	width: 100%;
+	height: 2.5rem;
+	object-fit: contain;
+	margin-top: 0.25rem;
+}
+
+.mobile-nav {
+	display: none;
+	font-size: 2.5rem;
+	margin-top: 0.1rem;
+}
+
+.mobile-nav::part(base) {
+	padding: 0;
+}
+
+@media only screen and (max-width: 960px) {
+	.bar > aside {
+		width: 32px;
 	}
 
-	.center {
-		width: 100%;
-		max-width: 1280px;
-		margin: 0 auto;
-		padding: 0 2rem;
-		box-sizing: border-box;
-		display: block;
-		min-height: 1rem;
+	.bar > section {
+		margin:0 auto;
 		position: relative;
+		width: calc(100% - 32px - 32px - 1rem - 1rem);
+		padding:0;
 	}
 
-	.center-center {
-		width: 100%;
-		max-width: 924px;
-		margin: 0 auto;
-		box-sizing: border-box;
-		display: block;
-		min-height: 1rem;
+	aside > a.home {
+		display: none;
 	}
 
-	img {
-		height: 100%;
-		width: auto;
-		height: 1.5rem;
-		margin-top: 0.7rem;
-	}
-
-	.center-left {
+	.mobile-nav {
 		display: inline-block;
-		position: absolute;
-		left: 0;
-		top: 0;
-		padding-left: 1rem;
-		box-sizing: border-box;
 	}
-
-	.center-right {
-		display: inline-block;
-		position: absolute;
-		right: 0;
-		top: 0;
-		padding-right: 1rem;
-		box-sizing: border-box;
-	}
-
+}
 `;
 }
 

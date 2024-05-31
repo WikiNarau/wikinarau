@@ -1,5 +1,5 @@
 import { html, css, LitElement } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 
 @customElement("i6q-site-nav")
@@ -14,9 +14,12 @@ export class SiteNav extends LitElement {
 		margin:0 0 1rem 0;
 	}
 
+	section.noBoxShadow {
+		box-shadow: none;
+	}
+
 	a {
 		display: block;
-		vertical-align: middle;
 		line-height: 1.4rem;
 	}
 
@@ -28,6 +31,9 @@ export class SiteNav extends LitElement {
 `,
 	];
 
+	@property({ type: Boolean })
+	noboxshadow = false;
+
 	@query("i6q-dialog-create-page")
 	dialogCreatePage: any;
 
@@ -37,14 +43,14 @@ export class SiteNav extends LitElement {
 	}
 
 	render() {
-		return html`<section>
+		return html`<section class="${this.noboxshadow ? "noBoxShadow" : ""}">
 		<h6>Navigation</h6>
 		<a href="/"><sl-icon name="house"></sl-icon> Main page</a>
 		<a href="/how-to"><sl-icon name="question-lg"></sl-icon> How to</a>
 		<a href="/contact-us"><sl-icon name="chat-dots"></sl-icon> Contact us</a>
 	</section>
 
-	<section>
+	<section class="${this.noboxshadow ? "noBoxShadow" : ""}">
 		<h6>Contribute</h6>
 		<a href="/" @click=${this.createPage}><sl-icon name="file-earmark"></sl-icon> New Page</a>
 		<a href="https://github.com/WikiNarau/wikinarau"><sl-icon name="github"></sl-icon> GitHub</a>

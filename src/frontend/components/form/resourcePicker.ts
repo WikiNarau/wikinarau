@@ -102,7 +102,7 @@ export class ResourcePicker extends LitElement {
 			case "audio":
 				return html`<audio src=${this.src} controls></audio>`;
 			case "image":
-				return html`<img src=${this.src}/>`;
+				return html`<img src=${this.src} />`;
 		}
 	}
 

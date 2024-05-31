@@ -46,6 +46,52 @@ h6 {
 	border-bottom: solid 1px var(--color-primary);
 }
 
+
+@media only screen and (max-width: 700px) {
+	h1 {
+		font-size: 2rem;
+	}
+
+	h2 {
+		font-size: 1.8rem;
+	}
+
+	h3 {
+		font-size: 1.6rem;
+	}
+
+	h4 {
+		font-size: 1.4rem;
+	}
+
+	h5 {
+		font-size: 1.2rem;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+	h1 {
+		font-size: 1.6rem;
+	}
+
+	h2 {
+		font-size: 1.4rem;
+	}
+
+	h3 {
+		font-size: 1.2rem;
+	}
+
+	h4 {
+		font-size: 1.1rem;
+	}
+
+	h5, h6 {
+		font-size: 1rem;
+	}
+}
+
+
 a {
 	text-decoration: none;
 	color: var(--color-primary);

@@ -38,11 +38,11 @@ export class EditBar extends LitElement {
 				<sl-button-group>
 					<sl-button variant="warning" @click=${this.cancel}>
 						<sl-icon slot="prefix" name="x-lg"></sl-icon>
-						Cancel
+						<span class="button-text">Cancel</span>
 					</sl-button>
 					<sl-button variant="success" @click=${this.save}>
 						<sl-icon slot="prefix" name="floppy"></sl-icon>
-						Save
+						<span class="button-text">Save</span>
 					</sl-button>
 				</sl-button-group>
 			</div>
@@ -52,7 +52,7 @@ export class EditBar extends LitElement {
 	static styles = css`
 		.left {
 			float:left;
-			width: calc(100% - 20rem);
+			width: calc(100% - 12.5rem);
 		}
 
 		.right {
@@ -69,7 +69,21 @@ export class EditBar extends LitElement {
 			padding-bottom: 0.5rem;
 			background: var(--color-background-light);
 			border-bottom: solid 2px var(--sl-color-neutral-600);
-			z-index:100;
+			z-index:9;
+		}
+
+		@media only screen and (max-width: 500px) {
+			.button-text {
+				display: none;
+			}
+
+			.right > sl-button-group > sl-button::part(label) {
+				padding: 0 0.4rem;
+			}
+
+			.left {
+				width: calc(100% - 6rem);
+			}
 		}
 	`;
 }

@@ -7,8 +7,8 @@ export class EditBox extends LitElement {
 	@property({ type: Boolean })
 	singleLine = false;
 
-	@property({ type: Boolean })
-	variant = false;
+	@property({ type: String })
+	variant = '';
 
 	static styles = [
 		typographicStyles,
@@ -38,7 +38,6 @@ export class EditBox extends LitElement {
 	cursor: grab;
 	cursor: -moz-grab;
 	cursor: -webkit-grab;
-	var(--sl-color-neutral-600);
 	background: var(--sl-input-border-color);
 	border-bottom: solid var(--sl-input-border-width) var(--sl-input-border-color);
 	transition: background-color 300ms;
