@@ -41,10 +41,11 @@ export class Entry {
 		this.footer = footerHTML;
 	}
 
-	public static renderTemplate(title: string, content: string) {
+	public static renderTemplate(title: string, content: string, head = '') {
 		return Entry.template
 			.replace("<!--TITLE-->", title)
 			.replace("<!--CONTENT-->", content)
+			.replace("<!--HEAD-->", head)
 			.replace("<!--FOOTER-->", Entry.footer);
 	}
 
@@ -72,12 +73,22 @@ export class Entry {
 		}
 	}
 
+	private genHeadFromFrontmatter(fm: Record<string, unknown>): string {
+		let ret:string[] = [];
+		if(fm.description && typeof fm.description === "string"){
+			const att = fm.description.replace(/'/g,"&#39;");
+			ret.push(`<meta name="description" content='${att}' />`);
+		}
+		return ret.join("\n");
+	}
+
 	public renderHTML() {
 		try {
 			const [frontmatter, content] = this.splitFrontmatterContent(this.content);
 			const html = renderJSONList(JSON.parse(content));
 			const { title } = frontmatter;
 
+			const head = this.genHeadFromFrontmatter(frontmatter);
 			const body = `<h1>${title}</h1>
 			<i6q-frame section="main" meta='${JSON.stringify(frontmatter).replace(
 				/'/g,
@@ -86,7 +97,7 @@ export class Entry {
 				${html}
 				<i6q-code slot="code" value='${this.content.replace(/'/g, "&#39;")}'></i6q-code>
 			</i6q-frame>`;
-			return Entry.renderTemplate(title, body);
+			return Entry.renderTemplate(title, body, head);
 		} catch (e) {
 			console.error(e);
 			return "";
