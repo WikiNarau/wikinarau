@@ -43,7 +43,7 @@ h6 {
 	margin: 0 0 0.25rem;
 	font-weight: normal;
 	display: block;
-	border-bottom: solid 1px var(--color-primary);
+	border-bottom: solid 1px var(--sl-color-primary-600);
 }
 
 
@@ -94,7 +94,12 @@ h6 {
 
 a {
 	text-decoration: none;
-	color: var(--color-primary);
+	color: var(--sl-color-primary-700);
+}
+
+a:focus,
+a:hover {
+	text-decoration: underline;
 }
 
 p {

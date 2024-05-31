@@ -52,7 +52,7 @@ export class TopBar extends LitElement {
 	width: 100%;
 	height: 3rem;
 	background: var(--color-background-light);
-	border-bottom: solid 2px var(--color-primary);
+	border-bottom: solid 2px var(--sl-color-primary-600);
 	box-shadow: 0px 0px 4px 1px var(--color-background-dark);
 	z-index:10;
 }

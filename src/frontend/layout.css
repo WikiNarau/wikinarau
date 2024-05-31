@@ -86,7 +86,7 @@ footer {
 	margin-top: 4rem;
 	width: 100%;
 	display: block;
-	border-top: solid 2px var(--color-primary);
+	border-top: solid 2px var(--sl-color-primary-600);
 }
 
 #footer {
@@ -170,7 +170,17 @@ h4,h5,h6,p,ul,ol {
 
 a {
 	text-decoration: none;
-	color: var(--color-primary);
+	color: var(--sl-color-primary-700);
+	font-weight: bold;
+}
+
+a:focus,
+a:hover {
+	text-decoration: underline;
+}
+
+footer a {
+	color: var(--sl-color-primary-800);
 }
 
 p {

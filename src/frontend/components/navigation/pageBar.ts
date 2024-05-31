@@ -95,7 +95,7 @@ export class PageBar extends LitElement {
 
 	a {
 		text-decoration: none;
-		color: var(--color-primary);
+		color: var(--sl-color-primary-700);
 		display: inline-block;
 		margin: 0 1rem;
 		padding: 6px 0;

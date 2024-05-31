@@ -83,13 +83,13 @@ export class Button extends LitElement {
 
 :host(.flat) {
   background: transparent !important;
-  color: var(--sl-color-primary-600);
+  color: var(--sl-color-primary-700);
 }
 
 :host(.flat:hover),
 :host(.flat:focus) {
   background: transparent !important;
-  color: var(--sl-color-primary-500);
+  color: var(--sl-color-primary-600);
 }
 `;
 }
