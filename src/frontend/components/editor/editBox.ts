@@ -41,6 +41,11 @@ export class EditBox extends LitElement {
 	var(--sl-color-neutral-600);
 	background: var(--sl-input-border-color);
 	border-bottom: solid var(--sl-input-border-width) var(--sl-input-border-color);
+	transition: background-color 300ms;
+}
+
+.edit-box {
+	transition: border-color 300ms;
 }
 
 :host([variant="primary"]) .edit-box {
