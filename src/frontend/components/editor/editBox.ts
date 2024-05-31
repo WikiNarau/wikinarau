@@ -47,48 +47,57 @@ export class EditBox extends LitElement {
 	transition: border-color 300ms;
 }
 
-:host([variant="primary"]) .edit-box {
-	border-color: var(--sl-color-primary-700);
+:host([variant="sky"]) .edit-box {
+	border-color: var(--sl-color-sky-700);
 }
-:host([variant="primary"]) .bar {
-	background: var(--sl-color-primary-600);
-	border-color: var(--sl-color-primary-700);
+:host([variant="sky"]) .bar {
+	background: var(--sl-color-sky-600);
+	border-color: var(--sl-color-sky-700);
 	color: #fff;
 }
 
-:host([variant="success"]) .edit-box {
-	border-color: var(--sl-color-success-700);
+:host([variant="emerald"]) .edit-box {
+	border-color: var(--sl-color-emerald-700);
 }
-:host([variant="success"]) .bar {
-	background: var(--sl-color-success-600);
-	border-color: var(--sl-color-success-700);
+:host([variant="emerald"]) .bar {
+	background: var(--sl-color-emerald-600);
+	border-color: var(--sl-color-emerald-700);
 	color: #fff;
 }
 
-:host([variant="neutral"]) .edit-box {
-	border-color: var(--sl-color-neutral-700);
+:host([variant="gray"]) .edit-box {
+	border-color: var(--sl-color-gray-700);
 }
-:host([variant="neutral"]) .bar {
-	background: var(--sl-color-neutral-600);
-	border-color: var(--sl-color-neutral-700);
+:host([variant="gray"]) .bar {
+	background: var(--sl-color-gray-600);
+	border-color: var(--sl-color-gray-700);
 	color: #fff;
 }
 
-:host([variant="warning"]) .edit-box {
-	border-color: var(--sl-color-warning-700);
+:host([variant="amber"]) .edit-box {
+	border-color: var(--sl-color-amber-700);
 }
-:host([variant="warning"]) .bar {
-	background: var(--sl-color-warning-600);
-	border-color: var(--sl-color-warning-700);
+:host([variant="amber"]) .bar {
+	background: var(--sl-color-amber-600);
+	border-color: var(--sl-color-amber-700);
 	color: #fff;
 }
 
-:host([variant="danger"]) .edit-box {
-	border-color: var(--sl-color-danger-700);
+:host([variant="red"]) .edit-box {
+	border-color: var(--sl-color-red-700);
 }
-:host([variant="danger"]) .bar {
-	background: var(--sl-color-danger-600);
-	border-color: var(--sl-color-danger-700);
+:host([variant="red"]) .bar {
+	background: var(--sl-color-red-600);
+	border-color: var(--sl-color-red-700);
+	color: #fff;
+}
+
+:host([variant="pink"]) .edit-box {
+	border-color: var(--sl-color-pink-700);
+}
+:host([variant="pink"]) .bar {
+	background: var(--sl-color-pink-600);
+	border-color: var(--sl-color-pink-700);
 	color: #fff;
 }
 
