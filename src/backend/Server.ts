@@ -36,13 +36,24 @@ export class Server {
 		this.app = express();
 	}
 
+	private parseUri(raw: string): [string, Record<string,string>] {
+		const args:Record<string, string> = {};
+		const parsed = new URL(`http://localhost${raw}`);
+		for(const [key, val] of parsed.searchParams.entries()){
+			args[key] = val;
+		}
+		return [parsed.pathname, args];
+	}
+
 	async handleRequest(req: WebRequest): Promise<WebResponse> {
-		const { uri } = req;
+		const [uri, _args] = this.parseUri(req.uri);
 		if (uri.startsWith("/assets/")) {
 			return <WebResponse>{
 				code: 0,
 			};
 		}
+
+		console.log(uri);
 		const entry = await Entry.getByURI(this.db, uri);
 		if (entry) {
 			return <WebResponse>{
