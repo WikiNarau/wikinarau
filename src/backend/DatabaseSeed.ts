@@ -29,7 +29,7 @@ dbSeed.set("/privacy",
 title = "Privacy policy"
 format = "JSON"
 ---
-[]
+[{"T":"Text","C":[{"T":"","text":"1. We respect and try to protect your privacy as much as possible."},{"T":"div","C":[{"T":"","text":"2. No private information will be shared with third parties. This includes server logs, user data and information not publicly shared."}]},{"T":"div","C":[{"T":"","text":"3. This service is hosted in Germany on servers provided by DigitalOcean, we may be required to comply with legal requests to identify people for commiting illegal activities on this site."}]},{"T":"div","C":[{"T":"","text":"4. Be careful about adding private and/or personal information to your profile or content you create because we keep a full history of every edit."}]},{"T":"div","C":[{"T":"","text":"5. Do not post other people's private information without their explicit consent."}]}]}]
 `);
 
 dbSeed.set("/terms-of-use",
@@ -37,7 +37,7 @@ dbSeed.set("/terms-of-use",
 title = "Terms of use"
 format = "JSON"
 ---
-[]
+[{"T":"Text","C":[{"T":"div","C":[{"T":"div","C":[{"T":"","text":"1. Please, do not upload any illegal content or create courses explaining how to do anything illegal."}]},{"T":"div","C":[{"T":"","text":"2. Be nice to each other, debates can get heated but this is no excuse to be rude towards one another."}]},{"T":"div","C":[{"T":"","text":"3. Be careful not to upload any content that you are not allowed to redistribute under an open license, like Creative Commons."}]},{"T":"div","C":[{"T":"","text":"4. If you notice anything inappropriate/illegal please contact us and we'll make sure to resolve that issue as soon as possible."}]},{"T":"div","C":[{"T":"","text":"5. Since anyone can create and/or edit content here we are not liable for any copyright infringement / illegal content posted here, we are a small group of volunteers and try our best to ensure that site is filled with high-quality content, however sometimes things might slip past us."}]}]}]}]
 `);
 
 dbSeed.set("/wiki/berry",
