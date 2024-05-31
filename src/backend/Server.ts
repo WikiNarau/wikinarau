@@ -7,6 +7,7 @@ import fsp from "node:fs/promises";
 import { Database } from "./Database";
 import { Entry } from "./Entry";
 import { Resource } from "./Resource";
+import { Config } from "./Config";
 
 interface WebRequest {
 	verb: "GET" | "POST";
@@ -20,36 +21,19 @@ interface WebResponse {
 }
 
 export class Server {
-	public readonly port: number;
-	public readonly host: string;
-
 	private server: http.Server | undefined;
-	private devMode = false;
+	public readonly config: Config = new Config();
 	private readonly app: express.Express;
 	private readonly webSockets = new Set<Socket>();
 	private readonly preRequestHandler: (() => Promise<void>)[] = [];
-	readonly db: Database;
+	readonly db = new Database();
 
 	closeSocket(socket: Socket) {
 		this.webSockets.delete(socket);
 	}
 
-	/*
-	broadcastMessage(msg: string, filter?: (sock: Socket) => boolean) {
-		for (const socket of this.webSockets.values()) {
-			if (filter && !filter(socket)) {
-				continue;
-			}
-			socket.send(msg);
-		}
-	}
-	*/
-
-	constructor({ port = 2600, host = "localhost" }) {
-		this.port = port;
-		this.host = host;
+	constructor() {
 		this.app = express();
-		this.db = new Database();
 	}
 
 	async handleRequest(req: WebRequest): Promise<WebResponse> {
@@ -105,7 +89,7 @@ export class Server {
 			appType: "custom",
 		});
 		this.app.use(vite.middlewares);
-		this.devMode = true;
+
 
 		let lastTemplateLoad = (await fsp.stat("index.html")).mtime;
 		Entry.setTemplate(
@@ -131,10 +115,14 @@ export class Server {
 	}
 
 	async listen() {
+		Entry.setFooter(this.config.footer);
+		if(this.config.devMode){
+			await this.devServer();
+		}
 		await this.db.init();
 		await Resource.init();
 
-		if (!this.devMode) {
+		if (!this.config.devMode) {
 			Entry.setTemplate(await fsp.readFile("./dist/index.html", "utf-8"));
 			this.app.use(
 				"/assets",
@@ -179,7 +167,7 @@ export class Server {
 		});
 
 		return new Promise<void>((resolve) => {
-			this.server?.listen(this.port, this.host, resolve);
+			this.server?.listen(this.config.port, this.config.bindAddress, resolve);
 		});
 	}
 }
