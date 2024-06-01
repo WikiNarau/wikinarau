@@ -2,7 +2,6 @@ import http from "node:http";
 import { WebSocketServer } from "ws";
 import { Socket } from "./Socket";
 import express from "express";
-import { createServer } from "vite";
 import fsp from "node:fs/promises";
 import { Database } from "./Database";
 import { Entry } from "./Entry";
@@ -92,6 +91,7 @@ export class Server {
 
 	async devServer() {
 		console.error("Starting Dev Server!!!");
+		const { createServer } = await import("vite");
 		const vite = await createServer({
 			server: {
 				middlewareMode: true,
