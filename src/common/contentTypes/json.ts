@@ -87,5 +87,7 @@ export const renderJSONElementToText = (ele: SerializedElement): string => {
 };
 
 export const renderJSONListToText = (list: SerializedElement[]): string => {
-	return Array.isArray(list) ? list.map(renderJSONElementToText).join("\n") : "";
-}
+	return Array.isArray(list)
+		? list.map(renderJSONElementToText).join("\n")
+		: "";
+};

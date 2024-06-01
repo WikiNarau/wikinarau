@@ -36,21 +36,33 @@ export class PageBar extends LitElement {
 		);
 	}
 
+	/*
+	<iframe src="http://localhost:2600/wiki/berry?embed=true" style="width: 100%; border: none;"></iframe>
+	<script src="http://localhost:2600/assets/iframeResizer.js"></script>
+	*/
+	private showEmbedLink() {
+		const dialog = document.createElement("i6q-embed-dialog-page");
+		document.body.append(dialog);
+	}
+
 	render() {
 		return html`
 			<nav>
 				<span class="left">
 					<i6q-button @click=${this.switchToMain} class="narrow flat ${
 						this.activeSection === "main" ? "active" : ""
-					}"><sl-icon name="file-text"></sl-icon> Content</i6q-button>
+					}"><sl-icon name="file-text"></sl-icon><span class="button-text"> Content</span></i6q-button>
 				</span>
 				<span class="right">
+					<i6q-button @click=${this.showEmbedLink} class="narrow flat">
+						<sl-icon name="window" style="position: relative; top:2px;"></sl-icon><span class="button-text"> Embed</span>
+					</i6q-button>
 					<i6q-button @click=${this.switchToCode} class="narrow flat ${
 						this.activeSection === "code" ? "active" : ""
-					}">λ Code</i6q-button>
+					}">λ<span class="button-text"> Code</span></i6q-button>
 					<i6q-button @click=${this.switchToEdit} class="narrow flat ${
 						this.activeSection === "edit" ? "active" : ""
-					}"><sl-icon name="pencil"></sl-icon> Edit</i6q-button>
+					}"><sl-icon name="pencil"></sl-icon><span class="button-text"> Edit</span></i6q-button>
 				</span>
 			</nav>
 			<div class="border"></div>
@@ -111,6 +123,12 @@ export class PageBar extends LitElement {
 	}
 	a:last-child {
 		margin-right:0;
+	}
+
+	@media only screen and (max-width: 470px) {
+		.button-text {
+			display: none;
+		}
 	}
 `;
 }

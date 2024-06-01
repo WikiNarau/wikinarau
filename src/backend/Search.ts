@@ -1,5 +1,5 @@
-import { create, insert, remove, search } from '@orama/orama';
-import type { Entry } from './Entry';
+import { create, insert, remove, search } from "@orama/orama";
+import type { Entry } from "./Entry";
 
 export interface SearchResult {
 	T: "Entry";
@@ -13,28 +13,28 @@ export class SearchIndex {
 	async init() {
 		this.content = await create({
 			schema: {
-				uri: 'string',
-				content: 'string',
-			}
+				uri: "string",
+				content: "string",
+			},
 		});
 	}
 
 	async updateEntry(entry: Entry) {
 		const res = await search(this.content, {
 			term: entry.uri,
-			properties: ['uri'],
+			properties: ["uri"],
 			exact: true,
 		});
-		if(res.count){
-			for(const hit of res.hits){
+		if (res.count) {
+			for (const hit of res.hits) {
 				await remove(this.content, hit.id);
 			}
 		}
 
 		await insert(this.content, {
 			uri: entry.uri,
-			content: entry.renderText()
-		})
+			content: entry.renderText(),
+		});
 	}
 
 	async searchForEntry(term: string): Promise<SearchResult[]> {
@@ -42,15 +42,13 @@ export class SearchIndex {
 			term: term,
 		});
 		const ret: SearchResult[] = [];
-		for(const hit of res.hits){
+		for (const hit of res.hits) {
 			const res = <SearchResult>{
 				uri: hit.document.uri,
-				score: hit.score
+				score: hit.score,
 			};
 			ret.push(res);
 		}
 		return ret;
 	}
-
-
 }

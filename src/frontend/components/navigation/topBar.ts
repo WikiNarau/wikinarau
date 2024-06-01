@@ -4,21 +4,19 @@ import { customElement, query } from "lit/decorators.js";
 
 @customElement("i6q-topbar")
 export class TopBar extends LitElement {
-
 	@query("sl-drawer.navigation-drawer")
 	drawer?: SlDrawer;
 
 	private toggleNavigation() {
-		if(!this.drawer){
+		if (!this.drawer) {
 			throw new Error("Can't query sl-drawer.navigation-drawer");
 		}
-		if(this.drawer.open){
+		if (this.drawer.open) {
 			this.drawer.hide();
 		} else {
 			this.drawer.show();
 		}
 	}
-
 
 	render() {
 		return html`

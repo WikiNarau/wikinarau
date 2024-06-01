@@ -36,10 +36,10 @@ export class Server {
 		this.app = express();
 	}
 
-	private parseUri(raw: string): [string, Record<string,string>] {
-		const args:Record<string, string> = {};
+	private parseUri(raw: string): [string, Record<string, string>] {
+		const args: Record<string, string> = {};
 		const parsed = new URL(`http://localhost${raw}`);
-		for(const [key, val] of parsed.searchParams.entries()){
+		for (const [key, val] of parsed.searchParams.entries()) {
 			args[key] = val;
 		}
 		return [parsed.pathname, args];
@@ -53,7 +53,6 @@ export class Server {
 			};
 		}
 
-		console.log(uri);
 		const entry = await Entry.getByURI(this.db, uri);
 		if (entry) {
 			return <WebResponse>{
@@ -101,7 +100,6 @@ export class Server {
 		});
 		this.app.use(vite.middlewares);
 
-
 		let lastTemplateLoad = (await fsp.stat("index.html")).mtime;
 		Entry.setTemplate(
 			await vite.transformIndexHtml(
@@ -127,7 +125,7 @@ export class Server {
 
 	async listen() {
 		Entry.setFooter(this.config.footer);
-		if(this.config.devMode){
+		if (this.config.devMode) {
 			await this.devServer();
 		}
 		await this.db.init();
@@ -167,7 +165,14 @@ export class Server {
 				}
 			} catch (error) {
 				console.error(error);
-				res.status(500).end(Entry.renderTemplate("500 - Server Error", "Something went wrong on our end, we will try to fix this issue as soon as possible."));
+				res
+					.status(500)
+					.end(
+						Entry.renderTemplate(
+							"500 - Server Error",
+							"Something went wrong on our end, we will try to fix this issue as soon as possible.",
+						),
+					);
 			}
 		});
 		this.server = http.createServer(this.app);

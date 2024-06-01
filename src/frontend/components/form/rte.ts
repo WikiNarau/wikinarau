@@ -117,7 +117,10 @@ export class RichTextEditor extends LitElement {
 	}
 
 	private showLinkWarning() {
-		showWarning("Invalid URL", "Please enter a valid URL in the menu bar before trying to add links.");
+		showWarning(
+			"Invalid URL",
+			"Please enter a valid URL in the menu bar before trying to add links.",
+		);
 	}
 
 	unlink(e: Event) {

@@ -1,4 +1,4 @@
-import { html, css, LitElement } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 import { titleToURI } from "../../../common/tuid";
@@ -7,12 +7,7 @@ import * as toml from "smol-toml";
 
 @customElement("i6q-dialog-create-page")
 export class DialogCreatePage extends LitElement {
-	static styles = [
-		typographicStyles,
-		css`
-
-`,
-	];
+	static styles = typographicStyles;
 
 	@query("sl-dialog")
 	dialog: any;

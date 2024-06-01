@@ -187,3 +187,19 @@ p {
 	font-size: 1.1rem;
 	line-height: 1.4em;
 }
+
+body.embed > header,
+body.embed > footer,
+body.embed > main > aside {
+	display: none;
+}
+
+body.embed > main {
+	max-width: none;
+	padding: 0;
+}
+
+body.embed > main > section {
+	box-shadow: none;
+	width: 100%;
+}

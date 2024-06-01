@@ -6,6 +6,7 @@ import * as toml from "smol-toml";
 import { createContext, provide } from "@lit/context";
 import { updateContentRevision } from "../../rpc";
 import { showWarning } from "../dialog/warning";
+import { isEmbed } from "../../embed";
 export type FrameState = "view" | "edit";
 export const frameStateContext = createContext<FrameState>("frameState");
 
@@ -21,6 +22,9 @@ export class Frame extends LitElement {
 	frameState: FrameState = "view";
 
 	private changeSection(sec: string) {
+		if (isEmbed) {
+			sec = "main";
+		}
 		if (sec === this.activeSection) {
 			return;
 		}
@@ -97,12 +101,14 @@ export class Frame extends LitElement {
 			await updateContentRevision(uri, this.getContentCode());
 			window.location.assign(window.location.pathname);
 		} catch (e) {
-			if(typeof e === "string"){
+			if (typeof e === "string") {
 				showWarning("Error while saving", e);
 			} else {
-				showWarning("Error while saving", "There was an error while trying to save the page, please reload or try again later.");
+				showWarning(
+					"Error while saving",
+					"There was an error while trying to save the page, please reload or try again later.",
+				);
 			}
-
 		}
 	}
 
@@ -112,9 +118,11 @@ export class Frame extends LitElement {
 
 	render() {
 		return html`
-		<i6q-page-bar activeSection=${this.activeSection} @sectionChange=${
-			this.sectionChange
-		}></i6q-page-bar>
+		${
+			!isEmbed
+				? html`<i6q-page-bar activeSection=${this.activeSection} @sectionChange=${this.sectionChange}></i6q-page-bar>`
+				: null
+		}
 		${
 			this.activeSection === "edit"
 				? html`<i6q-edit-bar @save=${this.save}></i6q-edit-bar>`

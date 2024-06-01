@@ -8,7 +8,7 @@ export class EditBox extends LitElement {
 	singleLine = false;
 
 	@property({ type: String })
-	variant = '';
+	variant = "";
 
 	static styles = [
 		typographicStyles,

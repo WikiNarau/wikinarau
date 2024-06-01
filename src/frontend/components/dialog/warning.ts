@@ -15,7 +15,7 @@ export class WarningDialog extends LitElement {
 	@query("sl-dialog")
 	private dialog?: SlDialog;
 
-	@property({type: String})
+	@property({ type: String })
 	label = "Warning";
 
 	closeDialog() {
@@ -26,9 +26,11 @@ export class WarningDialog extends LitElement {
 		console.log("after hide");
 	}
 
-	protected firstUpdated(props: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+	protected firstUpdated(
+		props: PropertyValueMap<any> | Map<PropertyKey, unknown>,
+	) {
 		super.firstUpdated(props);
-		setTimeout(() => this.dialog?.show() ,0);
+		setTimeout(() => this.dialog?.show(), 0);
 	}
 
 	render() {

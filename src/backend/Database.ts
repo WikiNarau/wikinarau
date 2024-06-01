@@ -17,7 +17,6 @@ export interface Content {
 	modifiedAt: Date;
 }
 
-
 export interface DBContent {
 	createdAt: number;
 	lastRevision: string;
@@ -39,28 +38,38 @@ export interface DBResource {
 	meta: Record<string, any>;
 }
 
-
 export class Database {
 	private readonly db: Level<string, any>;
-	private readonly dbContent: ReturnType<typeof this.db.sublevel<string, DBContent>>;
-	private readonly dbRevision: ReturnType<typeof this.db.sublevel<string, DBRevision>>;
-	private readonly dbResource: ReturnType<typeof this.db.sublevel<string, DBResource>>;
+	private readonly dbContent: ReturnType<
+		typeof this.db.sublevel<string, DBContent>
+	>;
+	private readonly dbRevision: ReturnType<
+		typeof this.db.sublevel<string, DBRevision>
+	>;
+	private readonly dbResource: ReturnType<
+		typeof this.db.sublevel<string, DBResource>
+	>;
 
 	private index: SearchIndex;
 
-
 	constructor() {
 		fs.mkdirSync("./data/", { recursive: true });
-		this.db = new Level('./data/wikinarau.db', { createIfMissing: true });
-		this.dbContent  = this.db.sublevel<string,  DBContent>("DBContent",  { valueEncoding: 'json' });
-		this.dbRevision = this.db.sublevel<string, DBRevision>("DBRevision", { valueEncoding: 'json' });
-		this.dbResource = this.db.sublevel<string, DBResource>("DBResource", { valueEncoding: 'json' });
+		this.db = new Level("./data/wikinarau.db", { createIfMissing: true });
+		this.dbContent = this.db.sublevel<string, DBContent>("DBContent", {
+			valueEncoding: "json",
+		});
+		this.dbRevision = this.db.sublevel<string, DBRevision>("DBRevision", {
+			valueEncoding: "json",
+		});
+		this.dbResource = this.db.sublevel<string, DBResource>("DBResource", {
+			valueEncoding: "json",
+		});
 		this.index = new SearchIndex();
 	}
 
 	async init() {
-		for(const [uri, content] of dbSeed.entries()){
-			if(!await this.getContent(uri)){
+		for (const [uri, content] of dbSeed.entries()) {
+			if (!(await this.getContent(uri))) {
 				await this.updateContentRevision(uri, content);
 			}
 		}
@@ -68,7 +77,7 @@ export class Database {
 		setTimeout(async () => {
 			for await (const uri of this.dbContent.keys()) {
 				const entry = await Entry.getByURI(this, uri);
-				if(entry){
+				if (entry) {
 					await this.index.updateEntry(entry);
 				}
 			}
@@ -76,11 +85,13 @@ export class Database {
 	}
 
 	async searchContent(sword: string): Promise<Content[]> {
-		const ret:Content[] = [];
-		const results = (await this.index.searchForEntry(sword)).sort((a,b) => b.score - a.score);
-		for(const res of results){
+		const ret: Content[] = [];
+		const results = (await this.index.searchForEntry(sword)).sort(
+			(a, b) => b.score - a.score,
+		);
+		for (const res of results) {
 			const con = await this.getContent(res.uri);
-			if(con){
+			if (con) {
 				ret.push(con);
 			}
 		}
@@ -96,7 +107,7 @@ export class Database {
 				lastRevision: c.lastRevision,
 				content: r.content,
 				createdAt: new Date(c.createdAt),
-				modifiedAt: new Date(r.createdAt)
+				modifiedAt: new Date(r.createdAt),
 			};
 		} catch {
 			return null;
@@ -117,39 +128,48 @@ export class Database {
 			const r = await this.dbResource.get(path);
 			ret.push({
 				...r,
-				path
+				path,
 			});
 		}
 		return ret;
 	}
 
 	static newKey(): string {
-		return randomBytes(8).toString('base64');
+		return randomBytes(8).toString("base64");
 	}
 
 	async updateContentRevision(uri: string, content: string) {
 		try {
 			const old = await this.dbContent.get(uri);
 			const newRev = await this.createRevision(content, old.lastRevision);
-			await this.dbContent.put(uri, { createdAt: old.createdAt, lastRevision: newRev });
+			await this.dbContent.put(uri, {
+				createdAt: old.createdAt,
+				lastRevision: newRev,
+			});
 		} catch {
 			const newRev = await this.createRevision(content, "");
-			await this.dbContent.put(uri, { createdAt: utime(), lastRevision: newRev });
+			await this.dbContent.put(uri, {
+				createdAt: utime(),
+				lastRevision: newRev,
+			});
 		}
 		const entry = await Entry.getByURI(this, uri);
-		if(entry){
+		if (entry) {
 			this.index.updateEntry(entry);
 		}
 	}
 
-	async createRevision(content: string, previousRevision = ""): Promise<string> {
+	async createRevision(
+		content: string,
+		previousRevision = "",
+	): Promise<string> {
 		let key = Database.newKey();
-		for(let i=0;i<10;i++){
+		for (let i = 0; i < 10; i++) {
 			const rev = await this.getRevision(key);
-			if(!rev){
+			if (!rev) {
 				break;
 			}
-			if(i > 8){
+			if (i > 8) {
 				throw new Error("Can't generate Revision Key");
 			}
 		}
@@ -176,7 +196,7 @@ export class Database {
 			name,
 			ext,
 			hash,
-			type
+			type,
 		});
 		return path;
 	}

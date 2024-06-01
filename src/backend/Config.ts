@@ -9,34 +9,40 @@ export class Config {
 	By using this site, you agree to the <a href="/terms-of-use">Terms of Use</a> and <a href="/privacy">Privacy Policy</a>.`;
 
 	private checkEnvVars() {
-		if(process.env.DEV_MODE?.toLowerCase() === "true"){
+		if (process.env.DEV_MODE?.toLowerCase() === "true") {
 			this.devMode = true;
 		}
-		if(process.env.PORT){
+		if (process.env.PORT) {
 			try {
 				const num = parseInt(process.env.PORT);
-				if((num <= 0) || (num >= 65535)){
-					console.error(`Port number ${num} is out of range, choose another one`);
+				if (num <= 0 || num >= 65535) {
+					console.error(
+						`Port number ${num} is out of range, choose another one`,
+					);
 				} else {
 					this.port = num;
 				}
 			} catch {
-				console.error(`Invalid PORT Environment variable: "${process.env.PORT}"`);
+				console.error(
+					`Invalid PORT Environment variable: "${process.env.PORT}"`,
+				);
 			}
 		}
-		if(process.env.BIND_ADDRESS){
+		if (process.env.BIND_ADDRESS) {
 			this.bindAddress = process.env.BIND_ADDRESS;
 		}
-		if(process.env.BASE_URI){
+		if (process.env.BASE_URI) {
 			this.baseUri = process.env.BASE_URI;
-			if(this.baseUri.endsWith("/")){
-				throw new Error("Base URI's shouldn't end with a slash, please change your config!!!")
+			if (this.baseUri.endsWith("/")) {
+				throw new Error(
+					"Base URI's shouldn't end with a slash, please change your config!!!",
+				);
 			}
 		}
 	}
 
 	constructor() {
-		if(process.env.NODE_ENV === "development"){
+		if (process.env.NODE_ENV === "development") {
 			this.devMode = true;
 			this.bindAddress = "localhost";
 		}

@@ -42,7 +42,7 @@ export class Entry {
 		this.footer = footerHTML;
 	}
 
-	public static renderTemplate(title: string, content: string, head = '') {
+	public static renderTemplate(title: string, content: string, head = "") {
 		return Entry.template
 			.replace("<!--TITLE-->", title)
 			.replace("<!--CONTENT-->", content)
@@ -74,10 +74,13 @@ export class Entry {
 		}
 	}
 
-	private genHeadFromFrontmatter(config: Config, fm: Record<string, unknown>): string {
-		let ret:string[] = [];
-		if(fm.description && typeof fm.description === "string"){
-			const att = fm.description.replace(/'/g,"&#39;");
+	private genHeadFromFrontmatter(
+		config: Config,
+		fm: Record<string, unknown>,
+	): string {
+		let ret: string[] = [];
+		if (fm.description && typeof fm.description === "string") {
+			const att = fm.description.replace(/'/g, "&#39;");
 			ret.push(`<meta name="description" content='${att}' />`);
 		}
 		const canonical = `${config.baseUri}${this.uri}`;
