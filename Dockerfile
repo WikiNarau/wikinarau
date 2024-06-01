@@ -3,7 +3,7 @@ FROM node:22-alpine
 RUN apk add --no-cache graphicsmagick curl
 WORKDIR /app
 COPY . .
-RUN npm ci && npm run build
+RUN npm ci && npm run build && npm ci --production
 CMD [ "npm", "start" ]
 
 EXPOSE 2600
