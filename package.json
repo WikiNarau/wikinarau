@@ -4,6 +4,11 @@
 	"type": "module",
 	"author": "Benjamin Vincent Schulenburg <bennyschulenburg@gmx.de>",
 	"license": "EUPL-1.2",
+	"husky": {
+		"hooks": {
+			"pre-commit": "echo '[Husky] pre-commit'"
+		}	
+	},
 	"scripts": {
 		"dev": "NODE_ENV=development tsx --watch --watch-path=./src/backend/ ./src/backend/index.ts",
 		"dev:old": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
@@ -20,6 +25,7 @@
 		"@orama/orama": "latest",
 		"@shoelace-style/shoelace": "latest",
 		"express": "latest",
+		"husky": "^9.0.11",
 		"level": "latest",
 		"lit": "latest",
 		"smol-toml": "latest",
