@@ -17,9 +17,8 @@
 	},
 	"dependencies": {
 		"@lit/context": "latest",
-		"@orama/orama": "^2.0.19",
+		"@orama/orama": "latest",
 		"@shoelace-style/shoelace": "latest",
-		"better-sqlite3": "latest",
 		"express": "latest",
 		"level": "latest",
 		"lit": "latest",
@@ -30,7 +29,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "latest",
-		"@types/better-sqlite3": "latest",
 		"@types/express": "latest",
 		"@types/node": "latest",
 		"@types/ws": "latest",
