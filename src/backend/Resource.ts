@@ -22,15 +22,22 @@ export class Resource {
 			case "jpg":
 			case "jpeg":
 			case "png":
+			case "apng":
 			case "gif":
 			case "avif":
 			case "bmp":
 			case "svg":
+			case "tiff":
+			case "tga":
+			case "webp":
 				return "image";
 			case "mp4":
 			case "webm":
 			case "mkv":
 			case "avi":
+			case "mkv":
+			case "wmv":
+			case "mov":
 				return "video";
 			case "mp3":
 			case "m4a":
