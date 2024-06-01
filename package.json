@@ -14,7 +14,7 @@
 		"preview:frontend": "vite preview",
 		"build": "tsc && vite build",
 		"start": "tsx ./src/backend/index.ts",
-		"prepare": "husky"
+		"prepare": "husky || true"
 	},
 	"dependencies": {
 		"@lit/context": "latest",
