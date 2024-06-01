@@ -4,11 +4,6 @@
 	"type": "module",
 	"author": "Benjamin Vincent Schulenburg <bennyschulenburg@gmx.de>",
 	"license": "EUPL-1.2",
-	"husky": {
-		"hooks": {
-			"pre-commit": "echo '[Husky] pre-commit'"
-		}	
-	},
 	"scripts": {
 		"dev": "NODE_ENV=development tsx --watch --watch-path=./src/backend/ ./src/backend/index.ts",
 		"dev:old": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
@@ -18,18 +13,17 @@
 		"format": "npx @biomejs/biome format --write ./src",
 		"preview:frontend": "vite preview",
 		"build": "tsc && vite build",
-		"start": "tsx ./src/backend/index.ts"
+		"start": "tsx ./src/backend/index.ts",
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"@lit/context": "latest",
 		"@orama/orama": "latest",
 		"@shoelace-style/shoelace": "latest",
 		"express": "latest",
-		"husky": "^9.0.11",
 		"level": "latest",
 		"lit": "latest",
 		"smol-toml": "latest",
-		"trix": "latest",
 		"tsx": "latest",
 		"ws": "latest"
 	},
@@ -39,6 +33,7 @@
 		"@types/node": "latest",
 		"@types/ws": "latest",
 		"concurrently": "latest",
+		"husky": "latest",
 		"typescript": "latest",
 		"vite": "latest"
 	}
