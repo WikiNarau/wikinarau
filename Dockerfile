@@ -1,7 +1,6 @@
 FROM node:22-alpine
-
-RUN apk add --no-cache graphicsmagick curl
 WORKDIR /app
+
 COPY . .
 RUN npm ci && npm run build && npm ci --production
 CMD [ "npm", "start" ]
@@ -9,4 +8,6 @@ CMD [ "npm", "start" ]
 EXPOSE 2600
 VOLUME /app/data/
 
-HEALTHCHECK CMD curl "--fail" "http://localhost:2600"
+USER wikinarau:wikinarau
+
+HEALTHCHECK CMD node -e "fetch('http://localhost:2600')"
