@@ -58,7 +58,7 @@ export class HistoryRevision extends LitElement {
 		return html`
 		<div class="wrap">
 			<div style="display: inline-block; padding: 0.35rem 0 0;">
-				<sl-badge>Date: <wn-datetime timestamp=${this.revision.createdAt}></wn-datetime></sl-badge>
+				<sl-badge><wn-datetime timestamp=${this.revision.createdAt}></wn-datetime></sl-badge>
 				<sl-badge variant="neutral">ID: ${this.revision.id}</sl-badge>
 			</div>
 			${this.revision.commitMessage ? html`<sl-badge variant="warning">${this.revision.commitMessage}</sl-badge>` : null}
