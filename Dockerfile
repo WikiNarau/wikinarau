@@ -10,4 +10,4 @@ VOLUME /app/data/
 
 USER wikinarau:wikinarau
 
-HEALTHCHECK CMD node -e "fetch('http://localhost:2600')"
+HEALTHCHECK --interval=5m --timeout=5s CMD node -e "fetch('http://localhost:2600')"
