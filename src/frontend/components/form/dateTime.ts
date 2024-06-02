@@ -23,7 +23,7 @@ export class WNDateTime extends LitElement {
 			if(minutes > 0){
 				parts.push(`${minutes} Minute${minutes > 1 ? 's' : ''}`);
 			}
-			return html`${parts.join(", ")} ago`;
+			return html`${parts.join(" ")} ago`;
 		}
 		const date = new Date(this.timestamp*1000);
 		return html`<span>${date.toLocaleString()}</span>`;
