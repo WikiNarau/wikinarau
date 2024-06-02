@@ -2,10 +2,10 @@ import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { updateContentRevision } from "../../rpc";
 
-@customElement("i6q-code")
+@customElement("wn-code")
 export class Code extends LitElement {
 	@property({ type: String })
-	url = "";
+	uri = "";
 
 	@property({ type: String })
 	value = "";
@@ -26,7 +26,7 @@ export class Code extends LitElement {
 
 	render() {
 		return html`
-		<i6q-edit-bar @save=${this.save}></i6q-edit-bar>
+		<wn-edit-bar @save=${this.save}></wn-edit-bar>
 		<sl-textarea rows=25 @input=${this.editCB} value=${this.value}></sl-textarea>`;
 	}
 }

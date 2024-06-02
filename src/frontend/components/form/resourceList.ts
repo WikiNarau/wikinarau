@@ -4,7 +4,7 @@ import { typographicStyles } from "../styles";
 import { listResources } from "../../rpc";
 import { ServerResource } from "../../../common/types";
 
-@customElement("i6q-resource-list")
+@customElement("wn-resource-list")
 export class ResourceList extends LitElement {
 	static styles = [
 		typographicStyles,
@@ -50,7 +50,7 @@ export class ResourceList extends LitElement {
 	accept: string = "";
 
 	@state()
-	private resources?: ServerResource[] = [];
+	private resources?: ServerResource[];
 
 	async refresh() {
 		this.resources = undefined;

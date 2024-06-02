@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement("i6q-edit-bar")
+@customElement("wn-edit-bar")
 export class EditBar extends LitElement {
 	@property({ type: String })
 	url = "";

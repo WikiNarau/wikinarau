@@ -4,7 +4,7 @@ import type { MultipleChoiceOption } from "./multipleChoiceOption";
 import { contentTypes, EditableElement } from "../abstract";
 import { generateTypeUID } from "../../../common/tuid";
 
-@customElement("i6q-multiple-choice")
+@customElement("wn-multiple-choice")
 export class MultipleChoice extends EditableElement {
 	@property({ type: Boolean, reflect: true })
 	multiple = false;
@@ -75,7 +75,7 @@ export class MultipleChoice extends EditableElement {
 
 	private setResult(score: number, maxScore: number) {
 		const text = score === maxScore ? "Correct!" : "Wrong";
-		this.result = html`${text}<br/><br/><i6q-success-bar score="${score}" maxScore="${maxScore}"></i6q-success-bar>`;
+		this.result = html`${text}<br/><br/><wn-success-bar score="${score}" maxScore="${maxScore}"></wn-success-bar>`;
 	}
 
 	private optionClick() {
@@ -90,9 +90,9 @@ export class MultipleChoice extends EditableElement {
 
 	connectedCallback() {
 		super.connectedCallback();
-		this.addEventListener("i6q-option-click", this.optionClick.bind(this));
+		this.addEventListener("wn-option-click", this.optionClick.bind(this));
 		this.options = Array.from(
-			this.querySelectorAll(":scope > i6q-multiple-choice-option"),
+			this.querySelectorAll(":scope > wn-multiple-choice-option"),
 		);
 	}
 
@@ -119,7 +119,7 @@ export class MultipleChoice extends EditableElement {
 	}
 
 	newAnswer() {
-		const ele = document.createElement("i6q-multiple-choice-option");
+		const ele = document.createElement("wn-multiple-choice-option");
 		ele.innerHTML = "New Answer";
 		let id = generateTypeUID("MCO");
 		for (let i = 0; i < 100; i++) {
@@ -141,7 +141,7 @@ export class MultipleChoice extends EditableElement {
 
 	renderEdit() {
 		return html`
-		<i6q-edit-box typeName="Multiple Choice" icon="list-check">
+		<wn-edit-box typeName="Multiple Choice" icon="list-check">
 		<div class="wrap">
 			<sl-switch ?checked=${this.multiple} @sl-change=${this.toggleMultiple}>Allow multiple answers</sl-switch>
 			<br/><br/>
@@ -151,7 +151,7 @@ export class MultipleChoice extends EditableElement {
 				New answer
 			</sl-button>
 		</div>
-		</i6q-edit-box>
+		</wn-edit-box>
 		`;
 	}
 
@@ -216,7 +216,7 @@ export class MultipleChoice extends EditableElement {
 	padding: 0;
 }
 
-::slotted(i6q-multiple-choice-option) {
+::slotted(wn-multiple-choice-option) {
 	margin-bottom: 1rem;
 	box-sizing: border-box;
 	display: block;

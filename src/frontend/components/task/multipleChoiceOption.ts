@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { EditableElement } from "../abstract";
 import { generateTypeUID } from "../../../common/tuid";
 
-@customElement("i6q-multiple-choice-option")
+@customElement("wn-multiple-choice-option")
 export class MultipleChoiceOption extends EditableElement {
 	@property({ type: Boolean, reflect: true })
 	selected = false;
@@ -28,7 +28,7 @@ export class MultipleChoiceOption extends EditableElement {
 			return;
 		}
 		this.dispatchEvent(
-			new CustomEvent("i6q-option-click", {
+			new CustomEvent("wn-option-click", {
 				bubbles: true,
 				composed: true,
 			}),
@@ -58,7 +58,7 @@ export class MultipleChoiceOption extends EditableElement {
 	newElement(e: Event) {
 		e.stopPropagation();
 		e.preventDefault();
-		const ele = document.createElement("i6q-multiple-choice-option");
+		const ele = document.createElement("wn-multiple-choice-option");
 		ele.innerHTML = "New Answer";
 		let id = generateTypeUID("MCO");
 		for (let i = 0; i < 100; i++) {
@@ -80,10 +80,10 @@ export class MultipleChoiceOption extends EditableElement {
 
 	renderEdit() {
 		return html`
-<i6q-edit-box singleLine icon="check2-circle">
+<wn-edit-box singleLine icon="check2-circle">
 	<sl-input placeholder="Answer text" style="display:inline-block; margin-right: 1rem;" @sl-input=${this.editInput} value=${this.editValue}></sl-input>
 	<sl-switch ?checked=${this.correct} @sl-change=${this.toggleCorrect}>Correct</sl-switch>
-</i6q-edit-box>`;
+</wn-edit-box>`;
 	}
 
 	render() {

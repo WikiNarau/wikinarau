@@ -45,14 +45,14 @@ export class Server {
 	}
 
 	async handleRequest(req: WebRequest): Promise<WebResponse> {
-		const [uri, _args] = this.parseUri(req.uri);
+		const [uri, args] = this.parseUri(req.uri);
 		if (uri.startsWith("/assets/")) {
 			return <WebResponse>{
 				code: 0,
 			};
 		}
 
-		const entry = await Entry.getByURI(this.db, uri);
+		const entry = await Entry.getByURI(this.db, uri, args.revision || "");
 		if (entry) {
 			return <WebResponse>{
 				code: 200,
@@ -76,9 +76,9 @@ export class Server {
 			} else {
 				const content = `<h1>The page couldn't be found</h1>
 				<p>Maybe you would like to create it?</p>
-				<i6q-frame section="main">
-					<i6q-code slot="code"></i6q-code>
-				</i6q-frame>`;
+				<wn-frame section="main">
+					<wn-code slot="code"></wn-code>
+				</wn-frame>`;
 				const html = Entry.renderTemplate("404 - Page Not Found", content);
 				return <WebResponse>{
 					code: 404,

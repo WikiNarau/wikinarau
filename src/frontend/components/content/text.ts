@@ -3,7 +3,7 @@ import { customElement } from "lit/decorators.js";
 import { contentTypes, EditableElement } from "../abstract";
 import { typographicStyles } from "../styles";
 
-@customElement("i6q-text")
+@customElement("wn-text")
 export class Text extends EditableElement {
 	static styles = [typographicStyles];
 
@@ -27,9 +27,9 @@ export class Text extends EditableElement {
 
 	renderEdit() {
 		return html`
-<i6q-edit-box typeName="Text" icon="justify-left" class="noPadding">
-	<i6q-rte @rte-edit=${this.editInput} value=${this.editValue}></i6q-rte>
-</i6q-edit-box>`;
+<wn-edit-box typeName="Text" icon="justify-left" class="noPadding">
+	<wn-rte @rte-edit=${this.editInput} value=${this.editValue}></wn-rte>
+</wn-edit-box>`;
 	}
 
 	render() {

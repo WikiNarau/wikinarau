@@ -5,7 +5,7 @@ import { titleToURI } from "../../../common/tuid";
 import { updateContentRevision } from "../../rpc";
 import * as toml from "smol-toml";
 
-@customElement("i6q-dialog-create-page")
+@customElement("wn-dialog-create-page")
 export class DialogCreatePage extends LitElement {
 	static styles = typographicStyles;
 

@@ -6,3 +6,11 @@ export interface ServerResource {
 	name: string;
 	type: string;
 }
+
+export interface Revision {
+	id: string;
+	createdAt: number;
+	content: string;
+	uri: string;
+	commitMessage?: string;
+}

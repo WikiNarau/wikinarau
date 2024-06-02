@@ -1,7 +1,7 @@
 import { html, css, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
 
-@customElement("i6q-user-icon")
+@customElement("wn-user-icon")
 export class UserIcon extends LitElement {
 	static styles = css`
 	.icon {

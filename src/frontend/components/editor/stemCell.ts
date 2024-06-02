@@ -2,7 +2,7 @@ import { css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { contentTypes, EditableElement } from "../abstract";
 
-@customElement("i6q-stem-cell")
+@customElement("wn-stem-cell")
 export class StemCell extends EditableElement {
 	renderEdit() {
 		const T = Array.from(contentTypes.values()).map(
@@ -12,11 +12,11 @@ export class StemCell extends EditableElement {
 </sl-button>`,
 		);
 		return html`
-<i6q-edit-box typeName="Choose a Type" icon="box">
+<wn-edit-box typeName="Choose a Type" icon="box">
 	<sl-button-group>
 		${T}
 	</sl-button-group>
-</i6q-edit-box>`;
+</wn-edit-box>`;
 	}
 
 	render() {
@@ -33,7 +33,7 @@ export class StemCell extends EditableElement {
 	}
 
 	static styles = css`
-	i6q-edit-box > * {
+	wn-edit-box > * {
 		margin-right: 0.5rem;
 		margin-bottom: 0.5rem;
 	}

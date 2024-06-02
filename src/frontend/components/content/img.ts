@@ -2,7 +2,7 @@ import { css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { contentTypes, EditableElement } from "../abstract";
 
-@customElement("i6q-img")
+@customElement("wn-img")
 export class Img extends EditableElement {
 	@property({ type: String, reflect: true })
 	src = "";
@@ -23,9 +23,9 @@ export class Img extends EditableElement {
 
 	renderEdit() {
 		return html`
-	<i6q-edit-box typeName="Image" icon="image">
-		<i6q-resource-picker src=${this.src} @change=${this.resourceChange} accept="image"></i6q-resource-picker>
-	</i6q-edit-box>`;
+	<wn-edit-box typeName="Image" icon="image">
+		<wn-resource-picker src=${this.src} @change=${this.resourceChange} accept="image"></wn-resource-picker>
+	</wn-edit-box>`;
 	}
 
 	serialize() {

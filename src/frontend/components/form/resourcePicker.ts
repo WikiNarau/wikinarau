@@ -3,7 +3,7 @@ import { customElement, property, query } from "lit/decorators.js";
 import { uploadResource } from "../../rpc";
 import { typographicStyles } from "../styles";
 
-@customElement("i6q-resource-picker")
+@customElement("wn-resource-picker")
 export class ResourcePicker extends LitElement {
 	static styles = [
 		typographicStyles,
@@ -49,7 +49,7 @@ export class ResourcePicker extends LitElement {
 	@query("sl-dialog")
 	chooseDialog?: any;
 
-	@query("i6q-resource-list")
+	@query("wn-resource-list")
 	resourceList?: any;
 
 	@query("input")
@@ -146,7 +146,7 @@ export class ResourcePicker extends LitElement {
 	<sl-button variant="danger" label="Remove" @click=${this.removeUpload}><sl-icon slot="prefix" name="x-lg"></sl-icon> Remove</sl-button>
 </sl-button-group>
 <sl-dialog label="Choose an asset" style="--width: 50vw;">
-	<i6q-resource-list @resource-pick=${this.resourcePick} accept=${this.accept}></i6q-resource-list>
+	<wn-resource-list @resource-pick=${this.resourcePick} accept=${this.accept}></wn-resource-list>
 	<sl-button-group slot="footer">
 		<sl-button variant="warning" @click=${this.closeChooseDialog}>Cancel</sl-button>
 	</sl-button-group>

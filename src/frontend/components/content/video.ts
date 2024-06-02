@@ -2,7 +2,7 @@ import { css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { contentTypes, EditableElement } from "../abstract";
 
-@customElement("i6q-video")
+@customElement("wn-video")
 export class Video extends EditableElement {
 	@property({ type: String, reflect: true })
 	src = "";
@@ -17,9 +17,9 @@ export class Video extends EditableElement {
 
 	renderEdit() {
 		return html`
-	<i6q-edit-box typeName="Video" icon="play-btn">
-		<i6q-resource-picker src=${this.src} @change=${this.resourceChange} accept="video"></i6q-resource-picker>
-	</i6q-edit-box>`;
+	<wn-edit-box typeName="Video" icon="play-btn">
+		<wn-resource-picker src=${this.src} @change=${this.resourceChange} accept="video"></wn-resource-picker>
+	</wn-edit-box>`;
 	}
 
 	serialize() {

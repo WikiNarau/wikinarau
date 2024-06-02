@@ -2,7 +2,7 @@ import { css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { contentTypes, EditableElement } from "../abstract";
 
-@customElement("i6q-box")
+@customElement("wn-box")
 export class Box extends EditableElement {
 	static styles = css`
 	sl-details {
@@ -114,7 +114,7 @@ export class Box extends EditableElement {
 	}
 
 	newElement() {
-		this.append(document.createElement("i6q-stem-cell"));
+		this.append(document.createElement("wn-stem-cell"));
 	}
 
 	editSummary(e: Event) {
@@ -129,7 +129,7 @@ export class Box extends EditableElement {
 
 	renderEdit() {
 		return html`
-<i6q-edit-box typeName="Box" icon="card-list" variant=${this.variant}>
+<wn-edit-box typeName="Box" icon="card-list" variant=${this.variant}>
 	<sl-input placeholder="Headline" style="display: block; margin-bottom: 1rem;" @sl-input=${this.editSummary} value=${this.summary}></sl-input>
 
 	<sl-radio-group style="margin-bottom: 1rem;" value="${this.variant}" @sl-change=${this.editVariant}>
@@ -146,7 +146,7 @@ export class Box extends EditableElement {
 		<sl-icon slot="prefix" name="plus-lg"></sl-icon>
 		New element
 	</sl-button>
-</i6q-edit-box>`;
+</wn-edit-box>`;
 	}
 
 	render() {

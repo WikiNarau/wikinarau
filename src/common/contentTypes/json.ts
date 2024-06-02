@@ -14,31 +14,31 @@ export const renderJSONElement = (ele: SerializedElement): string => {
 		case "":
 			return ele.text;
 		case "MultipleChoice":
-			return `<i6q-multiple-choice ${ele.multiple ? "multiple" : ""}>${
+			return `<wn-multiple-choice ${ele.multiple ? "multiple" : ""}>${
 				ele.C ? renderJSONList(ele.C) : ""
-			}</i6q-multiple-choice>`;
+			}</wn-multiple-choice>`;
 		case "Option":
-			return `<i6q-multiple-choice-option ${ele.correct ? "correct" : ""}>${
+			return `<wn-multiple-choice-option ${ele.correct ? "correct" : ""}>${
 				ele.C ? renderJSONList(ele.C) : ""
-			}</i6q-multiple-choice-option>`;
+			}</wn-multiple-choice-option>`;
 		case "Box":
-			return `<i6q-box summary="${ele.summary || ""}" variant="${
+			return `<wn-box summary="${ele.summary || ""}" variant="${
 				ele.variant || ""
-			}">${ele.C ? renderJSONList(ele.C) : ""}</i6q-box>`;
+			}">${ele.C ? renderJSONList(ele.C) : ""}</wn-box>`;
 		case "Header":
-			return `<i6q-header h=${ele.h}>${
+			return `<wn-header h=${ele.h}>${
 				ele.C ? renderJSONList(ele.C) : ""
-			}</i6q-header>`;
+			}</wn-header>`;
 		case "Img":
-			return `<i6q-img src="${ele.src}" width="${ele.width}" width="${ele.height}"></i6q-img>`;
+			return `<wn-img src="${ele.src}" width="${ele.width}" width="${ele.height}"></wn-img>`;
 		case "Audio":
-			return `<i6q-audio src="${ele.src}" ></i6q-audio>`;
+			return `<wn-audio src="${ele.src}" ></wn-audio>`;
 		case "Video":
-			return `<i6q-video src="${ele.src}" ></i6q-video>`;
+			return `<wn-video src="${ele.src}" ></wn-video>`;
 		case "StemCell":
-			return `<i6q-stem-cell></i6q-stem-cell>`;
+			return `<wn-stem-cell></wn-stem-cell>`;
 		case "Text":
-			return `<i6q-text>${ele.C ? renderJSONList(ele.C) : ""}</i6q-text>`;
+			return `<wn-text>${ele.C ? renderJSONList(ele.C) : ""}</wn-text>`;
 		default:
 			const fc = ele.T.charAt(0);
 			if (fc !== fc.toLowerCase()) {

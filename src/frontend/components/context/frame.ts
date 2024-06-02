@@ -10,10 +10,13 @@ import { isEmbed } from "../../embed";
 export type FrameState = "view" | "edit";
 export const frameStateContext = createContext<FrameState>("frameState");
 
-@customElement("i6q-frame")
+@customElement("wn-frame")
 export class Frame extends LitElement {
 	@property({ type: String })
 	activeSection = "main";
+
+	@property({ type: String })
+	uri = "";
 
 	@property({ type: String })
 	meta = "{}";
@@ -95,11 +98,11 @@ export class Frame extends LitElement {
 	}
 
 	async save() {
-		const uri = window.location.pathname;
+		const uri = this.uri || document.location.pathname;
 
 		try {
 			await updateContentRevision(uri, this.getContentCode());
-			window.location.assign(window.location.pathname);
+			window.location.assign(uri);
 		} catch (e) {
 			if (typeof e === "string") {
 				showWarning("Error while saving", e);
@@ -113,22 +116,26 @@ export class Frame extends LitElement {
 	}
 
 	newElement() {
-		this.append(document.createElement("i6q-stem-cell"));
+		this.append(document.createElement("wn-stem-cell"));
 	}
 
 	render() {
 		return html`
 		${
 			!isEmbed
-				? html`<i6q-page-bar activeSection=${this.activeSection} @sectionChange=${this.sectionChange}></i6q-page-bar>`
+				? html`<wn-page-bar activeSection=${this.activeSection} @sectionChange=${this.sectionChange}></wn-page-bar>`
 				: null
 		}
 		${
 			this.activeSection === "edit"
-				? html`<i6q-edit-bar @save=${this.save}></i6q-edit-bar>`
+				? html`<wn-edit-bar @save=${this.save}></wn-edit-bar>`
 				: html``
 		}
-		<slot name="${this.activeSection === "code" ? "code" : ""}"></slot>
+		${
+			this.activeSection === "history"
+				? html`<wn-history uri="${this.uri}"></wn-history>`
+				: html`<slot name="${this.activeSection === "code" ? "code" : ""}"></slot>`
+		}
 		${
 			this.activeSection === "edit"
 				? html`<sl-button variant="success" @click=${this.newElement}>

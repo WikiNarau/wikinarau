@@ -36,7 +36,7 @@ export abstract class EditableElement extends LitElement {
 					break;
 				}
 				case Node.ELEMENT_NODE: {
-					if ((n as HTMLElement).tagName.toUpperCase() === "I6Q-CODE") {
+					if ((n as HTMLElement).tagName.toUpperCase() === "WN-CODE") {
 						continue;
 					}
 					ret.push(EditableElement.serializeElement(n as HTMLElement));
@@ -123,7 +123,7 @@ export abstract class EditableElement extends LitElement {
 	newElement(e: Event) {
 		e.stopPropagation();
 		e.preventDefault();
-		const ele = document.createElement("i6q-stem-cell");
+		const ele = document.createElement("wn-stem-cell");
 		let id = generateTypeUID("MCO");
 		for (let i = 0; i < 100; i++) {
 			if (!document.querySelector(`#${id}`)) {
@@ -246,7 +246,7 @@ export abstract class EditableElement extends LitElement {
 
 	dispatchEditEvent() {
 		this.dispatchEvent(
-			new CustomEvent("i6q-edit", {
+			new CustomEvent("wn-edit", {
 				bubbles: true,
 				composed: true,
 			}),

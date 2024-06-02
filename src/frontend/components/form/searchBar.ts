@@ -1,7 +1,7 @@
 import { html, css, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
-@customElement("i6q-search-bar")
+@customElement("wn-search-bar")
 export class SearchBar extends LitElement {
 	static styles = css`
 	input {

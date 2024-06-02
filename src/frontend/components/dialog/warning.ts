@@ -3,7 +3,7 @@ import { customElement, property, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 import { SlDialog } from "@shoelace-style/shoelace";
 
-@customElement("i6q-warning-dialog")
+@customElement("wn-warning-dialog")
 export class WarningDialog extends LitElement {
 	static styles = [
 		typographicStyles,

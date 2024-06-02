@@ -1,7 +1,7 @@
 import { Level } from "level";
 import fs from "node:fs";
 
-import type { ServerResource } from "../common/types";
+import type { Revision, ServerResource } from "../common/types";
 import { dbSeed } from "./DatabaseSeed";
 import { utime } from "../common/util";
 import { randomBytes } from "node:crypto";
@@ -27,6 +27,7 @@ export interface DBRevision {
 	previousRevision: string;
 
 	content: string;
+	commitMessage?: string;
 }
 
 export interface DBResource {
@@ -98,10 +99,21 @@ export class Database {
 		return ret;
 	}
 
-	async getContent(uri: string): Promise<Content | null> {
+	async getContent(uri: string, revision = ""): Promise<Content | null> {
 		try {
 			const c = await this.dbContent.get(uri);
-			const r = await this.dbRevision.get(c.lastRevision);
+			let curRev = c.lastRevision;
+			if(revision){
+				while(curRev && curRev !== revision){
+					const r = await this.dbRevision.get(curRev);
+					curRev = r.previousRevision;
+				}
+				if(curRev !== revision){
+					return null;
+				}
+			}
+			console.log(`${curRev} === ${revision}`);
+			const r = await this.dbRevision.get(curRev);
 			return <Content>{
 				uri,
 				lastRevision: c.lastRevision,
@@ -134,20 +146,42 @@ export class Database {
 		return ret;
 	}
 
+	async getRevisionHistory(uri: string): Promise<Revision[]> {
+		try {
+			const c = await this.dbContent.get(uri);
+			let lastRevision = c.lastRevision;
+			const ret:Revision[] = [];
+			while(lastRevision){
+				const rev = await this.dbRevision.get(lastRevision);
+				ret.push({
+					id: lastRevision,
+					createdAt: rev.createdAt,
+					content: rev.content,
+					commitMessage: rev.commitMessage,
+					uri,
+				});
+				lastRevision = rev.previousRevision;
+			}
+			return ret;
+		} catch {
+			return [];
+		}
+	}
+
 	static newKey(): string {
 		return randomBytes(8).toString("base64");
 	}
 
-	async updateContentRevision(uri: string, content: string) {
+	async updateContentRevision(uri: string, content: string, commitMessage = '') {
 		try {
 			const old = await this.dbContent.get(uri);
-			const newRev = await this.createRevision(content, old.lastRevision);
+			const newRev = await this.createRevision(content, old.lastRevision, commitMessage);
 			await this.dbContent.put(uri, {
 				createdAt: old.createdAt,
 				lastRevision: newRev,
 			});
 		} catch {
-			const newRev = await this.createRevision(content, "");
+			const newRev = await this.createRevision(content, "", commitMessage);
 			await this.dbContent.put(uri, {
 				createdAt: utime(),
 				lastRevision: newRev,
@@ -162,6 +196,7 @@ export class Database {
 	async createRevision(
 		content: string,
 		previousRevision = "",
+		commitMessage = "",
 	): Promise<string> {
 		let key = Database.newKey();
 		for (let i = 0; i < 10; i++) {
@@ -178,6 +213,7 @@ export class Database {
 			createdAt,
 			content,
 			previousRevision,
+			commitMessage,
 		});
 		return key;
 	}

@@ -2,7 +2,7 @@ import { SlDrawer } from "@shoelace-style/shoelace";
 import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
 
-@customElement("i6q-topbar")
+@customElement("wn-topbar")
 export class TopBar extends LitElement {
 	@query("sl-drawer.navigation-drawer")
 	drawer?: SlDrawer;
@@ -31,11 +31,11 @@ export class TopBar extends LitElement {
 				<img class="logo" src="/assets/logo.svg?v=1" alt="WikiLearn" />
 			</a>
 			<br/>
-			<i6q-site-nav noBoxShadow></i6q-site-nav>
+			<wn-site-nav noBoxShadow></wn-site-nav>
 		</sl-drawer>
 	</aside>
 	<section>
-		<i6q-search-bar></i6q-search-bar>
+		<wn-search-bar></wn-search-bar>
 	</section>
 </div>
 `;
@@ -126,6 +126,6 @@ img.logo {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"i6q-topbar": TopBar;
+		"wn-topbar": TopBar;
 	}
 }

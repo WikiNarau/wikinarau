@@ -2,7 +2,7 @@ import { html, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 
-@customElement("i6q-embed-dialog-page")
+@customElement("wn-embed-dialog-page")
 export class DialogEmbedPage extends LitElement {
 	static styles = typographicStyles;
 

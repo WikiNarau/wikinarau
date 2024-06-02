@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { contentTypes, EditableElement } from "../abstract";
 import { typographicStyles } from "../styles/typographic";
 
-@customElement("i6q-header")
+@customElement("wn-header")
 export class Header extends EditableElement {
 	static styles = [typographicStyles];
 
@@ -14,7 +14,7 @@ export class Header extends EditableElement {
 	editValue = "";
 
 	static tagName(): string {
-		return "i6q-header";
+		return "wn-header";
 	}
 
 	editInput(e: InputEvent) {
@@ -36,7 +36,7 @@ export class Header extends EditableElement {
 
 	renderEdit() {
 		return html`
-		<i6q-edit-box typeName="Header" icon="paragraph">
+		<wn-edit-box typeName="Header" icon="paragraph">
 			<sl-radio-group style="margin-bottom: 1rem;" value="${this.h}" @sl-change=${this.editSelect}>
 				<sl-radio-button pill value="h1"><span style="font-size:1.2em;">Heading 1</span></sl-radio-button>
 				<sl-radio-button pill value="h2"><span style="font-size:1.1em;">Heading 2</span></sl-radio-button>
@@ -46,7 +46,7 @@ export class Header extends EditableElement {
 				<sl-radio-button pill value="h6"><span style="font-size:0.7em;">Heading 6</span></sl-radio-button>
 			</sl-radio-group>
 			<sl-input placeholder="Headline" style="display: block; margin-top:1rem;" @sl-input=${this.editInput} value=${this.editValue}></sl-input>
-		</i6q-edit-box>`;
+		</wn-edit-box>`;
 	}
 
 	serialize() {

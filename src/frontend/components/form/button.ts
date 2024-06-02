@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 
-@customElement("i6q-button")
+@customElement("wn-button")
 export class Button extends LitElement {
 	render() {
 		return html`<slot></slot>`;

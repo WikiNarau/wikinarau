@@ -2,7 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { typographicStyles } from "../styles";
 
-@customElement("i6q-edit-box")
+@customElement("wn-edit-box")
 export class EditBox extends LitElement {
 	@property({ type: Boolean })
 	singleLine = false;

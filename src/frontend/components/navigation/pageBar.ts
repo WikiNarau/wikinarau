@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-@customElement("i6q-page-bar")
+@customElement("wn-page-bar")
 export class PageBar extends LitElement {
 	@property({ type: String })
 	public activeSection = "main";
@@ -36,12 +36,22 @@ export class PageBar extends LitElement {
 		);
 	}
 
+	private switchToHistory() {
+		this.dispatchEvent(
+			new CustomEvent("sectionChange", {
+				detail: "history",
+				bubbles: true,
+				composed: true,
+			}),
+		);
+	}
+
 	/*
 	<iframe src="http://localhost:2600/wiki/berry?embed=true" style="width: 100%; border: none;"></iframe>
 	<script src="http://localhost:2600/assets/iframeResizer.js"></script>
 	*/
 	private showEmbedLink() {
-		const dialog = document.createElement("i6q-embed-dialog-page");
+		const dialog = document.createElement("wn-embed-dialog-page");
 		document.body.append(dialog);
 	}
 
@@ -49,20 +59,25 @@ export class PageBar extends LitElement {
 		return html`
 			<nav>
 				<span class="left">
-					<i6q-button @click=${this.switchToMain} class="narrow flat ${
+					<wn-button @click=${this.switchToMain} class="narrow flat ${
 						this.activeSection === "main" ? "active" : ""
-					}"><sl-icon name="file-text"></sl-icon><span class="button-text"> Content</span></i6q-button>
+					}"><sl-icon name="file-text"></sl-icon><span class="button-text"> Content</span></wn-button>
 				</span>
 				<span class="right">
-					<i6q-button @click=${this.showEmbedLink} class="narrow flat">
+					<wn-button @click=${this.showEmbedLink} class="narrow flat">
 						<sl-icon name="window" style="position: relative; top:2px;"></sl-icon><span class="button-text"> Embed</span>
-					</i6q-button>
-					<i6q-button @click=${this.switchToCode} class="narrow flat ${
+					</wn-button>
+					<wn-button @click=${this.switchToHistory} class="narrow flat ${
+						this.activeSection === "history" ? "active" : ""
+					}">
+						<sl-icon name="clock-history" style="position: relative; top:2px;"></sl-icon><span class="button-text"> History</span>
+					</wn-button>
+					<wn-button @click=${this.switchToCode} class="narrow flat ${
 						this.activeSection === "code" ? "active" : ""
-					}">λ<span class="button-text"> Code</span></i6q-button>
-					<i6q-button @click=${this.switchToEdit} class="narrow flat ${
+					}">λ<span class="button-text"> Code</span></wn-button>
+					<wn-button @click=${this.switchToEdit} class="narrow flat ${
 						this.activeSection === "edit" ? "active" : ""
-					}"><sl-icon name="pencil"></sl-icon><span class="button-text"> Edit</span></i6q-button>
+					}"><sl-icon name="pencil"></sl-icon><span class="button-text"> Edit</span></wn-button>
 				</span>
 			</nav>
 			<div class="border"></div>
@@ -135,6 +150,6 @@ export class PageBar extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"i6q-pagebar": PageBar;
+		"wn-pagebar": PageBar;
 	}
 }

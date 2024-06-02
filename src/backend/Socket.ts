@@ -20,6 +20,7 @@ export class Socket {
 		);
 		this.queue.setCallHandler("uploadResource", this.uploadResource);
 		this.queue.setCallHandler("listResources", this.listResources);
+		this.queue.setCallHandler("listRevisions", this.listRevisions);
 
 		socket.on("error", this.error.bind(this));
 		socket.on("close", this.close.bind(this));
@@ -32,6 +33,16 @@ export class Socket {
 
 	async listResources(_args: unknown) {
 		return await this.server.db.getResources();
+	}
+
+	async listRevisions(args: unknown) {
+		if (typeof args !== "object" || !args) {
+			throw "Invalid args";
+		}
+		if (!("uri" in args) || typeof args.uri !== "string") {
+			throw "Invalid uri";
+		}
+		return await this.server.db.getRevisionHistory(args.uri);
 	}
 
 	async uploadResource(args: unknown) {
@@ -66,7 +77,7 @@ export class Socket {
 			throw "Invalid content";
 		}
 
-		await this.server.db.updateContentRevision(args.uri, args.content);
+		await this.server.db.updateContentRevision(args.uri, args.content, (args as any).commitMessage || '');
 		return true;
 	}
 

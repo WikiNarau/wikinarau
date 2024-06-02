@@ -2,7 +2,7 @@ import { html, css, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 
-@customElement("i6q-site-nav")
+@customElement("wn-site-nav")
 export class SiteNav extends LitElement {
 	static styles = [
 		typographicStyles,
@@ -34,7 +34,7 @@ export class SiteNav extends LitElement {
 	@property({ type: Boolean })
 	noboxshadow = false;
 
-	@query("i6q-dialog-create-page")
+	@query("wn-dialog-create-page")
 	dialogCreatePage: any;
 
 	private createPage(e: Event) {
@@ -54,7 +54,7 @@ export class SiteNav extends LitElement {
 		<h6>Contribute</h6>
 		<a href="/" @click=${this.createPage}><sl-icon name="file-earmark"></sl-icon> New Page</a>
 		<a href="https://github.com/WikiNarau/wikinarau"><sl-icon name="github"></sl-icon> GitHub</a>
-		<i6q-dialog-create-page></i6q-dialog-create-page>
+		<wn-dialog-create-page></wn-dialog-create-page>
 	</section>`;
 	}
 }

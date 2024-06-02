@@ -4,7 +4,7 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { typographicStyles } from "../styles";
 import { showWarning } from "../dialog/warning";
 
-@customElement("i6q-rte")
+@customElement("wn-rte")
 export class RichTextEditor extends LitElement {
 	static styles = [
 		typographicStyles,

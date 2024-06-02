@@ -96,13 +96,13 @@ export class Entry {
 
 			const head = this.genHeadFromFrontmatter(config, frontmatter);
 			const body = `<h1>${title}</h1>
-			<i6q-frame section="main" meta='${JSON.stringify(frontmatter).replace(
+			<wn-frame uri='${this.uri.replace(/'/g, "&#39;")}' section="main" meta='${JSON.stringify(frontmatter).replace(
 				/'/g,
 				"&#39;",
 			)}'>
 				${html}
-				<i6q-code slot="code" value='${this.content.replace(/'/g, "&#39;")}'></i6q-code>
-			</i6q-frame>`;
+				<wn-code slot="code" value='${this.content.replace(/'/g, "&#39;")}'></wn-code>
+			</wn-frame>`;
 			return Entry.renderTemplate(title, body, head);
 		} catch (e) {
 			console.error(e);
@@ -121,8 +121,8 @@ export class Entry {
 		return `<h3>${i + 1}. <a href="${this.uri}">${title}</a></h3>`;
 	}
 
-	static async getByURI(db: Database, uri: string): Promise<Entry | null> {
-		const con = await db.getContent(uri);
+	static async getByURI(db: Database, uri: string, revision = ""): Promise<Entry | null> {
+		const con = await db.getContent(uri, revision);
 		if (con) {
 			return Entry.fromContent(con);
 		} else {

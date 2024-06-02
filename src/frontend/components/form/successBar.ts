@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 
-@customElement("i6q-success-bar")
+@customElement("wn-success-bar")
 export class SuccessBar extends LitElement {
 	@property({ type: String })
 	src = "";
@@ -69,6 +69,6 @@ export class SuccessBar extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"i6q-success-bar": SuccessBar;
+		"wn-success-bar": SuccessBar;
 	}
 }
