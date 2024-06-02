@@ -77,7 +77,11 @@ export class Socket {
 			throw "Invalid content";
 		}
 
-		await this.server.db.updateContentRevision(args.uri, args.content, (args as any).commitMessage || '');
+		await this.server.db.updateContentRevision(
+			args.uri,
+			args.content,
+			(args as any).commitMessage || "",
+		);
 		return true;
 	}
 

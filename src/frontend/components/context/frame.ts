@@ -134,7 +134,9 @@ export class Frame extends LitElement {
 		${
 			this.activeSection === "history"
 				? html`<wn-history uri="${this.uri}"></wn-history>`
-				: html`<slot name="${this.activeSection === "code" ? "code" : ""}"></slot>`
+				: html`<slot name="${
+						this.activeSection === "code" ? "code" : ""
+					}"></slot>`
 		}
 		${
 			this.activeSection === "edit"

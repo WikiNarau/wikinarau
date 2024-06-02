@@ -30,12 +30,17 @@ export const rpc = (fun: string, args: any): Promise<any> =>
 
 (window as any).rpc = rpc;
 
-export const updateContentRevision = (uri: string, content: string, commitMessage = '') =>
-	queue.call("updateContentRevision", { uri, content, commitMessage });
+export const updateContentRevision = (
+	uri: string,
+	content: string,
+	commitMessage = "",
+) => queue.call("updateContentRevision", { uri, content, commitMessage });
 
 export const uploadResource = (name: string, data: string) =>
 	queue.call("uploadResource", { name, data });
 
-export const listResources = ():Promise<ServerResource[]> => queue.call("listResources", {});
+export const listResources = (): Promise<ServerResource[]> =>
+	queue.call("listResources", {});
 
-export const listRevisions = (uri: string):Promise<Revision[]> => queue.call("listRevisions", { uri });
+export const listRevisions = (uri: string): Promise<Revision[]> =>
+	queue.call("listRevisions", { uri });

@@ -23,9 +23,13 @@ export class History extends LitElement {
 	}
 
 	render() {
-		return html`${this.history
-			? this.history.map(rev => html`<wn-history-revision .revision=${rev}></wn-history-revision>`)
-			: html`<div style="text-align: center; padding: 4rem 0;"><sl-spinner style="font-size: 8rem;"></sl-spinner></div>`
+		return html`${
+			this.history
+				? this.history.map(
+						(rev) =>
+							html`<wn-history-revision .revision=${rev}></wn-history-revision>`,
+					)
+				: html`<div style="text-align: center; padding: 4rem 0;"><sl-spinner style="font-size: 8rem;"></sl-spinner></div>`
 		}`;
 	}
 }

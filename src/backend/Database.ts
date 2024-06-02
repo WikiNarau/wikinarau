@@ -103,12 +103,12 @@ export class Database {
 		try {
 			const c = await this.dbContent.get(uri);
 			let curRev = c.lastRevision;
-			if(revision){
-				while(curRev && curRev !== revision){
+			if (revision) {
+				while (curRev && curRev !== revision) {
 					const r = await this.dbRevision.get(curRev);
 					curRev = r.previousRevision;
 				}
-				if(curRev !== revision){
+				if (curRev !== revision) {
 					return null;
 				}
 			}
@@ -150,8 +150,8 @@ export class Database {
 		try {
 			const c = await this.dbContent.get(uri);
 			let lastRevision = c.lastRevision;
-			const ret:Revision[] = [];
-			while(lastRevision){
+			const ret: Revision[] = [];
+			while (lastRevision) {
 				const rev = await this.dbRevision.get(lastRevision);
 				ret.push({
 					id: lastRevision,
@@ -172,10 +172,18 @@ export class Database {
 		return randomBytes(8).toString("base64");
 	}
 
-	async updateContentRevision(uri: string, content: string, commitMessage = '') {
+	async updateContentRevision(
+		uri: string,
+		content: string,
+		commitMessage = "",
+	) {
 		try {
 			const old = await this.dbContent.get(uri);
-			const newRev = await this.createRevision(content, old.lastRevision, commitMessage);
+			const newRev = await this.createRevision(
+				content,
+				old.lastRevision,
+				commitMessage,
+			);
 			await this.dbContent.put(uri, {
 				createdAt: old.createdAt,
 				lastRevision: newRev,
