@@ -41,7 +41,7 @@ export class Img extends EditableElement {
 		if (this.frameState === "edit") {
 			return this.renderEdit();
 		}
-		return html`<img src="${this.src}" width="${this.width}" height="${this.height}" />`;
+		return html`<img loading="lazy" src="${this.src}" width="${this.width}" height="${this.height}" />`;
 	}
 
 	static {
