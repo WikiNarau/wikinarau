@@ -69,12 +69,12 @@ export class Database {
 	}
 
 	async init() {
+		await this.index.init();
 		for (const [uri, content] of dbSeed.entries()) {
 			if (!(await this.getContent(uri))) {
 				await this.updateContentRevision(uri, content);
 			}
 		}
-		await this.index.init();
 		setTimeout(async () => {
 			for await (const uri of this.dbContent.keys()) {
 				const entry = await Entry.getByURI(this, uri);
