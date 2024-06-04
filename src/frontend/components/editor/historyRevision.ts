@@ -89,7 +89,7 @@ export class HistoryRevision extends LitElement {
 			} label="Preview of Version ${
 				this.revision.id
 			} from ${createdAt.toLocaleString()}" style="--width: 50vw;">
-				<iframe @message=${
+				<iframe loading="lazy" @message=${
 					this.onIframeMessage
 				} style="display: block; width: 100%; min-height: 80vh; box-sizing: border-box;" src="${iframeUri}"></iframe>
 			</sl-dialog>
