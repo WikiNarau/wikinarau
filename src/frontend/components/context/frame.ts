@@ -47,6 +47,27 @@ export class Frame extends LitElement {
 		}
 	}
 
+	private dragStart(e: DragEvent) {
+		e.stopPropagation();
+		if (this.frameState !== "edit") {
+			return;
+		}
+		if (e.dataTransfer) {
+			e.dataTransfer.effectAllowed = "move";
+			if (e.target instanceof HTMLElement) {
+				const editable = EditableElement.getClosestEditableElement(e.target);
+				if (editable) {
+					e.dataTransfer.setData("text/plain", editable.innerText);
+					e.dataTransfer.setData("text/html", editable.outerHTML);
+					e.dataTransfer.setData(
+						"application/wikinarau",
+						JSON.stringify(editable.serialize()),
+					);
+				}
+			}
+		}
+	}
+
 	sectionChange(e: CustomEvent) {
 		const sec = e.detail || "main";
 		if (sec) {
@@ -55,7 +76,7 @@ export class Frame extends LitElement {
 	}
 
 	_hashChange: () => void;
-	hashChange() {
+	private hashChange() {
 		if (document.location.hash) {
 			this.changeSection(document.location.hash.substring(1));
 		}
@@ -134,7 +155,7 @@ export class Frame extends LitElement {
 		${
 			this.activeSection === "history"
 				? html`<wn-history uri="${this.uri}"></wn-history>`
-				: html`<slot name="${
+				: html`<slot @dragstart=${this.dragStart} name="${
 						this.activeSection === "code" ? "code" : ""
 					}"></slot>`
 		}

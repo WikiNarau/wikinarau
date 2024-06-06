@@ -171,10 +171,10 @@ sl-icon-button {
 
 	render() {
 		return html`
-<div class="edit-box
+<div draggable="true" class="edit-box
 	${this.singleLine ? "singleLine" : ""}"
 >
-	<div class="bar" draggable="true">
+	<div class="bar">
 		<div class="left">
 			<sl-icon style="display:inline-block; vertical-align:middle; margin-right:0.25rem;" name="${
 				this.icon

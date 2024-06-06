@@ -22,10 +22,6 @@ export class WarningDialog extends LitElement {
 		this.dialog?.hide();
 	}
 
-	afterHide() {
-		console.log("after hide");
-	}
-
 	protected firstUpdated(
 		props: PropertyValueMap<any> | Map<PropertyKey, unknown>,
 	) {

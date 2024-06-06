@@ -28,7 +28,6 @@ export class Header extends EditableElement {
 	editSelect(e: InputEvent) {
 		if (e.target) {
 			const select = e.target as HTMLInputElement;
-			console.log(select.value);
 			this.h = select.value;
 			this.dispatchEditEvent();
 		}

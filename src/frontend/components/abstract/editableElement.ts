@@ -1,6 +1,9 @@
 import { LitElement, PropertyValueMap } from "lit";
 import { generateTypeUID } from "../../../common/tuid";
-import { SerializedElement } from "../../../common/contentTypes";
+import {
+	SerializedElement,
+	renderJSONElement,
+} from "../../../common/contentTypes";
 import { consume } from "@lit/context";
 import { type FrameState, frameStateContext } from "../context";
 import { property } from "lit/decorators.js";
@@ -23,6 +26,18 @@ export abstract class EditableElement extends LitElement {
 	}
 
 	abstract serialize(): SerializedElement;
+
+	static getClosestEditableElement(
+		e: HTMLElement | null,
+	): EditableElement | null {
+		if (!e) {
+			return null;
+		} else if (e instanceof EditableElement) {
+			return e;
+		} else {
+			return this.getClosestEditableElement(e.parentElement);
+		}
+	}
 
 	static serializeNodes(e: NodeListOf<ChildNode>): SerializedElement[] {
 		let ret: SerializedElement[] = [];
@@ -97,28 +112,6 @@ export abstract class EditableElement extends LitElement {
 		this.remove();
 	}
 
-	_moveUpHandler: (e: Event) => void;
-	moveUpHandler(e: Event) {
-		e.stopPropagation();
-		e.preventDefault();
-		const ele = this.previousElementSibling;
-		if (!ele) {
-			return;
-		}
-		ele.before(this);
-	}
-
-	_moveDownHandler: (e: Event) => void;
-	moveDownHandler(e: Event) {
-		e.stopPropagation();
-		e.preventDefault();
-		const ele = this.nextElementSibling;
-		if (!ele) {
-			return;
-		}
-		ele.after(this);
-	}
-
 	_newElementHandler: (e: Event) => void;
 	newElement(e: Event) {
 		e.stopPropagation();
@@ -137,27 +130,12 @@ export abstract class EditableElement extends LitElement {
 	constructor() {
 		super();
 		this._removeHandler = this.removeHandler.bind(this);
-		this._moveUpHandler = this.moveUpHandler.bind(this);
-		this._moveDownHandler = this.moveDownHandler.bind(this);
 		this._newElementHandler = this.newElement.bind(this);
 
-		this._dragStart = this.dragStart.bind(this);
 		this._dragEnd = this.dragEnd.bind(this);
 
 		this._dragOver = this.dragOver.bind(this);
 		this._drop = this.drop.bind(this);
-	}
-
-	_dragStart: (e: DragEvent) => void;
-	dragStart(e: DragEvent) {
-		if (this.frameState !== "edit") {
-			return;
-		}
-		e.stopPropagation();
-		if (e.dataTransfer) {
-			e.dataTransfer.effectAllowed = "move";
-			e.dataTransfer.setData("text/html", this.outerHTML);
-		}
 	}
 
 	_dragEnd: (e: DragEvent) => void;
@@ -166,7 +144,6 @@ export abstract class EditableElement extends LitElement {
 			return;
 		}
 		e.stopPropagation();
-		console.log(e.dataTransfer);
 		if (e.dataTransfer?.dropEffect === "move") {
 			e.preventDefault();
 			this.dispatchEditEvent();
@@ -185,6 +162,27 @@ export abstract class EditableElement extends LitElement {
 		}
 	}
 
+	private dropSerializedElement(ele: SerializedElement) {
+		const div = document.createElement("DIV");
+		const html = renderJSONElement(ele);
+		div.innerHTML = html;
+		for (const childEle of div.children) {
+			this.before(childEle);
+		}
+	}
+
+	private dropWikinarau(raw: string) {
+		const data = JSON.parse(raw);
+		if (Array.isArray(data)) {
+			while (data.length > 0) {
+				this.dropSerializedElement(data.pop());
+			}
+		} else {
+			this.dropSerializedElement(data);
+		}
+		this.dispatchEditEvent();
+	}
+
 	_drop: (e: DragEvent) => void;
 	drop(e: DragEvent) {
 		if (this.frameState !== "edit") {
@@ -192,16 +190,12 @@ export abstract class EditableElement extends LitElement {
 		}
 		if (e.dataTransfer) {
 			e.dataTransfer.dropEffect = "move";
-			const data = e.dataTransfer.getData("text/html");
-			if (data) {
+
+			const wikiData = e.dataTransfer.getData("application/wikinarau");
+			if (wikiData) {
 				e.preventDefault();
 				e.stopPropagation();
-				const ele = document.createElement("DIV");
-				ele.innerHTML = data;
-				for (const childEle of ele.children) {
-					this.before(childEle);
-				}
-				this.dispatchEditEvent();
+				this.dropWikinarau(wikiData);
 			}
 		}
 	}
@@ -210,14 +204,10 @@ export abstract class EditableElement extends LitElement {
 		super.connectedCallback();
 
 		this.addEventListener("remove", this._removeHandler);
-		this.addEventListener("moveUp", this._moveUpHandler);
-		this.addEventListener("moveDown", this._moveDownHandler);
 		this.addEventListener("newElement", this._newElementHandler);
 
 		this.setAttribute("droppable", "true");
-		this.addEventListener("dragstart", this._dragStart);
 		this.addEventListener("dragend", this._dragEnd);
-
 		this.addEventListener("dragover", this._dragOver);
 		this.addEventListener("drop", this._drop);
 	}
@@ -233,13 +223,9 @@ export abstract class EditableElement extends LitElement {
 
 	disconnectedCallback() {
 		this.removeEventListener("remove", this._removeHandler);
-		this.removeEventListener("moveUp", this._moveUpHandler);
-		this.removeEventListener("moveDown", this._moveDownHandler);
 		this.removeEventListener("newElement", this._newElementHandler);
 
-		this.removeEventListener("dragstart", this._dragStart);
 		this.removeEventListener("dragend", this._dragEnd);
-
 		this.removeEventListener("dragover", this._dragOver);
 		this.removeEventListener("drop", this._drop);
 	}

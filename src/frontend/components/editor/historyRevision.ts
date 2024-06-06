@@ -50,10 +50,6 @@ export class HistoryRevision extends LitElement {
 		window.location.assign(window.location.pathname);
 	}
 
-	onIframeMessage(e: Event) {
-		console.log(e);
-	}
-
 	render() {
 		if (!this.revision) {
 			return html`<div>Error</div>`;
@@ -89,9 +85,7 @@ export class HistoryRevision extends LitElement {
 			} label="Preview of Version ${
 				this.revision.id
 			} from ${createdAt.toLocaleString()}" style="--width: 50vw;">
-				<iframe loading="lazy" @message=${
-					this.onIframeMessage
-				} style="display: block; width: 100%; min-height: 80vh; box-sizing: border-box;" src="${iframeUri}"></iframe>
+				<iframe loading="lazy" style="display: block; width: 100%; min-height: 80vh; box-sizing: border-box;" src="${iframeUri}"></iframe>
 			</sl-dialog>
 		</div>
 		`;
