@@ -112,7 +112,6 @@ export class Database {
 					return null;
 				}
 			}
-			console.log(`${curRev} === ${revision}`);
 			const r = await this.dbRevision.get(curRev);
 			return <Content>{
 				uri,
