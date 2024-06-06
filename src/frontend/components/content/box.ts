@@ -113,7 +113,7 @@ export class Box extends EditableElement {
 		};
 	}
 
-	newElement() {
+	appendNewElement() {
 		this.append(document.createElement("wn-stem-cell"));
 	}
 
@@ -129,7 +129,7 @@ export class Box extends EditableElement {
 
 	renderEdit() {
 		return html`
-<wn-edit-box typeName="Box" icon="card-list" variant=${this.variant}>
+<wn-edit-box typeName="Box" icon="card-list" variant=${this.variant} dropStatus=${this.dropStatus}>
 	<sl-input placeholder="Headline" style="display: block; margin-bottom: 1rem;" @sl-input=${this.editSummary} value=${this.summary}></sl-input>
 
 	<sl-radio-group style="margin-bottom: 1rem;" value="${this.variant}" @sl-change=${this.editVariant}>
@@ -142,7 +142,7 @@ export class Box extends EditableElement {
 	</sl-radio-group>
 
 	<slot></slot>
-	<sl-button variant="success" @click=${this.newElement}>
+	<sl-button variant="success" @click=${this.appendNewElement}>
 		<sl-icon slot="prefix" name="plus-lg"></sl-icon>
 		New element
 	</sl-button>

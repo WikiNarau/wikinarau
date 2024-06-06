@@ -6,7 +6,7 @@ import {
 } from "../../../common/contentTypes";
 import { consume } from "@lit/context";
 import { type FrameState, frameStateContext } from "../context";
-import { property } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 
 export interface ContentTypeDefinition {
 	cons: () => EditableElement;
@@ -24,6 +24,9 @@ export abstract class EditableElement extends LitElement {
 	static tagName(): string {
 		return "error";
 	}
+
+	@state()
+	protected dropStatus: "" | "before" | "after" = "";
 
 	abstract serialize(): SerializedElement;
 
@@ -132,42 +135,69 @@ export abstract class EditableElement extends LitElement {
 		this._removeHandler = this.removeHandler.bind(this);
 		this._newElementHandler = this.newElement.bind(this);
 
+		this._dragLeave = this.dragLeave.bind(this);
 		this._dragEnd = this.dragEnd.bind(this);
-
 		this._dragOver = this.dragOver.bind(this);
 		this._drop = this.drop.bind(this);
 	}
 
 	_dragEnd: (e: DragEvent) => void;
-	dragEnd(e: DragEvent) {
+	private dragEnd(e: DragEvent) {
 		if (this.frameState !== "edit") {
 			return;
 		}
+		this.style.opacity = "";
+		e.stopPropagation();
 		e.stopPropagation();
 		if (e.dataTransfer?.dropEffect === "move") {
 			e.preventDefault();
 			this.dispatchEditEvent();
 			this.remove();
 		}
+		this.dropStatus = "";
 	}
 
 	_dragOver: (e: DragEvent) => void;
-	dragOver(e: DragEvent) {
+	private dragOver(e: DragEvent) {
 		if (this.frameState !== "edit") {
 			return;
 		}
+		const hasWikiData = e.dataTransfer?.types.includes("application/wikinarau");
+		if (!hasWikiData) {
+			return;
+		}
 		e.preventDefault();
+		e.stopPropagation();
 		if (e.dataTransfer) {
 			e.dataTransfer.dropEffect = "move";
 		}
+		const rect = this.getBoundingClientRect();
+		const halfPoint = (rect.height || 1) / 2;
+		const y = e.clientY - rect.top;
+		if (y < halfPoint) {
+			this.dropStatus = "before";
+		} else {
+			this.dropStatus = "after";
+		}
+	}
+
+	_dragLeave: (e: DragEvent) => void;
+	private dragLeave(_e: DragEvent) {
+		this.dropStatus = "";
 	}
 
 	private dropSerializedElement(ele: SerializedElement) {
 		const div = document.createElement("DIV");
 		const html = renderJSONElement(ele);
 		div.innerHTML = html;
-		for (const childEle of div.children) {
-			this.before(childEle);
+		if (this.dropStatus === "after") {
+			for (const childEle of div.children) {
+				this.after(childEle);
+			}
+		} else {
+			for (const childEle of div.children) {
+				this.before(childEle);
+			}
 		}
 	}
 
@@ -190,12 +220,14 @@ export abstract class EditableElement extends LitElement {
 		}
 		if (e.dataTransfer) {
 			e.dataTransfer.dropEffect = "move";
+			console.log(this.dropStatus);
 
 			const wikiData = e.dataTransfer.getData("application/wikinarau");
 			if (wikiData) {
 				e.preventDefault();
 				e.stopPropagation();
 				this.dropWikinarau(wikiData);
+				this.dropStatus = "";
 			}
 		}
 	}
@@ -206,9 +238,10 @@ export abstract class EditableElement extends LitElement {
 		this.addEventListener("remove", this._removeHandler);
 		this.addEventListener("newElement", this._newElementHandler);
 
-		this.setAttribute("droppable", "true");
 		this.addEventListener("dragend", this._dragEnd);
 		this.addEventListener("dragover", this._dragOver);
+		this.addEventListener("dragenter", this._dragOver);
+		this.addEventListener("dragleave", this._dragLeave);
 		this.addEventListener("drop", this._drop);
 	}
 
@@ -227,6 +260,8 @@ export abstract class EditableElement extends LitElement {
 
 		this.removeEventListener("dragend", this._dragEnd);
 		this.removeEventListener("dragover", this._dragOver);
+		this.removeEventListener("dragenter", this._dragOver);
+		this.removeEventListener("dragleave", this._dragLeave);
 		this.removeEventListener("drop", this._drop);
 	}
 

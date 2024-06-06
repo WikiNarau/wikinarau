@@ -10,11 +10,15 @@ export class EditBox extends LitElement {
 	@property({ type: String })
 	variant = "";
 
+	@property({ type: String })
+	dropStatus: "" | "before" | "after" = "";
+
 	static styles = [
 		typographicStyles,
 		css`
 
 .edit-box {
+	position: relative;
 	display: block;
 	border: solid var(--sl-input-border-width) var(--sl-input-border-color);
 	border-radius: var(--sl-input-border-radius-medium);
@@ -119,11 +123,43 @@ h5 {
 
 sl-icon-button {
 	color: inherit;
+	font-size: 1.2rem;
+}
+
+sl-icon-button::part(base) {
+	padding: 0.25rem;
 }
 
 :host(.noPadding) .content {
 	padding:0;
 }
+
+.drop-zone {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 3px;
+	display: block;
+	background: var(--sl-color-success-600);
+}
+
+.drop-zone-before {
+	top: -0.7rem;
+}
+.drop-zone-after {
+	bottom: -0.7rem;
+}
+
+.green-icon-button::part(base):hover,
+.green-icon-button::part(base):focus {
+	color: var(--sl-color-success-600);
+}
+
+.red-icon-button::part(base):hover,
+.red-icon-button::part(base):focus {
+	color: var(--sl-color-red-600);
+}
+
 `,
 	];
 
@@ -169,12 +205,22 @@ sl-icon-button {
 		);
 	}
 
+	private eventBlocker(e: Event) {
+		e.preventDefault();
+		e.stopPropagation();
+	}
+
 	render() {
 		return html`
-<div draggable="true" class="edit-box
+<div class="edit-box
 	${this.singleLine ? "singleLine" : ""}"
 >
-	<div class="bar">
+	${
+		this.dropStatus === "before"
+			? html`<div class="drop-zone drop-zone-before"></div>`
+			: null
+	}
+	<div class="bar" draggable="true">
 		<div class="left">
 			<sl-icon style="display:inline-block; vertical-align:middle; margin-right:0.25rem;" name="${
 				this.icon
@@ -185,14 +231,14 @@ sl-icon-button {
 					: html`<h5 style="display:inline-block;">${this.typeName}</h5>`
 			}
 		</div>
-		<div class="right">
+		<div class="right" @mousedown=${this.eventBlocker}>
 			<sl-tooltip content="New element">
-				<sl-icon-button name="plus-lg" label="New element" @click=${
+				<sl-icon-button class="green-icon-button" name="plus-lg" label="New element" @click=${
 					this.newElement
 				}></sl-icon-button>
 			</sl-tooltip>
 			<sl-tooltip content="Remove element">
-				<sl-icon-button name="x-lg" label="Remove element" @click=${
+				<sl-icon-button class="red-icon-button" name="x-lg" label="Remove element" @click=${
 					this.removeHandler
 				}></sl-icon-button>
 			</sl-tooltip>
@@ -205,6 +251,11 @@ sl-icon-button {
 		<div class="content">
 			<slot></slot>
 		</div>`
+	}
+	${
+		this.dropStatus === "after"
+			? html`<div class="drop-zone drop-zone-after"></div>`
+			: null
 	}
 </div>`;
 	}

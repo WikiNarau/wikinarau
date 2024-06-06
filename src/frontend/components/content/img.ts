@@ -23,7 +23,7 @@ export class Img extends EditableElement {
 
 	renderEdit() {
 		return html`
-	<wn-edit-box typeName="Image" icon="image">
+	<wn-edit-box typeName="Image" icon="image" dropStatus=${this.dropStatus}>
 		<wn-resource-picker src=${this.src} @change=${this.resourceChange} accept="image"></wn-resource-picker>
 	</wn-edit-box>`;
 	}

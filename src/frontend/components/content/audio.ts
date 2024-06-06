@@ -17,7 +17,7 @@ export class Audio extends EditableElement {
 
 	renderEdit() {
 		return html`
-	<wn-edit-box typeName="Audio" icon="volume-up">
+	<wn-edit-box typeName="Audio" icon="volume-up" dropStatus=${this.dropStatus}>
 		<wn-resource-picker src=${this.src} @change=${this.resourceChange} accept="audio"></wn-resource-picker>
 	</wn-edit-box>`;
 	}

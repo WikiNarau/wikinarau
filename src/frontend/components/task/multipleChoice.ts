@@ -141,7 +141,7 @@ export class MultipleChoice extends EditableElement {
 
 	renderEdit() {
 		return html`
-		<wn-edit-box typeName="Multiple Choice" icon="list-check">
+		<wn-edit-box typeName="Multiple Choice" icon="list-check" dropStatus=${this.dropStatus}>
 		<div class="wrap">
 			<sl-switch ?checked=${this.multiple} @sl-change=${this.toggleMultiple}>Allow multiple answers</sl-switch>
 			<br/><br/>

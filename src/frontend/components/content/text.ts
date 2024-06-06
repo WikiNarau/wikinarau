@@ -27,7 +27,7 @@ export class Text extends EditableElement {
 
 	renderEdit() {
 		return html`
-<wn-edit-box typeName="Text" icon="justify-left" class="noPadding">
+<wn-edit-box typeName="Text" icon="justify-left" class="noPadding" dropStatus=${this.dropStatus}>
 	<wn-rte @rte-edit=${this.editInput} value=${this.editValue}></wn-rte>
 </wn-edit-box>`;
 	}

@@ -12,7 +12,7 @@ export class StemCell extends EditableElement {
 </sl-button>`,
 		);
 		return html`
-<wn-edit-box typeName="Choose a Type" icon="box">
+<wn-edit-box typeName="Choose a Type" icon="box" dropStatus=${this.dropStatus}>
 	<sl-button-group>
 		${T}
 	</sl-button-group>

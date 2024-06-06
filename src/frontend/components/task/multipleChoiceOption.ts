@@ -80,7 +80,7 @@ export class MultipleChoiceOption extends EditableElement {
 
 	renderEdit() {
 		return html`
-<wn-edit-box singleLine icon="check2-circle">
+<wn-edit-box singleLine icon="check2-circle" dropStatus=${this.dropStatus}>
 	<sl-input placeholder="Answer text" style="display:inline-block; margin-right: 1rem;" @sl-input=${this.editInput} value=${this.editValue}></sl-input>
 	<sl-switch ?checked=${this.correct} @sl-change=${this.toggleCorrect}>Correct</sl-switch>
 </wn-edit-box>`;

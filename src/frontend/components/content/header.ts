@@ -35,7 +35,7 @@ export class Header extends EditableElement {
 
 	renderEdit() {
 		return html`
-		<wn-edit-box typeName="Header" icon="paragraph">
+		<wn-edit-box typeName="Header" icon="paragraph" dropStatus=${this.dropStatus}>
 			<sl-radio-group style="margin-bottom: 1rem;" value="${this.h}" @sl-change=${this.editSelect}>
 				<sl-radio-button pill value="h1"><span style="font-size:1.2em;">Heading 1</span></sl-radio-button>
 				<sl-radio-button pill value="h2"><span style="font-size:1.1em;">Heading 2</span></sl-radio-button>

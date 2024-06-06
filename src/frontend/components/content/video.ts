@@ -17,7 +17,7 @@ export class Video extends EditableElement {
 
 	renderEdit() {
 		return html`
-	<wn-edit-box typeName="Video" icon="play-btn">
+	<wn-edit-box typeName="Video" icon="play-btn" dropStatus=${this.dropStatus}>
 		<wn-resource-picker src=${this.src} @change=${this.resourceChange} accept="video"></wn-resource-picker>
 	</wn-edit-box>`;
 	}

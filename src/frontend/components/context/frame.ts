@@ -63,6 +63,13 @@ export class Frame extends LitElement {
 						"application/wikinarau",
 						JSON.stringify(editable.serialize()),
 					);
+					editable.style.opacity = "0.01";
+					const rect = editable.getBoundingClientRect();
+					const ox = e.clientX - rect.x;
+					const oy = e.clientY - rect.y;
+
+					console.log(editable);
+					e.dataTransfer.setDragImage(editable, ox, oy);
 				}
 			}
 		}
