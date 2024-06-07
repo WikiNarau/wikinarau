@@ -123,9 +123,3 @@ img.logo {
 }
 `;
 }
-
-declare global {
-	interface HTMLElementTagNameMap {
-		"wn-topbar": TopBar;
-	}
-}

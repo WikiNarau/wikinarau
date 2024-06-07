@@ -7,27 +7,27 @@ export class SiteNav extends LitElement {
 	static styles = [
 		typographicStyles,
 		css`
-	section {
-		padding:0.5rem 1rem;
-		background: var(--color-background-light);
-		box-shadow: 0px 0px 4px 1px var(--color-background-dark);
-		margin:0 0 1rem 0;
-	}
+section {
+	padding:0.5rem 1rem;
+	background: var(--color-background-light);
+	box-shadow: 0px 0px 4px 1px var(--color-background-dark);
+	margin:0 0 1rem 0;
+}
 
-	section.noBoxShadow {
-		box-shadow: none;
-	}
+section.noBoxShadow {
+	box-shadow: none;
+}
 
-	a {
-		display: block;
-		line-height: 1.4rem;
-	}
+a {
+	display: block;
+	line-height: 1.4rem;
+}
 
-	a > sl-icon {
-		position: relative;
-		top: 2px;
-		margin-right: 4px;
-	}
+a > sl-icon {
+	position: relative;
+	top: 2px;
+	margin-right: 4px;
+}
 `,
 	];
 

@@ -33,9 +33,9 @@ export class StemCell extends EditableElement {
 	}
 
 	static styles = css`
-	wn-edit-box > * {
-		margin-right: 0.5rem;
-		margin-bottom: 0.5rem;
-	}
+wn-edit-box > * {
+	margin-right: 0.5rem;
+	margin-bottom: 0.5rem;
+}
 `;
 }

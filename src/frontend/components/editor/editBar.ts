@@ -50,40 +50,40 @@ export class EditBar extends LitElement {
 	}
 
 	static styles = css`
-		.left {
-			float:left;
-			width: calc(100% - 12.5rem);
-		}
+.left {
+	float:left;
+	width: calc(100% - 12.5rem);
+}
 
-		.right {
-			float: right;
-		}
+.right {
+	float: right;
+}
 
-		.edit-bar {
-			display: table;
-			width:100%;
-			margin-bottom: 1rem;
-			position: sticky;
-			top: 3rem;
-			padding-top: 0.5rem;
-			padding-bottom: 0.5rem;
-			background: var(--color-background-light);
-			border-bottom: solid 2px var(--sl-color-neutral-600);
-			z-index:9;
-		}
+.edit-bar {
+	display: table;
+	width:100%;
+	margin-bottom: 1rem;
+	position: sticky;
+	top: 3rem;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	background: var(--color-background-light);
+	border-bottom: solid 2px var(--sl-color-neutral-600);
+	z-index:9;
+}
 
-		@media only screen and (max-width: 500px) {
-			.button-text {
-				display: none;
-			}
+@media only screen and (max-width: 500px) {
+	.button-text {
+		display: none;
+	}
 
-			.right > sl-button-group > sl-button::part(label) {
-				padding: 0 0.4rem;
-			}
+	.right > sl-button-group > sl-button::part(label) {
+		padding: 0 0.4rem;
+	}
 
-			.left {
-				width: calc(100% - 6rem);
-			}
-		}
+	.left {
+		width: calc(100% - 6rem);
+	}
+}
 	`;
 }

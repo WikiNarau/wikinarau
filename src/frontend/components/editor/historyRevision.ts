@@ -52,7 +52,7 @@ export class HistoryRevision extends LitElement {
 
 	render() {
 		if (!this.revision) {
-			return html`<div>Error</div>`;
+			return html`<h1>Error</h1>`;
 		}
 		const createdAt = new Date(this.revision.createdAt * 1000);
 		const iframeUri =

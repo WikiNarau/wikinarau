@@ -4,23 +4,23 @@ import { customElement, property, query } from "lit/decorators.js";
 @customElement("wn-search-bar")
 export class SearchBar extends LitElement {
 	static styles = css`
-	input {
-		display: inline-block;
-		appearance: none;
-		border: none;
-		margin: 0.3rem 0 0 0;
-		outline: none;
-		font-size: 1.2rem;
-		line-height: 1.35rem;
-		background: transparent;
-		color: #000;
-		position: relative;
-		border: solid 2px var(--color-background-dark);
-		border-radius: 2px;
-		padding: 0.25rem 2rem;
-		width: 100%;
-		box-sizing: border-box;
-	}
+input {
+	display: inline-block;
+	appearance: none;
+	border: none;
+	margin: 0.3rem 0 0 0;
+	outline: none;
+	font-size: 1.2rem;
+	line-height: 1.35rem;
+	background: transparent;
+	color: #000;
+	position: relative;
+	border: solid 2px var(--color-background-dark);
+	border-radius: 2px;
+	padding: 0.25rem 2rem;
+	width: 100%;
+	box-sizing: border-box;
+}
 `;
 
 	@property({ type: Boolean, attribute: false })

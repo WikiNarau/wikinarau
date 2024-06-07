@@ -66,9 +66,3 @@ export class SuccessBar extends LitElement {
 }
 `;
 }
-
-declare global {
-	interface HTMLElementTagNameMap {
-		"wn-success-bar": SuccessBar;
-	}
-}

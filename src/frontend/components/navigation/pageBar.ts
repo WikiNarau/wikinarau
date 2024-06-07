@@ -85,66 +85,66 @@ export class PageBar extends LitElement {
 	}
 
 	static styles = css`
-	:host {
-		display: block;
-		margin-bottom: 1rem;
-	}
+:host {
+	display: block;
+	margin-bottom: 1rem;
+}
 
-	.border {
-		width:100%;
-		position: absolute;
-		left:0;
-		width:100%;
-		height:2px;
-		background: var(--sl-color-primary-600);
-	}
+.border {
+	width:100%;
+	position: absolute;
+	left:0;
+	width:100%;
+	height:2px;
+	background: var(--sl-color-primary-600);
+}
 
-	nav {
-		display: table;
-		width: 100%;
-	}
+nav {
+	display: table;
+	width: 100%;
+}
 
-	.left {
-		float:left;
-	}
+.left {
+	float:left;
+}
 
-	.right {
-		float:right;
-	}
+.right {
+	float:right;
+}
 
-	.left > * {
-		margin-right: 12px;
-	}
+.left > * {
+	margin-right: 12px;
+}
 
-	.right > * {
-		margin-left: 12px;
-	}
+.right > * {
+	margin-left: 12px;
+}
 
-	a {
-		text-decoration: none;
-		color: var(--sl-color-primary-700);
-		display: inline-block;
-		margin: 0 1rem;
-		padding: 6px 0;
-		font-size: 1.2rem;
-	}
+a {
+	text-decoration: none;
+	color: var(--sl-color-primary-700);
+	display: inline-block;
+	margin: 0 1rem;
+	padding: 6px 0;
+	font-size: 1.2rem;
+}
 
-	a.active {
-		text-decoration: underline;
-	}
+a.active {
+	text-decoration: underline;
+}
 
-	a:first-child {
-		margin-left:0;
-	}
-	a:last-child {
-		margin-right:0;
-	}
+a:first-child {
+	margin-left:0;
+}
+a:last-child {
+	margin-right:0;
+}
 
-	@media only screen and (max-width: 470px) {
-		.button-text {
-			display: none;
-		}
+@media only screen and (max-width: 470px) {
+	.button-text {
+		display: none;
 	}
+}
 `;
 }
 

@@ -8,41 +8,41 @@ export class ResourcePicker extends LitElement {
 	static styles = [
 		typographicStyles,
 		css`
-	input {
-		display: inline-block;
-		appearance: none;
-		border: none;
-		margin: 0.3rem 0 0 0;
-		outline: none;
-		font-size: 1.2rem;
-		line-height: 1.35rem;
-		background: transparent;
-		color: #000;
-		position: relative;
-		border: solid 2px var(--color-background-dark);
-		border-radius: 2px;
-		padding: 0.25rem 2rem;
-		width: 100%;
-		box-sizing: border-box;
-	}
+input {
+	display: inline-block;
+	appearance: none;
+	border: none;
+	margin: 0.3rem 0 0 0;
+	outline: none;
+	font-size: 1.2rem;
+	line-height: 1.35rem;
+	background: transparent;
+	color: #000;
+	position: relative;
+	border: solid 2px var(--color-background-dark);
+	border-radius: 2px;
+	padding: 0.25rem 2rem;
+	width: 100%;
+	box-sizing: border-box;
+}
 
-	audio {
-		width: 100%;
-	}
+audio {
+	width: 100%;
+}
 
-	video {
-		width: 100%;
-		height: auto;
-		max-height: 400px;
-	}
+video {
+	width: 100%;
+	height: auto;
+	max-height: 400px;
+}
 
-	img {
-		display: block;
-		width: 100%;
-		height: auto;
-		max-height: 400px;
-		object-fit: contain;
-	}
+img {
+	display: block;
+	width: 100%;
+	height: auto;
+	max-height: 400px;
+	object-fit: contain;
+}
 `,
 	];
 

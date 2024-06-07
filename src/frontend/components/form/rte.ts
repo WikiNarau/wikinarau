@@ -9,35 +9,35 @@ export class RichTextEditor extends LitElement {
 	static styles = [
 		typographicStyles,
 		css`
-	.wrap {
-		border-radius: 0 0 var(--sl-input-border-radius-medium) var(--sl-input-border-radius-medium);
-		background-color: var(--sl-input-background-color);
-		transition: border-color 300ms, box-shadow 300ms;
-		color: var(--sl-input-color);
-	}
+.wrap {
+	border-radius: 0 0 var(--sl-input-border-radius-medium) var(--sl-input-border-radius-medium);
+	background-color: var(--sl-input-background-color);
+	transition: border-color 300ms, box-shadow 300ms;
+	color: var(--sl-input-color);
+}
 
-	.wrap:hover {
-		border-color: var(--sl-input-border-color-hover);
-	}
+.wrap:hover {
+	border-color: var(--sl-input-border-color-hover);
+}
 
-	.topBar {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 2rem;
-		background: var(--sl-input-border-color);
-	}
+.topBar {
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 2rem;
+	background: var(--sl-input-border-color);
+}
 
-	.editor {
-		flex: 1 1 auto;
-		border: none;
-		background: none;
-		box-shadow: none;
-		cursor: inherit;
-		padding: 0.5em var(--sl-input-spacing-medium);
-		font-size: var(--sl-input-font-size-medium);
-		outline: none;
-	}
+.editor {
+	flex: 1 1 auto;
+	border: none;
+	background: none;
+	box-shadow: none;
+	cursor: inherit;
+	padding: 0.5em var(--sl-input-spacing-medium);
+	font-size: var(--sl-input-font-size-medium);
+	outline: none;
+}
 `,
 	];
 
