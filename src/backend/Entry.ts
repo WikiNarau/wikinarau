@@ -119,9 +119,13 @@ export class Entry {
 	}
 
 	public renderTeaser(i: number) {
-		const [frontmatter, _content] = this.splitFrontmatterContent(this.content);
+		const [frontmatter, content] = this.splitFrontmatterContent(this.content);
 		const title = frontmatter.title;
-		return `<h3>${i + 1}. <a href="${this.uri}">${title}</a></h3>`;
+		let teaser = renderJSONListToText(JSON.parse(content)).substring(0, 256);
+		if (teaser.length >= 255) {
+			teaser += "…";
+		}
+		return `<h3>${i + 1}. <a href="${this.uri}">${title}</a></h3><p>${teaser}</p>`;
 	}
 
 	static async getByURI(
