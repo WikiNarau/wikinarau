@@ -1,4 +1,6 @@
-export interface SerializedElement {
+export type SerializedElement = ComplexSerializedElement | string;
+
+export interface ComplexSerializedElement {
 	T: string;
 	C?: SerializedElement[];
 	[key: string]: any;
@@ -10,6 +12,9 @@ export const renderJSONElement = (ele: SerializedElement): string => {
 		return "";
 	}
 
+	if (typeof ele === "string") {
+		return ele;
+	}
 	switch (ele.T) {
 		case "":
 			return ele.text;
@@ -66,6 +71,9 @@ export const renderJSONElementToText = (ele: SerializedElement): string => {
 		return "";
 	}
 
+	if (typeof ele === "string") {
+		return ele;
+	}
 	switch (ele.T) {
 		case "":
 			return ele.text;
