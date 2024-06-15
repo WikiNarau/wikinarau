@@ -17,6 +17,7 @@
 		"@lit/context": "latest",
 		"@orama/orama": "latest",
 		"@shoelace-style/shoelace": "latest",
+		"cookie-parser": "latest",
 		"express": "latest",
 		"level": "latest",
 		"lit": "latest",
@@ -26,6 +27,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "latest",
+		"@types/cookie-parser": "latest",
 		"@types/express": "latest",
 		"@types/node": "latest",
 		"@types/ws": "latest",

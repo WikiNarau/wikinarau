@@ -2,6 +2,15 @@ import fs from "node:fs/promises";
 import crypto from "node:crypto";
 import { Database } from "./Database";
 
+export interface DBResource {
+	createdAt: number;
+	name: string;
+	type: string;
+	ext: string;
+	hash: string;
+	meta: Record<string, any>;
+}
+
 export class Resource {
 	private uri: string;
 

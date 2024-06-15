@@ -7,6 +7,8 @@ import { utime } from "../common/util";
 import { randomBytes } from "node:crypto";
 import { SearchIndex } from "./Search";
 import { Entry } from "./Entry";
+import type { DBSession } from "./Session";
+import type { DBResource } from "./Resource";
 
 export interface Content {
 	uri: string;
@@ -30,15 +32,6 @@ export interface DBRevision {
 	commitMessage?: string;
 }
 
-export interface DBResource {
-	createdAt: number;
-	name: string;
-	type: string;
-	ext: string;
-	hash: string;
-	meta: Record<string, any>;
-}
-
 export class Database {
 	private readonly db: Level<string, any>;
 	private readonly dbContent: ReturnType<
@@ -50,19 +43,25 @@ export class Database {
 	private readonly dbResource: ReturnType<
 		typeof this.db.sublevel<string, DBResource>
 	>;
+	private readonly dbSession: ReturnType<
+		typeof this.db.sublevel<string, DBSession>
+	>;
 
 	private index: SearchIndex;
 
 	constructor() {
 		fs.mkdirSync("./data/", { recursive: true });
 		this.db = new Level("./data/wikinarau.db", { createIfMissing: true });
-		this.dbContent = this.db.sublevel<string, DBContent>("DBContent", {
+		this.dbContent = this.db.sublevel("DBContent", {
 			valueEncoding: "json",
 		});
-		this.dbRevision = this.db.sublevel<string, DBRevision>("DBRevision", {
+		this.dbRevision = this.db.sublevel("DBRevision", {
 			valueEncoding: "json",
 		});
-		this.dbResource = this.db.sublevel<string, DBResource>("DBResource", {
+		this.dbResource = this.db.sublevel("DBResource", {
+			valueEncoding: "json",
+		});
+		this.dbSession = this.db.sublevel("DBSession", {
 			valueEncoding: "json",
 		});
 		this.index = new SearchIndex();
@@ -128,6 +127,23 @@ export class Database {
 	async getRevision(id: string): Promise<DBRevision | null> {
 		try {
 			return await this.dbRevision.get(id);
+		} catch {
+			return null;
+		}
+	}
+
+	async getSession(id: string): Promise<DBSession | null> {
+		try {
+			return await this.dbSession.get(id);
+		} catch {
+			return null;
+		}
+	}
+
+	async setSession(id: string, data: DBSession): Promise<string | null> {
+		try {
+			await this.dbSession.put(id, data);
+			return id;
 		} catch {
 			return null;
 		}

@@ -1,12 +1,16 @@
 import http from "node:http";
-import { WebSocketServer } from "ws";
-import { Socket } from "./Socket";
-import express from "express";
 import fsp from "node:fs/promises";
+
+import { WebSocketServer } from "ws";
+import cookieParser from "cookie-parser";
+import express from "express";
+
+import { Socket } from "./Socket";
 import { Database } from "./Database";
 import { Entry } from "./Entry";
 import { Resource } from "./Resource";
 import { Config } from "./Config";
+import { Session } from "./Session";
 
 interface WebRequest {
 	verb: "GET" | "POST";
@@ -99,6 +103,7 @@ export class Server {
 			appType: "custom",
 		});
 		this.app.use(vite.middlewares);
+		this.app.use(cookieParser());
 
 		let lastTemplateLoad = (await fsp.stat("index.html")).mtime;
 		Entry.setTemplate(
@@ -121,6 +126,20 @@ export class Server {
 			}
 		};
 		this.preRequestHandler.push(reloadTemplate);
+	}
+
+	private parseCookiesRaw(req: http.IncomingMessage) {
+		const ret: Record<string, string> = {};
+		const cookies = (req.headers.cookie || "").split(";");
+		for (const cookie of cookies) {
+			const s = cookie.split("=");
+			if (s.length === 2) {
+				const key = s[0];
+				const val = decodeURIComponent(s[1]);
+				ret[key] = val;
+			}
+		}
+		return ret;
 	}
 
 	async listen() {
@@ -148,6 +167,21 @@ export class Server {
 			"/res",
 			express.static("./data/res", { maxAge: 7 * 24 * 60 * 60 * 1000 }),
 		);
+		this.app.use("/api-session", async (req, res) => {
+			try {
+				if (!req.cookies.wikinarauSession) {
+					const session = await Session.create(this);
+					res.cookie("wikinarauSession", session.id, {
+						maxAge: 900000,
+						httpOnly: true,
+					});
+				}
+				res.end("");
+			} catch (e) {
+				res.status(500).end("500 - Server Error");
+				console.error(e);
+			}
+		});
 
 		this.app.use(async (req, res) => {
 			try {
@@ -178,8 +212,14 @@ export class Server {
 		this.server = http.createServer(this.app);
 
 		const wss = new WebSocketServer({ server: this.server, path: "/api-ws" });
-		wss.on("connection", (ws) => {
-			this.webSockets.add(new Socket(this, ws));
+		wss.on("connection", async (ws, req) => {
+			const cookies = this.parseCookiesRaw(req);
+			const session = await Session.get(this, cookies.wikinarauSession || "");
+			if (session) {
+				this.webSockets.add(new Socket(this, ws, session));
+			} else {
+				throw new Error("Unknown session");
+			}
 		});
 
 		return new Promise<void>((resolve) => {
