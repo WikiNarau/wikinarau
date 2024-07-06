@@ -175,6 +175,18 @@ export class Server {
 						maxAge: 900000,
 						httpOnly: true,
 					});
+				} else {
+					const session = await Session.get(
+						this,
+						req.cookies.wikinarauSession || "",
+					);
+					if (!session) {
+						const session = await Session.create(this);
+						res.cookie("wikinarauSession", session.id, {
+							maxAge: 900000,
+							httpOnly: true,
+						});
+					}
 				}
 				res.end("");
 			} catch (e) {
@@ -218,7 +230,7 @@ export class Server {
 			if (session) {
 				this.webSockets.add(new Socket(this, ws, session));
 			} else {
-				throw new Error("Unknown session");
+				ws.close();
 			}
 		});
 

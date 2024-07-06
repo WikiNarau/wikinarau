@@ -18,6 +18,11 @@ const flushHandler = (packet: RPCPacket) => {
 				}/api-ws`,
 			);
 			ws.addEventListener("message", messageHandler);
+			ws.addEventListener("close", () => (ws = undefined));
+			ws.addEventListener("error", (e) => {
+				console.log(e);
+				ws = undefined;
+			});
 		}, 0);
 	} else if (ws.readyState === ws.OPEN) {
 		ws.send(JSON.stringify(packet));
