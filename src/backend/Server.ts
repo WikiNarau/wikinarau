@@ -8,7 +8,7 @@ import express from "express";
 import { Socket } from "./Socket";
 import { Entry } from "./Entry";
 import { Resource } from "./Resource";
-import { Config } from "./Config";
+import config from "./Config";
 import { Session } from "./Session";
 import { initDB, searchContent } from "./Database";
 
@@ -25,7 +25,6 @@ interface WebResponse {
 
 export class Server {
 	private server: http.Server | undefined;
-	public readonly config: Config = new Config();
 	private readonly app: express.Express;
 	private readonly webSockets = new Set<Socket>();
 	private readonly preRequestHandler: (() => Promise<void>)[] = [];
@@ -60,7 +59,7 @@ export class Server {
 			return <WebResponse>{
 				code: 200,
 				contentType: "text/html",
-				body: entry.renderHTML(this.config),
+				body: entry.renderHTML(),
 			};
 		} else {
 			if (uri.startsWith("/search/")) {
@@ -142,14 +141,14 @@ export class Server {
 	}
 
 	async listen() {
-		Entry.setFooter(this.config.footer);
-		if (this.config.devMode) {
+		Entry.setFooter(config.footer);
+		if (config.devMode) {
 			await this.devServer();
 		}
 		await initDB();
 		await Resource.init();
 
-		if (!this.config.devMode) {
+		if (!config.devMode) {
 			Entry.setTemplate(await fsp.readFile("./dist/index.html", "utf-8"));
 			this.app.use(
 				"/assets",
@@ -231,7 +230,7 @@ export class Server {
 		});
 
 		return new Promise<void>((resolve) => {
-			this.server?.listen(this.config.port, this.config.bindAddress, resolve);
+			this.server?.listen(config.port, config.bindAddress, resolve);
 		});
 	}
 }
