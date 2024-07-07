@@ -1,5 +1,4 @@
 import { utime } from "../common/util";
-import type { Server } from "./Server";
 
 export type PrivilegeLevel = "admin" | "moderator" | "user";
 
@@ -18,12 +17,8 @@ export class User {
 	private readonly passwordHash: string;
 	public readonly createdAt: Date;
 
-	static create(
-		server: Server,
-		email: string,
-		privilegeLevel: PrivilegeLevel,
-	): User {
-		return new User(server, {
+	static create(email: string, privilegeLevel: PrivilegeLevel): User {
+		return new User({
 			email,
 			privilegeLevel,
 			name: "",
@@ -32,10 +27,7 @@ export class User {
 		});
 	}
 
-	constructor(
-		private readonly server: Server,
-		data: DBUser,
-	) {
+	constructor(data: DBUser) {
 		this.email = data.email;
 		this.privilegeLevel = data.privilegeLevel;
 		this.name = data.name;

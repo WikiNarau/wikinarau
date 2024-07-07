@@ -1,5 +1,4 @@
 import type { RawData, WebSocket } from "ws";
-import type { Server } from "./Server";
 import { RPCPacket, RPCQueue } from "../common/RPC";
 import { Resource } from "./Resource";
 import type { Session } from "./Session";
@@ -8,15 +7,14 @@ import {
 	getRevisionHistory,
 	updateContentRevision,
 } from "./Database";
+import { closeSocket } from "./Server";
 
 export class Socket {
-	private readonly server: Server;
 	private readonly socket: WebSocket;
 	private readonly queue: RPCQueue;
 	private readonly session: Session;
 
-	constructor(server: Server, socket: WebSocket, session: Session) {
-		this.server = server;
+	constructor(socket: WebSocket, session: Session) {
 		this.socket = socket;
 		this.session = session;
 		this.queue = new RPCQueue(this.flushHandler.bind(this));
@@ -115,6 +113,6 @@ export class Socket {
 	}
 
 	close() {
-		this.server.closeSocket(this);
+		closeSocket(this);
 	}
 }

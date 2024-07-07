@@ -1,7 +1,6 @@
-import { Server } from "./Server";
 import "./DatabaseSeed";
 import config from "./Config";
+import { serverListen } from "./Server";
 
-const server = new Server();
-await server.listen();
+await serverListen();
 console.log(`WikiNarau is running on ${config.baseUri}`);
