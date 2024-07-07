@@ -6,11 +6,11 @@ import cookieParser from "cookie-parser";
 import express from "express";
 
 import { Socket } from "./Socket";
-import { Database } from "./Database";
 import { Entry } from "./Entry";
 import { Resource } from "./Resource";
 import { Config } from "./Config";
 import { Session } from "./Session";
+import { initDB, searchContent } from "./Database";
 
 interface WebRequest {
 	verb: "GET" | "POST";
@@ -29,7 +29,6 @@ export class Server {
 	private readonly app: express.Express;
 	private readonly webSockets = new Set<Socket>();
 	private readonly preRequestHandler: (() => Promise<void>)[] = [];
-	readonly db = new Database();
 
 	closeSocket(socket: Socket) {
 		this.webSockets.delete(socket);
@@ -56,7 +55,7 @@ export class Server {
 			};
 		}
 
-		const entry = await Entry.getByURI(this.db, uri, args.revision || "");
+		const entry = await Entry.getByURI(uri, args.revision || "");
 		if (entry) {
 			return <WebResponse>{
 				code: 200,
@@ -66,7 +65,7 @@ export class Server {
 		} else {
 			if (uri.startsWith("/search/")) {
 				const sword = uri.substring("/search/".length);
-				const entries = (await this.db.searchContent(sword))
+				const entries = (await searchContent(sword))
 					.map(Entry.fromContent)
 					.map((e, i) => e.renderTeaser(i));
 				const content =
@@ -147,7 +146,7 @@ export class Server {
 		if (this.config.devMode) {
 			await this.devServer();
 		}
-		await this.db.init();
+		await initDB();
 		await Resource.init();
 
 		if (!this.config.devMode) {
@@ -170,18 +169,15 @@ export class Server {
 		this.app.use("/api-session", async (req, res) => {
 			try {
 				if (!req.cookies.wikinarauSession) {
-					const session = await Session.create(this);
+					const session = await Session.create();
 					res.cookie("wikinarauSession", session.id, {
 						maxAge: 900000,
 						httpOnly: true,
 					});
 				} else {
-					const session = await Session.get(
-						this,
-						req.cookies.wikinarauSession || "",
-					);
+					const session = await Session.get(req.cookies.wikinarauSession || "");
 					if (!session) {
-						const session = await Session.create(this);
+						const session = await Session.create();
 						res.cookie("wikinarauSession", session.id, {
 							maxAge: 900000,
 							httpOnly: true,
@@ -226,7 +222,7 @@ export class Server {
 		const wss = new WebSocketServer({ server: this.server, path: "/api-ws" });
 		wss.on("connection", async (ws, req) => {
 			const cookies = this.parseCookiesRaw(req);
-			const session = await Session.get(this, cookies.wikinarauSession || "");
+			const session = await Session.get(cookies.wikinarauSession || "");
 			if (session) {
 				this.webSockets.add(new Socket(this, ws, session));
 			} else {

@@ -3,6 +3,11 @@ import type { Server } from "./Server";
 import { RPCPacket, RPCQueue } from "../common/RPC";
 import { Resource } from "./Resource";
 import type { Session } from "./Session";
+import {
+	getResources,
+	getRevisionHistory,
+	updateContentRevision,
+} from "./Database";
 
 export class Socket {
 	private readonly server: Server;
@@ -35,7 +40,7 @@ export class Socket {
 	}
 
 	async listResources(_args: unknown) {
-		return await this.server.db.getResources();
+		return await getResources();
 	}
 
 	async listRevisions(args: unknown) {
@@ -45,7 +50,7 @@ export class Socket {
 		if (!("uri" in args) || typeof args.uri !== "string") {
 			throw "Invalid uri";
 		}
-		return await this.server.db.getRevisionHistory(args.uri);
+		return await getRevisionHistory(args.uri);
 	}
 
 	async uploadResource(args: unknown) {
@@ -66,7 +71,7 @@ export class Socket {
 			throw "Invalid base64uri";
 		}
 		const binData = Buffer.from(args.data.substring(comma), "base64url");
-		return Resource.create(this.server.db, args.name, binData);
+		return Resource.create(args.name, binData);
 	}
 
 	async updateContentRevision(args: unknown) {
@@ -80,7 +85,7 @@ export class Socket {
 			throw "Invalid content";
 		}
 
-		await this.server.db.updateContentRevision(
+		await updateContentRevision(
 			args.uri,
 			args.content,
 			(args as any).commitMessage || "",

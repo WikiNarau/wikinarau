@@ -1,7 +1,7 @@
 import { randomBytes } from "crypto";
-import type { Server } from "./Server";
 import { User } from "./User";
 import { utime } from "../common/util";
+import { getSession, setSession } from "./Database";
 
 export interface DBSession {
 	userEmail: string;
@@ -11,11 +11,11 @@ export interface DBSession {
 export class Session {
 	private static idMap: Map<string, Session> = new Map();
 
-	static async create(server: Server): Promise<Session> {
+	static async create(): Promise<Session> {
 		const id = randomBytes(30).toString("base64");
 		const createdAt = new Date();
-		const ses = new Session(server, id, createdAt);
-		await server.db.setSession(id, ses.serialize());
+		const ses = new Session(id, createdAt);
+		await setSession(id, ses.serialize());
 		Session.idMap.set(id, ses);
 		return ses;
 	}
@@ -27,7 +27,7 @@ export class Session {
 		};
 	}
 
-	static async get(server: Server, id: string): Promise<Session | null> {
+	static async get(id: string): Promise<Session | null> {
 		if (!id) {
 			return null;
 		}
@@ -35,16 +35,15 @@ export class Session {
 		if (map) {
 			return map;
 		}
-		const db = await server.db.getSession(id);
+		const db = await getSession(id);
 		if (db) {
-			return new Session(server, id, new Date(db.createdAt * 1000));
+			return new Session(id, new Date(db.createdAt * 1000));
 		} else {
 			return null;
 		}
 	}
 
 	constructor(
-		private readonly server: Server,
 		public readonly id: string,
 		private readonly createdAt: Date,
 		public user?: User,

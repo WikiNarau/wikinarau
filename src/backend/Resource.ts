@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import crypto from "node:crypto";
-import { Database } from "./Database";
+import { createResource } from "./Database";
 
 export interface DBResource {
 	createdAt: number;
@@ -65,7 +65,7 @@ export class Resource {
 		}
 	}
 
-	static async create(db: Database, name: string, data: Buffer) {
+	static async create(name: string, data: Buffer) {
 		const checksum = crypto.createHash("sha512").update(data).digest("hex");
 		const pathSum = checksum.substring(0, 8);
 
@@ -76,7 +76,7 @@ export class Resource {
 		const ext = dot > 0 ? name.substring(dot + 1) : "";
 		const fileType = Resource.determineFileType(ext);
 		const fileName = dot > 0 ? name.substring(0, dot) : name;
-		const id = await db.createResource(uri, fileName, ext, checksum, fileType);
+		const id = await createResource(uri, fileName, ext, checksum, fileType);
 		return {
 			uri,
 			id,

@@ -1,4 +1,4 @@
-import type { Content, Database } from "./Database";
+import { type Content, getContent } from "./Database";
 import { renderJSONList, renderJSONListToText } from "../common/contentTypes";
 import * as toml from "smol-toml";
 import type { Config } from "./Config";
@@ -128,12 +128,8 @@ export class Entry {
 		return `<h3>${i + 1}. <a href="${this.uri}">${title}</a></h3><p>${teaser}</p>`;
 	}
 
-	static async getByURI(
-		db: Database,
-		uri: string,
-		revision = "",
-	): Promise<Entry | null> {
-		const con = await db.getContent(uri, revision);
+	static async getByURI(uri: string, revision = ""): Promise<Entry | null> {
+		const con = await getContent(uri, revision);
 		if (con) {
 			return Entry.fromContent(con);
 		} else {
