@@ -34,18 +34,13 @@ export interface DBRevision {
 
 fs.mkdirSync("./data/", { recursive: true });
 const db = new Level("./data/wikinarau.db", { createIfMissing: true });
-const dbContent = db.sublevel<string, DBContent>("DBContent", {
-	valueEncoding: "json",
-});
-const dbRevision = db.sublevel<string, DBRevision>("DBRevision", {
-	valueEncoding: "json",
-});
-const dbResource = db.sublevel<string, DBResource>("DBResource", {
-	valueEncoding: "json",
-});
-const dbSession = db.sublevel<string, DBSession>("DBSession", {
-	valueEncoding: "json",
-});
+
+const sublevel = <T>(name: string) =>
+	db.sublevel<string, T>(name, { valueEncoding: "json" });
+const dbContent = sublevel<DBContent>("DBContent");
+const dbRevision = sublevel<DBRevision>("DBRevision");
+const dbResource = sublevel<DBResource>("DBResource");
+const dbSession = sublevel<DBSession>("DBSession");
 
 const index = new SearchIndex();
 
