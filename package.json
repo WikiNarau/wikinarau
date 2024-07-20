@@ -17,9 +17,9 @@
 		"@lit/context": "latest",
 		"@orama/orama": "latest",
 		"@shoelace-style/shoelace": "latest",
+		"better-sqlite3": "latest",
 		"cookie-parser": "latest",
 		"express": "latest",
-		"level": "latest",
 		"lit": "latest",
 		"smol-toml": "latest",
 		"tsx": "latest",
@@ -27,6 +27,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "latest",
+		"@types/better-sqlite3": "latest",
 		"@types/cookie-parser": "latest",
 		"@types/express": "latest",
 		"@types/node": "latest",

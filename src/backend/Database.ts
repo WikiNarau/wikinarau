@@ -1,5 +1,5 @@
-import { Level } from "level";
 import fs from "node:fs";
+import sqlite from "better-sqlite3";
 
 import type { Revision, ServerResource } from "../common/types";
 import { dbSeed } from "./DatabaseSeed";
@@ -8,7 +8,8 @@ import { randomBytes } from "node:crypto";
 import { SearchIndex } from "./Search";
 import { Entry } from "./Entry";
 import type { DBSession } from "./Session";
-import type { DBResource } from "./Resource";
+
+export type DBID = number | bigint;
 
 export interface Content {
 	uri: string;
@@ -33,16 +34,74 @@ export interface DBRevision {
 }
 
 fs.mkdirSync("./data/", { recursive: true });
-const db = new Level("./data/wikinarau.db", { createIfMissing: true });
-
-const sublevel = <T>(name: string) =>
-	db.sublevel<string, T>(name, { valueEncoding: "json" });
-const dbContent = sublevel<DBContent>("DBContent");
-const dbRevision = sublevel<DBRevision>("DBRevision");
-const dbResource = sublevel<DBResource>("DBResource");
-const dbSession = sublevel<DBSession>("DBSession");
-
 const index = new SearchIndex();
+const db = new sqlite("./data/main.sqlite3");
+
+export const userVersion = (): number => {
+	const { user_version } = (db.pragma("user_version;") as any[])[0];
+	return user_version;
+};
+
+export const setUserVersion = (v: number) => {
+	db.pragma(`user_version = ${v};`);
+};
+
+const applyDBMigrations = () => {
+	db.pragma("journal_mode=WAL;");
+	const migrations = fs
+		.readdirSync("./src/backend/databaseMigrations/")
+		.sort(
+			(a, b) =>
+				parseInt(a.split(".").shift() || "0") -
+				parseInt(b.split(".").shift() || "0"),
+		);
+	for (const m of migrations) {
+		const newVer = parseInt(m.split(".").shift() || "0");
+		const curVer = userVersion();
+		if (curVer >= newVer) {
+			continue;
+		}
+		if (newVer !== curVer + 1) {
+			throw new Error(
+				`Can't apply migrations, expected ${curVer + 1} but got ${newVer}`,
+			);
+		}
+		const sql = fs.readFileSync(
+			`./src/backend/databaseMigrations/${m}`,
+			"utf-8",
+		);
+		db.exec(sql);
+		setUserVersion(newVer);
+	}
+};
+
+applyDBMigrations();
+const contentGetByUri = db.prepare(
+	"SELECT * from content where uri = ? LIMIT 1;",
+);
+const contentUpdate = db.prepare(
+	"UPDATE content SET lastRevision=? where uri = ?;",
+);
+const contentCreate = db.prepare(
+	"INSERT INTO content (createdAt, uri, lastRevision) VALUES (?,?,?);",
+);
+
+const revisionGetByID = db.prepare(
+	"SELECT * from revision where id = ? LIMIT 1;",
+);
+const revisionCreate = db.prepare(
+	"INSERT INTO revision (createdAt, previousRevision, content, commitMessage) values(?,?,?,?);",
+);
+
+const resourceCreate = db.prepare(
+	"INSERT INTO resource (createdAt, path, extension, hash, name, type) VALUES (?,?,?,?,?,?);",
+);
+const resourceGetAll = db.prepare("SELECT * from resource;");
+
+const sessionCreate = db.prepare(
+	"INSERT INTO session (createdAt, token) VALUES (?,?);",
+);
+const sessionGet = db.prepare("SELECT * from session WHERE token = ? LIMIT 1;");
 
 export const initDB = async () => {
 	await index.init();
@@ -52,7 +111,9 @@ export const initDB = async () => {
 		}
 	}
 	setTimeout(async () => {
-		for await (const uri of dbContent.keys()) {
+		const q = db.prepare("SELECT uri FROM content;").all() as string[];
+		console.log(q);
+		for (const uri of q) {
 			const entry = await Entry.getByURI(uri);
 			if (entry) {
 				await index.updateEntry(entry);
@@ -80,18 +141,21 @@ export const getContent = async (
 	revision = "",
 ): Promise<Content | null> => {
 	try {
-		const c = await dbContent.get(uri);
+		const c = contentGetByUri.get(uri) as DBContent;
 		let curRev = c.lastRevision;
 		if (revision) {
-			while (curRev && curRev !== revision) {
-				const r = await dbRevision.get(curRev);
+			while (curRev) {
+				if (String(curRev) === revision) {
+					break;
+				}
+				const r = revisionGetByID.get(curRev) as DBRevision;
 				curRev = r.previousRevision;
 			}
-			if (curRev !== revision) {
+			if (String(curRev) !== revision) {
 				return null;
 			}
 		}
-		const r = await dbRevision.get(curRev);
+		const r = (await revisionGetByID.get(curRev)) as DBRevision;
 		return <Content>{
 			uri,
 			lastRevision: c.lastRevision,
@@ -106,7 +170,7 @@ export const getContent = async (
 
 export const getRevision = async (id: string): Promise<DBRevision | null> => {
 	try {
-		return await dbRevision.get(id);
+		return revisionGetByID.get(id) as DBRevision;
 	} catch {
 		return null;
 	}
@@ -114,7 +178,7 @@ export const getRevision = async (id: string): Promise<DBRevision | null> => {
 
 export const getSession = async (id: string): Promise<DBSession | null> => {
 	try {
-		return await dbSession.get(id);
+		return sessionGet.get(id) as DBSession | null;
 	} catch {
 		return null;
 	}
@@ -125,7 +189,7 @@ export const setSession = async (
 	data: DBSession,
 ): Promise<string | null> => {
 	try {
-		await dbSession.put(id, data);
+		sessionCreate.run(data.createdAt, id);
 		return id;
 	} catch {
 		return null;
@@ -133,24 +197,19 @@ export const setSession = async (
 };
 
 export const getResources = async (): Promise<ServerResource[]> => {
-	const ret: ServerResource[] = [];
-	for await (const path of dbResource.keys()) {
-		const r = await dbResource.get(path);
-		ret.push({
-			...r,
-			path,
-		});
-	}
-	return ret;
+	return resourceGetAll.all() as ServerResource[];
 };
 
 export const getRevisionHistory = async (uri: string): Promise<Revision[]> => {
 	try {
-		const c = await dbContent.get(uri);
+		const c = contentGetByUri.get(uri) as DBContent;
 		let lastRevision = c.lastRevision;
 		const ret: Revision[] = [];
 		while (lastRevision) {
-			const rev = await dbRevision.get(lastRevision);
+			const rev = revisionGetByID.get(lastRevision) as DBRevision | null;
+			if (!rev) {
+				return ret;
+			}
 			ret.push({
 				id: lastRevision,
 				createdAt: rev.createdAt,
@@ -174,22 +233,16 @@ export const updateContentRevision = async (
 	commitMessage = "",
 ) => {
 	try {
-		const old = await dbContent.get(uri);
+		const old = contentGetByUri.get(uri) as DBContent;
 		const newRev = await createRevision(
 			content,
 			old.lastRevision,
 			commitMessage,
 		);
-		await dbContent.put(uri, {
-			createdAt: old.createdAt,
-			lastRevision: newRev,
-		});
+		contentUpdate.run(newRev, uri);
 	} catch {
 		const newRev = await createRevision(content, "", commitMessage);
-		await dbContent.put(uri, {
-			createdAt: utime(),
-			lastRevision: newRev,
-		});
+		contentCreate.run(utime(), uri, newRev);
 	}
 	const entry = await Entry.getByURI(uri);
 	if (entry) {
@@ -201,25 +254,9 @@ export const createRevision = async (
 	content: string,
 	previousRevision = "",
 	commitMessage = "",
-): Promise<string> => {
-	let key = newKey();
-	for (let i = 0; i < 10; i++) {
-		const rev = await getRevision(key);
-		if (!rev) {
-			break;
-		}
-		if (i > 8) {
-			throw new Error("Can't generate Revision Key");
-		}
-	}
-	const createdAt = utime();
-	await dbRevision.put(key, {
-		createdAt,
-		content,
-		previousRevision,
-		commitMessage,
-	});
-	return key;
+): Promise<DBID> => {
+	return revisionCreate.run(utime(), previousRevision, content, commitMessage)
+		.lastInsertRowid;
 };
 
 export const createResource = async (
@@ -229,14 +266,6 @@ export const createResource = async (
 	hash: string,
 	type: string,
 ) => {
-	const createdAt = utime();
-	await dbResource.put(path, {
-		createdAt,
-		meta: {},
-		name,
-		ext,
-		hash,
-		type,
-	});
+	resourceCreate.run(utime(), path, name, ext, hash, type);
 	return path;
 };

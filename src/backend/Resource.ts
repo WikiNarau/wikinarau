@@ -8,7 +8,6 @@ export interface DBResource {
 	type: string;
 	ext: string;
 	hash: string;
-	meta: Record<string, any>;
 }
 
 export class Resource {

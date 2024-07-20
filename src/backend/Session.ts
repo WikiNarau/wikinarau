@@ -4,7 +4,6 @@ import { utime } from "../common/util";
 import { getSession, setSession } from "./Database";
 
 export interface DBSession {
-	userEmail: string;
 	createdAt: number;
 }
 
@@ -22,7 +21,6 @@ export class Session {
 
 	private serialize(): DBSession {
 		return {
-			userEmail: this.user ? this.user.email : "",
 			createdAt: utime(this.createdAt),
 		};
 	}
