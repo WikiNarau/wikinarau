@@ -1,6 +1,6 @@
 import * as bcrypt from "bcrypt";
-import { createUser, getUserByEmail } from "./database/user";
-import { DBID } from "./database/db";
+import { createUser, getUserByEmail } from "./db/user";
+import { DBID } from "./db/db";
 
 export type PrivilegeLevel = "admin" | "moderator" | "user";
 

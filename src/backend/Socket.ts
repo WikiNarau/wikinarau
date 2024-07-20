@@ -2,11 +2,7 @@ import type { RawData, WebSocket } from "ws";
 import { RPCPacket, RPCQueue } from "../common/RPC";
 import { Resource } from "./Resource";
 import type { Session } from "./Session";
-import {
-	getResources,
-	getRevisionHistory,
-	updateContentRevision,
-} from "./database";
+import { getResources, getRevisionHistory, updateContentRevision } from "./db";
 import { closeSocket } from "./Server";
 import { User } from "./User";
 

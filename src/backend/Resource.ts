@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import crypto from "node:crypto";
-import { createResource } from "./database";
+import { createResource } from "./db";
 
 export interface DBResource {
 	createdAt: number;
