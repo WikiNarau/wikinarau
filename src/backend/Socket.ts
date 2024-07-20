@@ -6,7 +6,7 @@ import {
 	getResources,
 	getRevisionHistory,
 	updateContentRevision,
-} from "./Database";
+} from "./database";
 import { closeSocket } from "./Server";
 import { User } from "./User";
 

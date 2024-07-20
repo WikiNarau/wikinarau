@@ -1,4 +1,4 @@
-import { type Content, getContent } from "./Database";
+import { type Content, getContent } from "./database";
 import { renderJSONList, renderJSONListToText } from "../common/contentTypes";
 import * as toml from "smol-toml";
 import config from "./Config";

@@ -10,7 +10,7 @@ import { Entry } from "./Entry";
 import { Resource } from "./Resource";
 import config from "./Config";
 import { Session } from "./Session";
-import { initDB, searchContent } from "./Database";
+import { initDB, searchContent } from "./database";
 
 interface WebRequest {
 	verb: "GET" | "POST";

@@ -1,4 +1,4 @@
-import "./Database/seed";
+import "./database/seed";
 import config from "./Config";
 import { serverListen } from "./Server";
 

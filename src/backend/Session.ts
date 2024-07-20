@@ -1,7 +1,7 @@
 import { randomBytes } from "crypto";
 import { User } from "./User";
 import { utime } from "../common/util";
-import { getSession, setSession } from "./Database";
+import { getSession, setSession } from "./database";
 
 export interface DBSession {
 	createdAt: number;
