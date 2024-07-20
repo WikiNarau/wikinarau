@@ -8,8 +8,15 @@ const messageHandler = (v: any) => {
 	queue.handlePacket(packet);
 };
 
+let lastConnectionAttempt = 0;
 const flushHandler = (packet: RPCPacket) => {
 	if (!ws) {
+		const now = +new Date();
+		// Only try at most once every 10 seconds to establish a connection
+		if (now - lastConnectionAttempt < 10 * 1000) {
+			return false;
+		}
+		lastConnectionAttempt = now;
 		setTimeout(async () => {
 			await fetch("/api-session", { method: "POST" });
 			ws = new WebSocket(
