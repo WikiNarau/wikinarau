@@ -1,3 +1,4 @@
+export const initSQLTables = `
 CREATE TABLE IF NOT EXISTS content (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	createdAt INTEGER,
@@ -55,3 +56,4 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE INDEX user_name ON user (name);
 CREATE INDEX user_email ON user (email);
 CREATE INDEX user_privilegeLevel ON user (privilegeLevel);
+`;
