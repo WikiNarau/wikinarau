@@ -35,8 +35,6 @@ CREATE INDEX resource_type ON resource (type);
 CREATE INDEX resource_name ON resource (name);
 
 
-
-
 CREATE TABLE IF NOT EXISTS session (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	createdAt INTEGER,
@@ -44,3 +42,14 @@ CREATE TABLE IF NOT EXISTS session (
 	user INTEGER
 );
 CREATE INDEX session_token ON session (token);
+
+
+CREATE TABLE IF NOT EXISTS user (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	createdAt INTEGER,
+	privilegeLevel TEXT,
+	email TEXT,
+	passwordHash TEXT
+);
+CREATE INDEX user_email ON user (email);
+CREATE INDEX user_privilegeLevel ON user (privilegeLevel);
