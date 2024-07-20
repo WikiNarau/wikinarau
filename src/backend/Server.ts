@@ -162,14 +162,14 @@ export const serverListen = async () => {
 	);
 	app.use("/api-session", async (req, res) => {
 		try {
-			if (!req.cookies.wikinarauSession) {
+			if (!req.cookies?.wikinarauSession) {
 				const session = await Session.create();
 				res.cookie("wikinarauSession", session.id, {
 					maxAge: 900000,
 					httpOnly: true,
 				});
 			} else {
-				const session = await Session.get(req.cookies.wikinarauSession || "");
+				const session = await Session.get(req.cookies?.wikinarauSession || "");
 				if (!session) {
 					const session = await Session.create();
 					res.cookie("wikinarauSession", session.id, {
@@ -216,7 +216,7 @@ export const serverListen = async () => {
 	const wss = new WebSocketServer({ server: server, path: "/api-ws" });
 	wss.on("connection", async (ws, req) => {
 		const cookies = parseCookiesRaw(req);
-		const session = await Session.get(cookies.wikinarauSession || "");
+		const session = await Session.get(cookies?.wikinarauSession || "");
 		if (session) {
 			webSockets.add(new Socket(ws, session));
 		} else {
