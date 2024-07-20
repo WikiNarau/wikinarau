@@ -34,6 +34,9 @@ export class TopBar extends LitElement {
 			<wn-site-nav noBoxShadow></wn-site-nav>
 		</sl-drawer>
 	</aside>
+	<aside class="right">
+		<wn-user-icon></wn-user-icon>
+	</aside>
 	<section>
 		<wn-search-bar></wn-search-bar>
 	</section>

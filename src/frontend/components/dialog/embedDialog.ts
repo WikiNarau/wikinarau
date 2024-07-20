@@ -29,6 +29,7 @@ export class DialogEmbedPage extends LitElement {
 		setTimeout(() => {
 			this.open = true;
 		}, 0);
+		this.addEventListener("sl-after-hide", this.remove.bind(this));
 	}
 
 	private getEmbedCode(): string {

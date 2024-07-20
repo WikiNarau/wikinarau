@@ -12,21 +12,23 @@
 		<link rel="stylesheet" href="./src/frontend/layout.css" />
 	</head>
 	<body>
-		<header>
-			<wn-topbar />
-		</header>
-		<main>
-			<aside class="left">
-				<wn-site-nav />
-			</aside>
-			<section>
-				<!--CONTENT-->
-			</section>
-		</main>
-		<footer>
-			<div id="footer">
-				<!--FOOTER-->
-			</div>
-		</footer>
+		<wn-user-state>
+			<header>
+				<wn-topbar></wn-topbar>
+			</header>
+			<main>
+				<aside class="left">
+					<wn-site-nav></wn-site-nav>
+				</aside>
+				<section>
+					<!--CONTENT-->
+				</section>
+			</main>
+			<footer>
+				<div id="footer">
+					<!--FOOTER-->
+				</div>
+			</footer>
+		</wn-user-state>
 	</body>
 </html>

@@ -50,6 +50,31 @@ export const updateContentRevision = (
 	commitMessage = "",
 ) => queue.call("updateContentRevision", { uri, content, commitMessage });
 
+export const getSelf = () => queue.call("getSelf", {});
+
+export const loginUser = async (email: string, password: string) => {
+	const user = await queue.call("loginUser", { email, password });
+	window.dispatchEvent(
+		new CustomEvent("userChange", {
+			bubbles: true,
+			composed: true,
+			detail: user,
+		}),
+	);
+	return user;
+};
+
+export const logoutUser = async () => {
+	await queue.call("logoutUser", {});
+	window.dispatchEvent(
+		new CustomEvent("userChange", {
+			bubbles: true,
+			composed: true,
+			detail: undefined,
+		}),
+	);
+};
+
 export const uploadResource = (name: string, data: string) =>
 	queue.call("uploadResource", { name, data });
 
