@@ -99,9 +99,8 @@ export const initDB = async () => {
 		}
 	}
 	setTimeout(async () => {
-		const q = db.prepare("SELECT uri FROM content;").all() as string[];
-		console.log(q);
-		for (const uri of q) {
+		const q = db.prepare("SELECT uri FROM content;").all() as any[];
+		for (const { uri } of q) {
 			const entry = await Entry.getByURI(uri);
 			if (entry) {
 				await index.updateEntry(entry);
