@@ -73,10 +73,6 @@ export class Socket {
 	}
 
 	async loginUser(args: unknown) {
-		if (this.session.user) {
-			throw "Please logout first";
-		}
-
 		if (typeof args !== "object" || !args) {
 			throw "Invalid args";
 		}

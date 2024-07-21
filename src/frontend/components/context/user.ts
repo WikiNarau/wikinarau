@@ -64,10 +64,12 @@ export class UserStateElement extends LitElement {
 		super.connectedCallback();
 
 		setTimeout(async () => {
-			const user = await getSelf();
-			if (user) {
-				this.state = user;
-				this.saveInLocalStorage();
+			if (this.state) {
+				const user = await getSelf();
+				if (user) {
+					this.state = user;
+					this.saveInLocalStorage();
+				}
 			}
 		});
 
