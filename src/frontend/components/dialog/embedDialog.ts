@@ -1,4 +1,4 @@
-import { html, LitElement } from "lit";
+import { css, html, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 
@@ -46,7 +46,7 @@ export class DialogEmbedPage extends LitElement {
 	To embed this page somewhere else please use the following HTML Code:
 	<sl-input id="embedCode" readonly style="margin-top:1rem; width: calc(100% - 4rem); display: inline-block;" value=${embed}></sl-input><sl-copy-button style="font-size: 1.3rem; position: relative; top: 0.3rem;" from="embedCode.value"></sl-copy-button>
 	<sl-button-group slot="footer">
-		<sl-button variant="warning" @click=${this.close}>Close</sl-button>
+		<sl-button variant="warning" @click=${this.close}><sl-icon name="x-lg" slot="prefix"></sl-icon>Close</sl-button>
 	</sl-button-group>
 </sl-dialog>`;
 	}

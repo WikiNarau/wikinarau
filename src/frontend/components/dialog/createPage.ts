@@ -1,4 +1,4 @@
-import { html, LitElement } from "lit";
+import { css, html, LitElement } from "lit";
 import { customElement, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 import { titleToURI } from "../../../common/tuid";
@@ -53,8 +53,8 @@ export class DialogCreatePage extends LitElement {
 	How should this new page be called?
 	<sl-input placeholder="Title" name="title" style="margin-top:1rem;"></sl-input>
 	<sl-button-group slot="footer">
-		<sl-button variant="warning" @click=${this.close}>Close</sl-button>
-		<sl-button variant="success" @click=${this.create}>Create</sl-button>
+		<sl-button variant="warning" @click=${this.close}><sl-icon name="x-lg" slot="prefix"></sl-icon>Close</sl-button>
+		<sl-button variant="success" @click=${this.create}><sl-icon name="file-earmark-plus" slot="prefix"></sl-icon>Create</sl-button>
 	</sl-button-group>
 </sl-dialog>`;
 	}

@@ -118,4 +118,10 @@ img {
 	height: auto;
 }
 
+sl-dialog::part(close-button),
+sl-dialog::part(header) {
+	background: var(--sl-color-sky-600);
+	color: var(--sl-color-neutral-0);
+}
+
 `;
