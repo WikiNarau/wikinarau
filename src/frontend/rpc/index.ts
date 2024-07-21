@@ -64,6 +64,15 @@ export const loginUser = async (email: string, password: string) => {
 	return user;
 };
 
+export const registerUser = async (
+	name: string,
+	email: string,
+	password: string,
+) => {
+	const user = await queue.call("registerUser", { name, email, password });
+	return user;
+};
+
 export const logoutUser = async () => {
 	await queue.call("logoutUser", {});
 	window.dispatchEvent(

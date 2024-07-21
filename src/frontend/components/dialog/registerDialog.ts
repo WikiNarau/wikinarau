@@ -2,21 +2,16 @@ import { css, html, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 import type { SlInput } from "@shoelace-style/shoelace";
-import { loginUser } from "../../rpc";
-import { DialogRegister } from "./registerDialog";
+import { loginUser, registerUser } from "../../rpc";
 
-@customElement("wn-login-dialog")
-export class DialogLogin extends LitElement {
+@customElement("wn-register-dialog")
+export class DialogRegister extends LitElement {
 	static styles = [
 		typographicStyles,
 		css`
 	.errors {
 		color: #e41;
 		padding: 1rem 0 0;
-	}
-
-	.comment {
-		font-style: italic;
 	}
 `,
 	];
@@ -33,11 +28,17 @@ export class DialogLogin extends LitElement {
 	@query("sl-dialog")
 	dialog: any;
 
+	@query(`sl-input[name="username"]`)
+	username?: SlInput;
+
 	@query(`sl-input[name="email"]`)
 	email?: SlInput;
 
 	@query(`sl-input[name="password"]`)
 	password?: SlInput;
+
+	@query(`sl-input[name="passwordRepeat"]`)
+	passwordRepeat?: SlInput;
 
 	public show() {
 		if (this.dialog && this.dialog.show) {
@@ -60,15 +61,7 @@ export class DialogLogin extends LitElement {
 		this.addEventListener("sl-after-show", () => this.email?.focus());
 	}
 
-	private register(e: Event) {
-		e.preventDefault();
-		e.stopPropagation();
-
-		this.open = false;
-		document.body.append(new DialogRegister());
-	}
-
-	private async login(e: Event) {
+	private async register(e: Event) {
 		e.preventDefault();
 		e.stopPropagation();
 		if (this.form && !this.form.checkValidity()) {
@@ -76,14 +69,28 @@ export class DialogLogin extends LitElement {
 		}
 
 		try {
-			const user = await loginUser(
-				this.email?.value || "",
-				this.password?.value || "",
-			);
-			if (user) {
-				this.errorMessage = "";
-				this.close();
+			const username = this.username?.value || "";
+			const email = this.email?.value || "";
+			const password = this.password?.value || "";
+			const passwordRepeat = this.passwordRepeat?.value || "";
+
+			if (!username) {
+				throw "Please choose a username";
 			}
+			if (!email) {
+				throw "Please input your E-Mail-Adress";
+			}
+			if (!password) {
+				throw "Please choose a password";
+			}
+			if (!passwordRepeat) {
+				throw "Please confirm your password";
+			}
+			if (password !== passwordRepeat) {
+				throw "Passwords don't match, please check them";
+			}
+			await registerUser(username, email, password);
+			this.close();
 		} catch (e) {
 			this.errorMessage = String(e);
 		}
@@ -91,14 +98,16 @@ export class DialogLogin extends LitElement {
 
 	render() {
 		return html`
-	<form @submit=${this.login}>
-		<sl-dialog label="Login" ?open=${this.open}>
-			<sl-input name="email" type="email" required label="E-Mail" placeholder="Enter your E-Mail-Adress"></sl-input>
+	<form @submit=${this.register}>
+		<sl-dialog label="Register" ?open=${this.open}>
+			<sl-input name="username" type="text" required label="Username" placeholder="Enter your public username"></sl-input>
 			<br/>
-			<sl-input name="password" type="password" required label="Password" placeholder="Enter your password"></sl-input>
+			<sl-input name="email" type="email" required label="E-Mail" placeholder="Enter your E-Mail, it will be kept private"></sl-input>
+			<br/>
+			<sl-input name="password" type="password" required label="Password" placeholder="Enter a password"></sl-input>
+			<br/>
+			<sl-input name="passwordRepeat" type="password" required label="Confirm Password" placeholder="Enter your password again"></sl-input>
 			<div class="errors">${this.errorMessage}</div>
-			<div class="comment">Don't have an account?</div>
-			<sl-button variant="primary" slot="footer" style="float:left" @click=${this.register}>Join now</sl-button>
 			<sl-button-group slot="footer">
 				<sl-button variant="warning" @click=${this.close}>Cancel</sl-button>
 				<sl-button variant="success" type="submit">Login</sl-button>

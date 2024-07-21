@@ -32,6 +32,7 @@ export class UserIcon extends LitElement {
 
 	div {
 		cursor: pointer;
+		user-select: none;
 	}
 `;
 

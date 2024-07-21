@@ -24,6 +24,11 @@ export class User {
 		password: string,
 		data: Omit<DBUser, "id" | "passwordHash" | "createdAt">,
 	): User {
+		const oldUser = getUserByEmail(data.email);
+		if (oldUser) {
+			throw "E-Mail is already in use, please use a different one";
+		}
+
 		const passwordHash = bcrypt.hashSync(password, 10);
 		const id = createUser({ ...data, passwordHash });
 		const dbUser = getUserByEmail(data.email);

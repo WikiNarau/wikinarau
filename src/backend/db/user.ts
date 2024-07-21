@@ -30,6 +30,11 @@ export const createUser = (
 	data: Omit<DBUser, "id" | "createdAt">,
 ): DBID | null => {
 	try {
+		const oldUser = getUserByEmail(data.email);
+		if (oldUser) {
+			return null;
+		}
+
 		return userCreate.run(
 			utime(),
 			data.privilegeLevel,
