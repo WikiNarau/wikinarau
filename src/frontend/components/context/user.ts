@@ -8,7 +8,7 @@ export interface UserData {
 	email: string;
 	privilegeLevel: string;
 	name: string;
-	createdAt: Date;
+	createdAt: string;
 }
 
 export type UserState = UserData | null;

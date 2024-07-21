@@ -4,6 +4,7 @@ import { SearchIndex } from "../Search";
 import { dbSeed } from "./seed";
 import { Entry } from "../Entry";
 import { Revision } from "../../common/types";
+import { User } from "../User";
 
 export interface Content {
 	uri: string;
@@ -146,19 +147,24 @@ export const updateContentRevision = async (
 	uri: string,
 	content: string,
 	commitMessage = "",
+	user?: User,
 ) => {
-	try {
-		const old = contentGetByUri.get(uri) as DBContent;
+	if (!Entry.userMayCreate(uri, user)) {
+		throw "Insufficient permissions, only moderators or admins can edit this page.";
+	}
+	const old = contentGetByUri.get(uri) as DBContent | null;
+	if (old) {
 		const newRev = await createRevision(
 			content,
 			old.lastRevision,
 			commitMessage,
 		);
 		contentUpdate.run(newRev, uri);
-	} catch {
+	} else {
 		const newRev = await createRevision(content, "", commitMessage);
 		contentCreate.run(utime(), uri, newRev);
 	}
+
 	const entry = await Entry.getByURI(uri);
 	if (entry) {
 		index.updateEntry(entry);

@@ -10,7 +10,13 @@ export class UserMenu extends LitElement {
 	protected userState?: UserState;
 
 	static styles = css`
-	
+	dt, dd {
+		display: inline-block;
+	}
+
+	dt {
+		font-weight: bold;
+	}
 `;
 
 	private async logout() {
@@ -18,11 +24,15 @@ export class UserMenu extends LitElement {
 	}
 
 	render() {
-		const name = this.userState?.name || "";
 		return html`
-		<div>
+		<section>
+			<dl>
+				<dt>Name: </dt><dd>${this.userState?.name || ""}</dd><br>
+				<dt>Level: </dt><dd>${this.userState?.privilegeLevel || ""}</dd><br>
+				<dt>Member since: </dt><dd><wn-datetime timestamp=${+new Date(this.userState?.createdAt || "") / 1000}></wn-datetime></dd>
+			</dl>
 			<sl-button @click=${this.logout} label="Logout" variant="danger"><sl-icon name="box-arrow-right"></sl-icon> Logout</sl-button>
-		</div>
+		</section>
 		`;
 	}
 }

@@ -2,6 +2,7 @@ import { type Content, getContent } from "./db";
 import { renderJSONList, renderJSONListToText } from "../common/contentTypes";
 import * as toml from "smol-toml";
 import config from "./Config";
+import type { User } from "./User";
 
 export class Entry {
 	private static template = `
@@ -40,6 +41,22 @@ export class Entry {
 
 	static setFooter(footerHTML: string) {
 		this.footer = footerHTML;
+	}
+
+	static userMayCreate(uri: string, user?: User): boolean {
+		if (uri.startsWith("/wiki/")) {
+			return true;
+		}
+		if (!user) {
+			return false;
+		}
+		if (
+			user.privilegeLevel === "admin" ||
+			user.privilegeLevel === "moderator"
+		) {
+			return true;
+		}
+		return false;
 	}
 
 	public static renderTemplate(title: string, content: string, head = "") {

@@ -153,6 +153,7 @@ export class Socket {
 			args.uri,
 			args.content,
 			(args as any).commitMessage || "",
+			this.session.user,
 		);
 		return true;
 	}
