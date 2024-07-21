@@ -57,7 +57,6 @@ export class DialogLogin extends LitElement {
 			this.open = true;
 		}, 0);
 		this.addEventListener("sl-after-hide", this.remove.bind(this));
-		this.addEventListener("sl-after-show", () => this.email?.focus());
 	}
 
 	private register(e: Event) {
@@ -93,15 +92,15 @@ export class DialogLogin extends LitElement {
 		return html`
 	<form @submit=${this.login}>
 		<sl-dialog label="Login" ?open=${this.open}>
-			<sl-input name="email" type="email" required label="E-Mail" placeholder="Enter your E-Mail-Adress"></sl-input>
+			<sl-input autofocus name="email" type="email" required label="E-Mail" placeholder="Enter your E-Mail-Adress"></sl-input>
 			<br/>
 			<sl-input name="password" type="password" required label="Password" placeholder="Enter your password"></sl-input>
 			<div class="errors">${this.errorMessage}</div>
 			<div class="comment">Don't have an account?</div>
-			<sl-button variant="primary" slot="footer" style="float:left" @click=${this.register}>Join now</sl-button>
+			<sl-button variant="primary" slot="footer" style="float:left" @click=${this.register}><sl-icon name="person-add" slot="prefix"></sl-icon>Join now</sl-button>
 			<sl-button-group slot="footer">
-				<sl-button variant="warning" @click=${this.close}>Cancel</sl-button>
-				<sl-button variant="success" type="submit">Login</sl-button>
+				<sl-button variant="warning" @click=${this.close}><sl-icon name="x-lg" slot="prefix"></sl-icon>Cancel</sl-button>
+				<sl-button variant="success" type="submit"><sl-icon name="box-arrow-in-right" slot="prefix"></sl-icon>Login</sl-button>
 			</sl-button-group>
 		</sl-dialog>
 	</form>`;

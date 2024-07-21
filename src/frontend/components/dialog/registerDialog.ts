@@ -58,7 +58,6 @@ export class DialogRegister extends LitElement {
 			this.open = true;
 		}, 0);
 		this.addEventListener("sl-after-hide", this.remove.bind(this));
-		this.addEventListener("sl-after-show", () => this.email?.focus());
 	}
 
 	private async register(e: Event) {
@@ -100,7 +99,7 @@ export class DialogRegister extends LitElement {
 		return html`
 	<form @submit=${this.register}>
 		<sl-dialog label="Register" ?open=${this.open}>
-			<sl-input name="username" type="text" required label="Username" placeholder="Enter your public username"></sl-input>
+			<sl-input autofocus name="username" type="text" required label="Username" placeholder="Enter your public username"></sl-input>
 			<br/>
 			<sl-input name="email" type="email" required label="E-Mail" placeholder="Enter your E-Mail, it will be kept private"></sl-input>
 			<br/>
@@ -109,8 +108,8 @@ export class DialogRegister extends LitElement {
 			<sl-input name="passwordRepeat" type="password" required label="Confirm Password" placeholder="Enter your password again"></sl-input>
 			<div class="errors">${this.errorMessage}</div>
 			<sl-button-group slot="footer">
-				<sl-button variant="warning" @click=${this.close}>Cancel</sl-button>
-				<sl-button variant="success" type="submit">Login</sl-button>
+			<sl-button variant="warning" @click=${this.close}><sl-icon name="x-lg" slot="prefix"></sl-icon>Cancel</sl-button>
+			<sl-button variant="success" type="submit"><sl-icon name="person-add" slot="prefix"></sl-icon>Register</sl-button>
 			</sl-button-group>
 		</sl-dialog>
 	</form>`;
