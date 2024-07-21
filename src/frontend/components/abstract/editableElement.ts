@@ -47,7 +47,10 @@ export abstract class EditableElement extends LitElement {
 		for (const n of e) {
 			switch (n.nodeType) {
 				case Node.TEXT_NODE: {
-					ret.push((n.textContent || "").trim());
+					const ele = (n.textContent || "").trim();
+					if (ele) {
+						ret.push(ele);
+					}
 					break;
 				}
 				case Node.ELEMENT_NODE: {
