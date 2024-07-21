@@ -27,6 +27,39 @@ export class UserStateElement extends LitElement {
 	@provide({ context: userStateContext })
 	state: UserState = null;
 
+	private loadFromLocalStorage() {
+		try {
+			const raw = window.localStorage.getItem("wn-user-data") || "";
+			if (!raw) {
+				return;
+			}
+			const data = JSON.parse(raw);
+			if (!data.id || data["wn-ls-version"] !== 1) {
+				return;
+			}
+			this.state = data;
+		} catch {
+			this.state = null;
+			window.localStorage.removeItem("wn-user-data");
+		}
+	}
+
+	private saveInLocalStorage() {
+		if (!this.state) {
+			window.localStorage.removeItem("wn-user-data");
+		} else {
+			window.localStorage.setItem(
+				"wn-user-data",
+				JSON.stringify({ ...this.state, "wn-ls-version": 1 }),
+			);
+		}
+	}
+
+	constructor() {
+		super();
+		this.loadFromLocalStorage();
+	}
+
 	connectedCallback() {
 		super.connectedCallback();
 
@@ -34,6 +67,7 @@ export class UserStateElement extends LitElement {
 			const user = await getSelf();
 			if (user) {
 				this.state = user;
+				this.saveInLocalStorage();
 			}
 		});
 
@@ -43,6 +77,7 @@ export class UserStateElement extends LitElement {
 				throw new Error(`Invalid userChange event`);
 			}
 			this.state = e.detail ? e.detail : undefined;
+			this.saveInLocalStorage();
 		});
 	}
 
