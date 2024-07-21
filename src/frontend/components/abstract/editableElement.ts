@@ -251,6 +251,64 @@ export abstract class EditableElement extends LitElement {
 		}
 	}
 
+	protected maybeUnshuffleChildren() {
+		// Abort if there are no children
+		if (this.children.length === 0) {
+			return;
+		}
+
+		// If there is no original-order specified then the children shouldn't be shuffled.
+		if (!this.children[0].getAttribute("original-order")) {
+			return;
+		}
+
+		// First we determine how big an array we need
+		let max = 0;
+		for (const ele of this.children) {
+			max = Math.max(max, parseInt(ele.getAttribute("original-order") || "0"));
+		}
+
+		// Then we put the elements into the array, in the original-order
+		const arr = new Array(max);
+		for (const ele of this.children) {
+			const i = parseInt(ele.getAttribute("original-order") || "0");
+			arr[i] = ele;
+		}
+
+		// Then we append the elements, one by one, thereby restoring the original order
+		for (const ele of arr) {
+			this.append(ele);
+		}
+	}
+
+	protected maybeShuffleChildren() {
+		// Abort if there are no children
+		if (this.children.length === 0) {
+			return;
+		}
+		// Assume they are already shuffled if original-order is set on the first child.
+		// New children should only appear after editing, which also clears the original-order attribute.
+		if (this.children[0].getAttribute("original-order")) {
+			return;
+		}
+
+		let i = 0;
+		for (const ele of this.children) {
+			ele.setAttribute("original-order", String(i++));
+		}
+
+		// Shuffle a couple of times, this is probably overly cautious
+		for (let ii = 0; ii < 4; ii++) {
+			for (const ele of this.children) {
+				if (Math.random() < 0.5) {
+					this.prepend(ele);
+				} else {
+					this.append(ele);
+				}
+			}
+		}
+	}
+
 	disconnectedCallback() {
 		this.removeEventListener("remove", this._removeHandler);
 		this.removeEventListener("newElement", this._newElementHandler);

@@ -157,8 +157,10 @@ export class MultipleChoice extends EditableElement {
 
 	render() {
 		if (this.frameState === "edit") {
+			this.maybeUnshuffleChildren();
 			return this.renderEdit();
 		}
+		this.maybeShuffleChildren();
 		if (this.state === "check" || (this.state === "correct" && !this.result)) {
 			this.check();
 		}
