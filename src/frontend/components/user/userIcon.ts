@@ -34,6 +34,12 @@ export class UserIcon extends LitElement {
 		cursor: pointer;
 		user-select: none;
 	}
+
+	@media only screen and (max-width: 960px) {
+		.name {
+			display: none;
+		}
+	}
 `;
 
 	private openModal() {
@@ -63,7 +69,7 @@ export class UserIcon extends LitElement {
 		}
 		return html`
 		<div @click=${this.openModal}>
-			<sl-icon name="${iconName}"></sl-icon> <span class="name">${name}</span>
+			<sl-icon name="${iconName}"></sl-icon><span class="name"> ${name}</span>
 		</div>
 		<sl-drawer class="user-drawer" label="User Menu" placement="end">
 			<wn-user-menu></wn-user-menu>
