@@ -45,36 +45,6 @@ main > section {
 	box-shadow: 0px 0px 4px 1px var(--color-background-dark);
 }
 
-@media only screen and (max-width: 1280px) {
-	main > .right {
-		float: left;
-	}
-
-	main > section {
-		margin:0 0 0 auto;
-		position: relative;
-		width: calc(100% - 180px - 1rem);
-		padding:1rem 2rem;
-		background: var(--color-background-light);
-		box-shadow: 0px 0px 4px 1px var(--color-background-dark);
-	}
-}
-
-@media only screen and (max-width: 960px) {
-	main > aside {
-		display: none;
-	}
-
-	main > section {
-		margin:0 0 0 auto;
-		position: relative;
-		width: calc(100%);
-		padding:1rem 2rem;
-		background: var(--color-background-light);
-		box-shadow: 0px 0px 4px 1px var(--color-background-dark);
-	}
-}
-
 footer {
 	clear: both;
 	background: var(--color-background-dark);
@@ -94,7 +64,7 @@ footer {
 
 h1 {
 	font-size: 2.6rem;
-	margin: 0 0 0rem;
+	margin: 0;
 }
 
 h2 {
@@ -107,58 +77,11 @@ h3 {
 	margin: 0 0 1rem;
 }
 
-@media only screen and (max-width: 700px) {
-	h1 {
-		font-size: 2.2rem;
-	}
-
-	h2 {
-		font-size: 1.9rem;
-	}
-
-	h3 {
-		font-size: 1.6rem;
-	}
-
-	h4 {
-		font-size: 1.4rem;
-	}
-
-	h5 {
-		font-size: 1.2rem;
-	}
-
-	main > section {
-		padding: 1rem;
-	}
-}
-
-@media only screen and (max-width: 500px) {
-	h1 {
-		font-size: 1.6rem;
-	}
-
-	h2 {
-		font-size: 1.4rem;
-	}
-
-	h3 {
-		font-size: 1.2rem;
-	}
-
-	h4 {
-		font-size: 1.1rem;
-	}
-
-	h5, h6 {
-		font-size: 1rem;
-	}
-}
-
 h1,h2,h3 {
 	font-family: var(--header-font-family);
 	font-weight: 300;
 }
+
 h4,h5,h6,p,ul,ol {
 	font-family: var(--font-family);
 }
@@ -197,4 +120,131 @@ body.embed > main {
 body.embed > main > section {
 	box-shadow: none;
 	width: 100%;
+}
+
+@media only screen and (max-width: 1280px) {
+	main > .right {
+		float: left;
+	}
+
+	main > section {
+		margin:0 0 0 auto;
+		position: relative;
+		width: calc(100% - 180px - 1rem);
+		padding:1rem 2rem;
+		background: var(--color-background-light);
+		box-shadow: 0px 0px 4px 1px var(--color-background-dark);
+	}
+}
+
+@media only screen and (max-width: 960px) {
+	main {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	main > aside {
+		display: none;
+	}
+
+	main > section {
+		margin:0 0 0 auto;
+		position: relative;
+		width: 100%;
+		padding:1rem 1.5rem;
+		background: var(--color-background-light);
+		box-shadow: none;
+	}
+
+	:root {
+		background: var(--color-background-light);
+	}
+
+	#footer {
+		padding: 1rem 1.5rem;
+	}
+
+	footer {
+		background: var(--color-background);
+	}
+}
+
+@media only screen and (max-width: 700px) {
+	h1 {
+		font-size: 2.2rem;
+	}
+
+	h2 {
+		font-size: 1.9rem;
+	}
+
+	h3 {
+		font-size: 1.6rem;
+	}
+
+	h4 {
+		font-size: 1.4rem;
+	}
+
+	h5 {
+		font-size: 1.2rem;
+	}
+
+	#footer,
+	main > section {
+		padding: 1rem;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+	h1 {
+		font-size: 1.6rem;
+	}
+
+	h2 {
+		font-size: 1.4rem;
+	}
+
+	h3 {
+		font-size: 1.2rem;
+	}
+
+	h4 {
+		font-size: 1.1rem;
+	}
+
+	h5, h6 {
+		font-size: 1rem;
+	}
+
+	p {
+		font-size: 1rem;
+		line-height: 1.35em;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+	h1 {
+		font-size: 1.4rem;
+	}
+
+	h2 {
+		font-size: 1.3rem;
+	}
+
+	h3 {
+		font-size: 1.2rem;
+	}
+
+	h4 {
+		font-size: 1.1rem;
+	}
+
+	h5, h6 {
+		font-size: 1rem;
+	}
+
+	p {
+		line-height: 1.3em;
+	}
 }
