@@ -66,10 +66,8 @@ export class UserStateElement extends LitElement {
 		setTimeout(async () => {
 			if (this.state) {
 				const user = await getSelf();
-				if (user) {
-					this.state = user;
-					this.saveInLocalStorage();
-				}
+				this.state = user;
+				this.saveInLocalStorage();
 			}
 		});
 

@@ -1,4 +1,4 @@
-import { createUser, getUserByEmail } from "./db/user";
+import { createUser, getUserById, getUserIdByEmail } from "./db/user";
 import { DBID } from "./db/db";
 import { hashPasswordSync, comparePasswordSync } from "./db";
 
@@ -14,32 +14,60 @@ export interface DBUser {
 }
 
 export class User {
+	private static readonly idMap = new Map<DBID, User>();
 	public readonly id: DBID;
 	public readonly email: string;
 	public readonly privilegeLevel: PrivilegeLevel;
 	public name: string;
 	public readonly createdAt: Date;
 
+	static getById(id: DBID): User | undefined {
+		const old = User.idMap.get(id);
+		if (old) {
+			return old;
+		}
+		const db = getUserById(id);
+		if (db) {
+			const user = new User(db);
+			User.idMap.set(id, user);
+			return user;
+		}
+	}
+
+	static getByEmail(email: string) {
+		const id = getUserIdByEmail(email);
+		return id ? this.getById(id) : undefined;
+	}
+
 	static create(
 		password: string,
 		data: Omit<DBUser, "id" | "passwordHash" | "createdAt">,
 	): User {
-		const oldUser = getUserByEmail(data.email);
+		const oldUser = getUserIdByEmail(data.email);
 		if (oldUser) {
 			throw "E-Mail is already in use, please use a different one";
 		}
 
 		const passwordHash = hashPasswordSync(password);
 		const id = createUser({ ...data, passwordHash });
-		const dbUser = getUserByEmail(data.email);
+		if (!id) {
+			throw new Error(`Error while creating user: ${JSON.stringify(data)}`);
+		}
+		const dbUser = getUserById(id);
 		if (!dbUser) {
 			throw new Error(`Error while creating user: ${JSON.stringify(data)}`);
 		}
-		return new User(dbUser);
+		const user = new User(dbUser);
+		User.idMap.set(id, user);
+		return user;
 	}
 
 	static tryToLogin(email: string, password: string): User | null {
-		const dbUser = getUserByEmail(email);
+		const id = getUserIdByEmail(email);
+		if (!id) {
+			return null;
+		}
+		const dbUser = getUserById(id);
 		if (!dbUser) {
 			return null;
 		}

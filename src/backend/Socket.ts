@@ -86,6 +86,7 @@ export class Socket {
 		const user = User.tryToLogin(args.email, args.password);
 		if (user) {
 			this.session.user = user;
+			await this.session.save();
 		} else {
 			throw "Wrong E-Mail/Password combination";
 		}

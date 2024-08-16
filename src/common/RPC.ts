@@ -131,6 +131,7 @@ export class RPCQueue {
 						if (typeof e === "string") {
 							this.reply(call.id, undefined, e);
 						} else {
+							console.error(e);
 							this.reply(call.id, undefined, "Error");
 						}
 					}

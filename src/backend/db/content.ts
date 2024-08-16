@@ -5,7 +5,7 @@ import { dbSeed } from "./seed";
 import { Entry } from "../Entry";
 import { Revision } from "../../common/types";
 import config from "../Config";
-import { createUser, getUserByEmail } from "./user";
+import { createUser, getUserIdByEmail } from "./user";
 import { hashPasswordSync } from "./hash";
 
 export interface Content {
@@ -111,7 +111,7 @@ export const initDB = async () => {
 		}
 	});
 	if (config.seedAdminEmail && config.seedAdminPassword) {
-		const user = getUserByEmail(config.seedAdminEmail);
+		const user = getUserIdByEmail(config.seedAdminEmail);
 		if (!user) {
 			const passwordHash = hashPasswordSync(config.seedAdminPassword);
 			createUser({

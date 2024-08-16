@@ -15,12 +15,21 @@ const userCreate = db.prepare(
 	"INSERT INTO user (createdAt, privilegeLevel, name, email, passwordHash) VALUES (?,?,?,?,?);",
 );
 const userGetByEmail = db.prepare(
-	"SELECT * from user WHERE email = ? LIMIT 1;",
+	"SELECT id from user WHERE email = ? LIMIT 1;",
 );
+const userGetById = db.prepare("SELECT * from user WHERE id = ? LIMIT 1;");
 
-export const getUserByEmail = (email: string): DBUser | null => {
+export const getUserIdByEmail = (email: string): DBID => {
 	try {
-		return userGetByEmail.get(email) as DBUser | null;
+		return (userGetByEmail.get(email) as any)?.id || 0;
+	} catch {
+		return 0;
+	}
+};
+
+export const getUserById = (id: DBID): DBUser | null => {
+	try {
+		return userGetById.get(id) as DBUser | null;
 	} catch {
 		return null;
 	}
@@ -30,7 +39,7 @@ export const createUser = (
 	data: Omit<DBUser, "id" | "createdAt">,
 ): DBID | null => {
 	try {
-		const oldUser = getUserByEmail(data.email);
+		const oldUser = getUserIdByEmail(data.email);
 		if (oldUser) {
 			return null;
 		}

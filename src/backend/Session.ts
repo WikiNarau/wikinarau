@@ -2,9 +2,12 @@ import { randomBytes } from "crypto";
 import { User } from "./User";
 import { utime } from "../common/util";
 import { getSession, setSession } from "./db";
+import { DBID } from "./db/db";
+import { getUserById } from "./db/user";
 
 export interface DBSession {
 	createdAt: number;
+	user: DBID;
 }
 
 export class Session {
@@ -19,9 +22,14 @@ export class Session {
 		return ses;
 	}
 
+	public async save() {
+		await setSession(this.id, this.serialize());
+	}
+
 	private serialize(): DBSession {
 		return {
 			createdAt: utime(this.createdAt),
+			user: this.user?.id || 0,
 		};
 	}
 
@@ -35,7 +43,11 @@ export class Session {
 		}
 		const db = await getSession(id);
 		if (db) {
-			return new Session(id, new Date(db.createdAt * 1000));
+			return new Session(
+				id,
+				new Date(db.createdAt * 1000),
+				User.getById(db.user),
+			);
 		} else {
 			return null;
 		}

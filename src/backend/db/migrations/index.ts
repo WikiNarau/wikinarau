@@ -37,12 +37,10 @@ CREATE INDEX resource_name ON resource (name);
 
 
 CREATE TABLE IF NOT EXISTS session (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	token TEXT PRIMARY KEY,
 	createdAt INTEGER,
-	token TEXT,
 	user INTEGER
 );
-CREATE INDEX session_token ON session (token);
 
 
 CREATE TABLE IF NOT EXISTS user (
