@@ -4,7 +4,9 @@ import { SearchIndex } from "../Search";
 import { dbSeed } from "./seed";
 import { Entry } from "../Entry";
 import { Revision } from "../../common/types";
-import { User } from "../User";
+import config from "../Config";
+import { createUser, getUserByEmail } from "./user";
+import { hashPasswordSync } from "./hash";
 
 export interface Content {
 	uri: string;
@@ -108,6 +110,19 @@ export const initDB = async () => {
 			}
 		}
 	});
+	if (config.seedAdminEmail && config.seedAdminPassword) {
+		const user = getUserByEmail(config.seedAdminEmail);
+		if (!user) {
+			const passwordHash = hashPasswordSync(config.seedAdminPassword);
+			createUser({
+				privilegeLevel: "admin",
+				email: config.seedAdminEmail,
+				name: "Admin",
+				passwordHash,
+			});
+			console.log(`Seeding Admin user ${config.seedAdminEmail}`);
+		}
+	}
 };
 
 export const getRevision = async (id: string): Promise<DBRevision | null> => {
@@ -147,11 +162,7 @@ export const updateContentRevision = async (
 	uri: string,
 	content: string,
 	commitMessage = "",
-	user?: User,
 ) => {
-	if (!Entry.userMayCreate(uri, user)) {
-		throw "Insufficient permissions, only moderators or admins can edit this page.";
-	}
 	const old = contentGetByUri.get(uri) as DBContent | null;
 	if (old) {
 		const newRev = await createRevision(

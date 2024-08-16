@@ -1,5 +1,6 @@
 import type { RawData, WebSocket } from "ws";
 import { RPCPacket, RPCQueue } from "../common/RPC";
+import { Entry } from "./Entry";
 import { Resource } from "./Resource";
 import type { Session } from "./Session";
 import { getResources, getRevisionHistory, updateContentRevision } from "./db";
@@ -144,12 +145,14 @@ export class Socket {
 		if (!("content" in args) || typeof args.content !== "string") {
 			throw "Invalid content";
 		}
+		if (!Entry.userMayCreate(args.uri, this.session.user)) {
+			throw "Insufficient permissions, only moderators or admins can edit this page.";
+		}
 
 		await updateContentRevision(
 			args.uri,
 			args.content,
 			(args as any).commitMessage || "",
-			this.session.user,
 		);
 		return true;
 	}

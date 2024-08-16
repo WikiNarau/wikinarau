@@ -17,7 +17,7 @@
 		"@lit/context": "latest",
 		"@orama/orama": "latest",
 		"@shoelace-style/shoelace": "latest",
-		"bcrypt": "latest",
+		"dotenv": "latest",
 		"better-sqlite3": "latest",
 		"cookie-parser": "latest",
 		"express": "latest",
@@ -28,7 +28,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "latest",
-		"@types/bcrypt": "^5.0.2",
 		"@types/better-sqlite3": "latest",
 		"@types/cookie-parser": "latest",
 		"@types/express": "latest",

@@ -1,8 +1,12 @@
+import "dotenv/config";
+
 export class Config {
 	public devMode = false;
 	public port = 2600;
 	public bindAddress = "localhost";
 	public baseUri = "http://localhost:2600";
+	public seedAdminEmail = "";
+	public seedAdminPassword = "";
 
 	// This doesn't belong in Config, it should go into the DB in the long run
 	public footer = `All content is available under the Creative Commons <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">CC BY-SA 4.0 License</a>.<br/>
@@ -38,6 +42,12 @@ export class Config {
 					"Base URI's shouldn't end with a slash, please change your config!!!",
 				);
 			}
+		}
+		if (process.env.SEED_ADMIN_EMAIL) {
+			this.seedAdminEmail = process.env.SEED_ADMIN_EMAIL;
+		}
+		if (process.env.SEED_ADMIN_PASSWORD) {
+			this.seedAdminPassword = process.env.SEED_ADMIN_PASSWORD;
 		}
 	}
 

@@ -1,6 +1,6 @@
-import * as bcrypt from "bcrypt";
 import { createUser, getUserByEmail } from "./db/user";
 import { DBID } from "./db/db";
+import { hashPasswordSync, comparePasswordSync } from "./db";
 
 export type PrivilegeLevel = "admin" | "moderator" | "user";
 
@@ -29,7 +29,7 @@ export class User {
 			throw "E-Mail is already in use, please use a different one";
 		}
 
-		const passwordHash = bcrypt.hashSync(password, 10);
+		const passwordHash = hashPasswordSync(password);
 		const id = createUser({ ...data, passwordHash });
 		const dbUser = getUserByEmail(data.email);
 		if (!dbUser) {
@@ -43,7 +43,7 @@ export class User {
 		if (!dbUser) {
 			return null;
 		}
-		if (bcrypt.compareSync(password, dbUser.passwordHash)) {
+		if (comparePasswordSync(password, dbUser.passwordHash)) {
 			return new User(dbUser);
 		} else {
 			return null;
