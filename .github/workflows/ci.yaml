@@ -1,10 +1,5 @@
 name: WikiNarau CI
 
-on:
-  push:
-    branches:
-      - main
-
 env:
   HUSKY: 0
 
@@ -23,26 +18,3 @@ jobs:
         run: npm ci --save-dev
       - name: Check types
         run: npm run check
-
-  build-container:
-    runs-on: ubuntu-latest
-    name: Build docker image
-    needs: test
-    permissions:
-      contents: read
-      packages: write
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - name: 'Login to GitHub Container Registry'
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{secrets.GITHUB_TOKEN}}
-      - name: Build docker image
-        run: export DOCKER_BUILDKIT=1 && docker build -t wikinarau:${{ github.ref_name }} .
-      - name: Tag image
-        run: docker tag wikinarau:${{ github.ref_name }} ghcr.io/wikinarau/wikinarau:${{ github.ref_name }}
-      - name: Push image
-        run: docker push ghcr.io/wikinarau/wikinarau:${{ github.ref_name }}
