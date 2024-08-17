@@ -8,8 +8,10 @@ import { Resource } from "./Resource";
 import { getResources, getRevisionHistory, updateContentRevision } from "./db";
 import { closeSocket } from "./Server";
 import { User } from "./User";
+import { randomBytes } from "node:crypto";
 
 export class Socket {
+	public readonly id = randomBytes(30).toString("base64");
 	private readonly socket: WebSocket;
 	private readonly queue: RPCQueue;
 	private readonly session: Session;
@@ -37,15 +39,28 @@ export class Socket {
 
 		this.queue.setCallHandler("createLesson", this.createLesson);
 		this.queue.setCallHandler("joinLesson", this.joinLesson);
+		this.queue.setCallHandler("leaveLesson", this.leaveLesson);
 
 		socket.on("error", this.error.bind(this));
 		socket.on("close", this.close.bind(this));
 		socket.on("message", this.message.bind(this));
 	}
 
+	async call(fun: string, args: unknown): Promise<unknown> {
+		return this.queue.call(fun, args);
+	}
+
+	async leaveLesson() {
+		if (this.lesson) {
+			this.lesson.leave(this);
+			this.lesson = undefined;
+		}
+	}
+
 	async createLesson() {
 		const lesson = new Lesson();
 		this.doJoinLesson(lesson, "teacher");
+		return lesson.id;
 	}
 
 	doJoinLesson(lesson: Lesson, role: LessonRole) {

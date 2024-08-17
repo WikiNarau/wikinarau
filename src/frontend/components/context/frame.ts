@@ -7,6 +7,7 @@ import { createContext, provide } from "@lit/context";
 import { updateContentRevision } from "../../rpc";
 import { showWarning } from "../dialog/warning";
 import { isEmbed } from "../../embed";
+
 export type FrameState = "view" | "edit";
 export const frameStateContext = createContext<FrameState>("frameState");
 

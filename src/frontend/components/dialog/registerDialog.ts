@@ -2,7 +2,7 @@ import { css, html, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 import type { SlInput } from "@shoelace-style/shoelace";
-import { loginUser, registerUser } from "../../rpc";
+import { registerUser } from "../../rpc";
 
 @customElement("wn-register-dialog")
 export class DialogRegister extends LitElement {

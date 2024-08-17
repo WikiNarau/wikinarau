@@ -47,7 +47,7 @@ export class RPCQueue {
 		return this;
 	}
 
-	private flush() {
+	flush() {
 		this.flushTO = undefined;
 
 		const packet = <RPCPacket>{

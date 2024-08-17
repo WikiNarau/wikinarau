@@ -1,8 +1,8 @@
-import { css, html, LitElement } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { typographicStyles } from "../styles/typographic";
 
-@customElement("wn-embed-dialog-page")
+@customElement("wn-embed-dialog")
 export class DialogEmbedPage extends LitElement {
 	static styles = typographicStyles;
 
