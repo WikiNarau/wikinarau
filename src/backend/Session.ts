@@ -3,7 +3,6 @@ import { User } from "./User";
 import { utime } from "../common/util";
 import { getSession, setSession } from "./db";
 import { DBID } from "./db/db";
-import { getUserById } from "./db/user";
 
 export interface DBSession {
 	createdAt: number;

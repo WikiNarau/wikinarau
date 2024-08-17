@@ -1,8 +1,10 @@
 import type { RawData, WebSocket } from "ws";
+import type { Session } from "./Session";
+import { Lesson, LessonRole } from "./Lesson";
+
 import { RPCPacket, RPCQueue } from "../common/RPC";
 import { Entry } from "./Entry";
 import { Resource } from "./Resource";
-import type { Session } from "./Session";
 import { getResources, getRevisionHistory, updateContentRevision } from "./db";
 import { closeSocket } from "./Server";
 import { User } from "./User";
@@ -11,6 +13,7 @@ export class Socket {
 	private readonly socket: WebSocket;
 	private readonly queue: RPCQueue;
 	private readonly session: Session;
+	private lesson?: Lesson;
 
 	constructor(socket: WebSocket, session: Session) {
 		this.socket = socket;
@@ -18,21 +21,63 @@ export class Socket {
 		this.queue = new RPCQueue(this.flushHandler.bind(this));
 		this.queue.setCallThis(this);
 
-		this.queue.setCallHandler("getSelf", this.getSelf);
 		this.queue.setCallHandler(
 			"updateContentRevision",
 			this.updateContentRevision,
 		);
+		this.queue.setCallHandler("listRevisions", this.listRevisions);
+
 		this.queue.setCallHandler("uploadResource", this.uploadResource);
 		this.queue.setCallHandler("listResources", this.listResources);
-		this.queue.setCallHandler("listRevisions", this.listRevisions);
+
+		this.queue.setCallHandler("getSelf", this.getSelf);
 		this.queue.setCallHandler("registerUser", this.registerUser);
 		this.queue.setCallHandler("loginUser", this.loginUser);
 		this.queue.setCallHandler("logoutUser", this.logoutUser);
 
+		this.queue.setCallHandler("createLesson", this.createLesson);
+		this.queue.setCallHandler("joinLesson", this.joinLesson);
+
 		socket.on("error", this.error.bind(this));
 		socket.on("close", this.close.bind(this));
 		socket.on("message", this.message.bind(this));
+	}
+
+	async createLesson() {
+		const lesson = new Lesson();
+		this.doJoinLesson(lesson, "teacher");
+	}
+
+	doJoinLesson(lesson: Lesson, role: LessonRole) {
+		if (this.lesson) {
+			this.lesson.leave(this);
+		}
+		this.lesson = lesson;
+		lesson.join(this, role);
+	}
+
+	async joinLesson(args: unknown) {
+		if (typeof args !== "object" || !args) {
+			throw "Invalid args";
+		}
+		if (!("lesson" in args) || typeof args.lesson !== "string") {
+			throw "Invalid lesson id";
+		}
+		if (!("role" in args) || typeof args.role !== "string") {
+			throw "Invalid role";
+		}
+
+		const { role } = args;
+		if (!(role === "teacher" || role === "student")) {
+			throw "Invalid role";
+		}
+
+		const lesson = Lesson.getById(args.lesson);
+		if (!lesson) {
+			throw "Can't find lesson";
+		}
+
+		this.doJoinLesson(lesson, role);
 	}
 
 	async registerUser(args: unknown) {
