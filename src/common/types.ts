@@ -17,8 +17,7 @@ export interface Revision {
 
 export interface KeyValueEntry {
 	createdAt: number;
-	key: string;
-	value: unknown;
+	value: any;
 }
 
 export type KVKey = string;

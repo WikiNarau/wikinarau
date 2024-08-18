@@ -1,9 +1,9 @@
-import type { KVKey, KVSocket } from "../../common/types";
+import type { KeyValueEntry, KVKey, KVSocket } from "../../common/types";
 
 export type KVWatcher = (value: any) => void;
 
 const watcherMap = new Map<KVSocket, Map<KVKey, KVWatcher[]>>();
-const localMap = new Map<KVSocket, Map<KVKey, any>>();
+const localMap = new Map<KVSocket, Map<KVKey, KeyValueEntry>>();
 
 const kvTriggerWatcher = (socket: KVSocket, key: KVKey, value: any) => {
 	let socketMap = watcherMap.get(socket);
@@ -21,25 +21,42 @@ const kvTriggerWatcher = (socket: KVSocket, key: KVKey, value: any) => {
 	}
 };
 
-const kvSetRaw = (socket: KVSocket, key: KVKey, value: any) => {
+const kvSetLocal = (socket: KVSocket, key: KVKey, value: any) =>
+	localStorage.setItem(`WNKV|${socket}|${key}`, JSON.stringify(value));
+
+const kvSetRaw = (
+	socket: KVSocket,
+	key: KVKey,
+	value: any,
+	createdAt = +new Date(),
+) => {
+	if (!key) {
+		return;
+	}
+
 	let socketMap = localMap.get(socket);
 	if (!socketMap) {
 		localMap.set(socket, (socketMap = new Map()));
 	}
 
-	socketMap.set(key, value);
+	const entry = {
+		createdAt,
+		value,
+	};
+	socketMap.set(key, entry);
 	kvTriggerWatcher(socket, key, value);
+	kvSetLocal(socket, key, entry);
 };
 
 const kvGetRaw = (socket: KVSocket, key: KVKey): any =>
-	localMap.get(socket)?.get(key);
+	localMap.get(socket)?.get(key)?.value;
 
 export const kvSet = (key: KVKey, value: any) => kvSetRaw("", key, value);
 
 export const kvGet = (key: KVKey, socket: KVSocket = "") =>
 	kvGetRaw(socket, key);
 
-export const kvWatch = (cb: KVWatcher, key: KVKey, socket: KVSocket = "") => {
+export const kvWatch = (key: KVKey, cb: KVWatcher, socket: KVSocket = "") => {
 	let socketMap = watcherMap.get(socket);
 	if (!socketMap) {
 		watcherMap.set(socket, (socketMap = new Map()));
@@ -53,7 +70,7 @@ export const kvWatch = (cb: KVWatcher, key: KVKey, socket: KVSocket = "") => {
 	arr.push(cb);
 };
 
-export const kvUnwatch = (cb: KVWatcher, key: KVKey, socket: KVSocket = "") => {
+export const kvUnwatch = (key: KVKey, cb: KVWatcher, socket: KVSocket = "") => {
 	let socketMap = watcherMap.get(socket);
 	if (!socketMap) {
 		watcherMap.set(socket, (socketMap = new Map()));
@@ -68,3 +85,27 @@ export const kvUnwatch = (cb: KVWatcher, key: KVKey, socket: KVSocket = "") => {
 		arr.filter((c) => c !== cb),
 	);
 };
+
+const initLocalMap = () => {
+	for (const rawKey of Object.keys(localStorage)) {
+		const parts = rawKey.split("|");
+		if (parts.length !== 3) {
+			continue;
+		}
+		const [magic, socket, key] = parts;
+		if (magic !== "WNKV") {
+			continue;
+		}
+		const value = localStorage.getItem(rawKey);
+		if (value) {
+			try {
+				const entry = JSON.parse(value) as KeyValueEntry;
+				kvSetRaw(socket, key, entry.value, entry.createdAt);
+			} catch {
+				// Rmove invalid entries
+				localStorage.removeItem(rawKey);
+			}
+		}
+	}
+};
+initLocalMap();
