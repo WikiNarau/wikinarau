@@ -14,3 +14,12 @@ export interface Revision {
 	uri: string;
 	commitMessage?: string;
 }
+
+export interface KeyValueEntry {
+	createdAt: number;
+	key: string;
+	value: unknown;
+}
+
+export type KVKey = string;
+export type KVSocket = string;
