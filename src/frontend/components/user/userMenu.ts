@@ -3,6 +3,7 @@ import { html, css, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
 import { UserState, userStateContext } from "../context";
 import { logoutUser } from "../../rpc";
+import { KVPermissionBits } from "../../../common/types";
 
 @customElement("wn-user-menu")
 export class UserMenu extends LitElement {
@@ -24,7 +25,7 @@ export class UserMenu extends LitElement {
 		return html`
 		<section>
 			<table>
-				<tr><th>Name:</th><td><wn-kv-input label="Your Name" key="userName"></wn-kv-input></td></tr>
+				<tr><th>Name:</th><td><wn-kv-input permissions=${KVPermissionBits.Public} label="Your Name" key="userName"></wn-kv-input></td></tr>
 				<tr><th>Level:</th><td>${this.userState?.privilegeLevel || ""}</td></tr>
 				<tr><th>Member since:</th><td><wn-datetime timestamp=${+new Date(this.userState?.createdAt || "") / 1000}></wn-datetime></td></tr>
 			</table>

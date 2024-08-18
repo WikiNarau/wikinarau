@@ -10,6 +10,9 @@ export class WNKVInput extends LitElement {
 	@property({ type: String })
 	label = "";
 
+	@property({ type: Number })
+	permissions = 0;
+
 	_externalChange: () => void;
 	externalChange() {
 		this.requestUpdate();
@@ -32,7 +35,7 @@ export class WNKVInput extends LitElement {
 
 	change(e: InputEvent) {
 		const input = e.target as HTMLInputElement;
-		kvSet(this.key, input.value);
+		kvSet(this.key, input.value, this.permissions);
 	}
 
 	render() {

@@ -15,8 +15,21 @@ export interface Revision {
 	commitMessage?: string;
 }
 
+export type KVPermissions = number;
+export const KVPermissionBits = {
+	Admin: 32,
+	Public: 16,
+
+	GroupMod: 8,
+	Group: 4,
+
+	Teacher: 2,
+	Lesson: 1,
+};
+
 export interface KeyValueEntry {
 	createdAt: number;
+	permissions: KVPermissions;
 	value: any;
 }
 

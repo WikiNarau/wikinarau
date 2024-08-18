@@ -1,4 +1,10 @@
-import type { KeyValueEntry, KVKey, KVSocket } from "../../common/types";
+import { permission } from "process";
+import type {
+	KeyValueEntry,
+	KVKey,
+	KVPermissions,
+	KVSocket,
+} from "../../common/types";
 
 export type KVWatcher = (value: any) => void;
 
@@ -28,6 +34,7 @@ const kvSetRaw = (
 	socket: KVSocket,
 	key: KVKey,
 	value: any,
+	permissions: number,
 	createdAt = +new Date(),
 ) => {
 	if (!key) {
@@ -41,6 +48,7 @@ const kvSetRaw = (
 
 	const entry = {
 		createdAt,
+		permissions,
 		value,
 	};
 	socketMap.set(key, entry);
@@ -51,7 +59,8 @@ const kvSetRaw = (
 const kvGetRaw = (socket: KVSocket, key: KVKey): any =>
 	localMap.get(socket)?.get(key)?.value;
 
-export const kvSet = (key: KVKey, value: any) => kvSetRaw("", key, value);
+export const kvSet = (key: KVKey, value: any, permissions: KVPermissions) =>
+	kvSetRaw("", key, value, permissions);
 
 export const kvGet = (key: KVKey, socket: KVSocket = "") =>
 	kvGetRaw(socket, key);
@@ -100,7 +109,7 @@ const initLocalMap = () => {
 		if (value) {
 			try {
 				const entry = JSON.parse(value) as KeyValueEntry;
-				kvSetRaw(socket, key, entry.value, entry.createdAt);
+				kvSetRaw(socket, key, entry.value, entry.permissions, entry.createdAt);
 			} catch {
 				// Rmove invalid entries
 				localStorage.removeItem(rawKey);
