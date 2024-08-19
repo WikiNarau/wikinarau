@@ -1,5 +1,9 @@
 name: WikiNarau CI
 
+on:
+  push:
+  pull_request:
+
 env:
   HUSKY: 0
 
