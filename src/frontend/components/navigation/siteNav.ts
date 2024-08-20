@@ -26,7 +26,7 @@ a {
 a > sl-icon {
 	position: relative;
 	top: 2px;
-	margin-right: 4px;
+	margin-right: 0.5rem;
 }
 `,
 	];
@@ -45,15 +45,15 @@ a > sl-icon {
 	render() {
 		return html`<section class="${this.noboxshadow ? "noBoxShadow" : ""}">
 		<h6>Navigation</h6>
-		<a href="/"><sl-icon name="house"></sl-icon> Main page</a>
-		<a href="/how-to"><sl-icon name="question-lg"></sl-icon> How to</a>
-		<a href="/contact-us"><sl-icon name="chat-dots"></sl-icon> Contact us</a>
+		<a href="/"><sl-icon name="house"></sl-icon>Main page</a>
+		<a href="/how-to"><sl-icon name="question-lg"></sl-icon>How to</a>
+		<a href="/contact-us"><sl-icon name="chat-dots"></sl-icon>Contact us</a>
 	</section>
 
 	<section class="${this.noboxshadow ? "noBoxShadow" : ""}">
 		<h6>Contribute</h6>
-		<a href="/" @click=${this.createPage}><sl-icon name="file-earmark"></sl-icon> New Page</a>
-		<a href="https://github.com/WikiNarau/wikinarau"><sl-icon name="github"></sl-icon> GitHub</a>
+		<a href="/" @click=${this.createPage}><sl-icon name="file-earmark"></sl-icon>New Page</a>
+		<a href="https://github.com/WikiNarau/wikinarau"><sl-icon name="github"></sl-icon>GitHub</a>
 		<wn-dialog-create-page></wn-dialog-create-page>
 	</section>`;
 	}

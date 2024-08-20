@@ -248,3 +248,23 @@ body.embed > main > section {
 		line-height: 1.3em;
 	}
 }
+
+@media print {
+	footer,
+	wn-topbar,
+	wn-right-nav,
+	wn-site-nav {
+		display: none;
+	}
+
+	main {
+		padding: 0;
+		max-width: none;
+		width: 100%;
+	}
+
+	main > section {
+		width: 100%;
+		box-shadow: none;
+	}
+}

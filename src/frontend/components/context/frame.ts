@@ -191,5 +191,11 @@ footer {
 	box-sizing: border-box;
 	border-top: solid 1px var(--color-primary);
 }
+
+@media print {
+	wn-page-bar {
+		display: none;
+	}
+}
 `;
 }

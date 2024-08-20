@@ -46,16 +46,6 @@ export class PageBar extends LitElement {
 		);
 	}
 
-	private showEmbedLink() {
-		const dialog = document.createElement("wn-embed-dialog");
-		document.body.append(dialog);
-	}
-
-	private showLessonDialog() {
-		const dialog = document.createElement("wn-lesson-dialog");
-		document.body.append(dialog);
-	}
-
 	render() {
 		return html`
 			<nav>
@@ -65,12 +55,6 @@ export class PageBar extends LitElement {
 					}"><sl-icon name="file-text"></sl-icon><span class="button-text"> Content</span></wn-button>
 				</span>
 				<span class="right">
-					<wn-button @click=${this.showLessonDialog} class="narrow flat">
-						<sl-icon name="mortarboard" style="position: relative; top:2px;"></sl-icon><span class="button-text"> Teach</span>
-					</wn-button>
-					<wn-button @click=${this.showEmbedLink} class="narrow flat">
-						<sl-icon name="window" style="position: relative; top:2px;"></sl-icon><span class="button-text"> Embed</span>
-					</wn-button>
 					<wn-button @click=${this.switchToHistory} class="narrow flat ${
 						this.activeSection === "history" ? "active" : ""
 					}">
