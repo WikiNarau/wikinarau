@@ -17,6 +17,9 @@ export class HistoryRevision extends LitElement {
 			width: 100%;
 			border-bottom: solid 1px var(--sl-color-primary-600);
 		}
+		iframe {
+			border: none;
+		}
 		`,
 	];
 	@property({ attribute: false })
