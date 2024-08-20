@@ -117,7 +117,6 @@ export const initDB = async () => {
 			createUser({
 				privilegeLevel: "admin",
 				email: config.seedAdminEmail,
-				name: "Admin",
 				passwordHash,
 			});
 			console.log(`Seeding Admin user ${config.seedAdminEmail}`);

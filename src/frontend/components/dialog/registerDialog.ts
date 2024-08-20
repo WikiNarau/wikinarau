@@ -28,9 +28,6 @@ export class DialogRegister extends LitElement {
 	@query("sl-dialog")
 	dialog: any;
 
-	@query(`sl-input[name="username"]`)
-	username?: SlInput;
-
 	@query(`sl-input[name="email"]`)
 	email?: SlInput;
 
@@ -68,14 +65,10 @@ export class DialogRegister extends LitElement {
 		}
 
 		try {
-			const username = this.username?.value || "";
 			const email = this.email?.value || "";
 			const password = this.password?.value || "";
 			const passwordRepeat = this.passwordRepeat?.value || "";
 
-			if (!username) {
-				throw "Please choose a username";
-			}
 			if (!email) {
 				throw "Please input your E-Mail-Adress";
 			}
@@ -88,7 +81,7 @@ export class DialogRegister extends LitElement {
 			if (password !== passwordRepeat) {
 				throw "Passwords don't match, please check them";
 			}
-			await registerUser(username, email, password);
+			await registerUser(email, password);
 			this.close();
 		} catch (e) {
 			this.errorMessage = String(e);
@@ -99,8 +92,6 @@ export class DialogRegister extends LitElement {
 		return html`
 	<form @submit=${this.register}>
 		<sl-dialog label="Register" ?open=${this.open}>
-			<sl-input autofocus name="username" type="text" required label="Username" placeholder="Enter your public username"></sl-input>
-			<br/>
 			<sl-input name="email" type="email" required label="E-Mail" placeholder="Enter your E-Mail, it will be kept private"></sl-input>
 			<br/>
 			<sl-input name="password" type="password" required label="Password" placeholder="Enter a password"></sl-input>

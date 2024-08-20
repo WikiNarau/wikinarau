@@ -1,6 +1,7 @@
 export * from "./button";
 export * from "./dateTime";
 export * from "./kvInput";
+export * from "./kvText";
 export * from "./resourceList";
 export * from "./resourcePicker";
 export * from "./successBar";

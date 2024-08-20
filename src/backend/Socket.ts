@@ -103,13 +103,6 @@ export class Socket {
 			throw "Invalid args";
 		}
 		if (
-			!("name" in args) ||
-			typeof args.name !== "string" ||
-			args.name.length < 3
-		) {
-			throw "Invalid name";
-		}
-		if (
 			!("email" in args) ||
 			typeof args.email !== "string" ||
 			args.email.length < 3 ||
@@ -122,7 +115,6 @@ export class Socket {
 		}
 		const user = User.create(args.password, {
 			email: args.email,
-			name: args.name,
 			privilegeLevel: "user",
 		});
 		return user;

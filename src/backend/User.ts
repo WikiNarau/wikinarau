@@ -1,24 +1,14 @@
-import { createUser, getUserById, getUserIdByEmail } from "./db/user";
+import { createUser, DBUser, getUserById, getUserIdByEmail } from "./db/user";
 import { DBID } from "./db/db";
 import { hashPasswordSync, comparePasswordSync } from "./db";
 
 export type PrivilegeLevel = "admin" | "moderator" | "user";
-
-export interface DBUser {
-	id: DBID;
-	email: string;
-	privilegeLevel: PrivilegeLevel;
-	name: string;
-	passwordHash: string;
-	createdAt: number;
-}
 
 export class User {
 	private static readonly idMap = new Map<DBID, User>();
 	public readonly id: DBID;
 	public readonly email: string;
 	public readonly privilegeLevel: PrivilegeLevel;
-	public name: string;
 	public readonly createdAt: Date;
 
 	static getById(id: DBID): User | undefined {
@@ -82,7 +72,6 @@ export class User {
 		this.id = data.id;
 		this.email = data.email;
 		this.privilegeLevel = data.privilegeLevel;
-		this.name = data.name;
 		this.createdAt = new Date(data.createdAt * 1000);
 	}
 }

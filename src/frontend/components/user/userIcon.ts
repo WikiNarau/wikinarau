@@ -62,7 +62,9 @@ export class UserIcon extends LitElement {
 	}
 
 	render() {
-		const name = this.userState?.name || "Login";
+		const name = this.userState
+			? html`<wn-kv-text key="userName"></wn-kv-text>`
+			: html`Login`;
 		const iconName = this.userState ? "person" : "box-arrow-in-right";
 		if (!this.userState && this.drawer && this.drawer.open) {
 			this.drawer.hide();

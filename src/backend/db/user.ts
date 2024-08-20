@@ -6,13 +6,12 @@ export interface DBUser {
 	id: number | bigint;
 	createdAt: number;
 	privilegeLevel: PrivilegeLevel;
-	name: string;
 	email: string;
 	passwordHash: string;
 }
 
 const userCreate = db.prepare(
-	"INSERT INTO user (createdAt, privilegeLevel, name, email, passwordHash) VALUES (?,?,?,?,?);",
+	"INSERT INTO user (createdAt, privilegeLevel, email, passwordHash) VALUES (?,?,?,?);",
 );
 const userGetByEmail = db.prepare(
 	"SELECT id from user WHERE email = ? LIMIT 1;",
@@ -47,7 +46,6 @@ export const createUser = (
 		return userCreate.run(
 			utime(),
 			data.privilegeLevel,
-			data.name,
 			data.email,
 			data.passwordHash,
 		).lastInsertRowid;
