@@ -1,4 +1,3 @@
-import { permission } from "process";
 import type {
 	KeyValueEntry,
 	KVKey,

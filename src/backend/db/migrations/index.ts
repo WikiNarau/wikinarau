@@ -51,5 +51,17 @@ CREATE TABLE IF NOT EXISTS user (
 	passwordHash TEXT
 );
 CREATE INDEX user_email ON user (email);
-CREATE INDEX user_privilegeLevel ON user (privilegeLevel);
+
+
+CREATE TABLE IF NOT EXISTS userKVEntry (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	user INTEGER,
+	key TEXT,
+	createdAt INTEGER,
+	permissions INTEGER,
+	value TEXT
+);
+CREATE INDEX userKVEntry_createdAt ON userKVEntry (createdAt);
+CREATE INDEX userKVEntry_user ON userKVEntry (user);
+CREATE INDEX userKVEntry_user_key ON userKVEntry (user, key);
 `;
