@@ -106,18 +106,18 @@ p {
 	line-height: 1.4em;
 }
 
-body.embed > header,
-body.embed > footer,
-body.embed > main > aside {
+body.embed header,
+body.embed footer,
+body.embed main > aside {
 	display: none;
 }
 
-body.embed > main {
+body.embed main {
 	max-width: none;
 	padding: 0;
 }
 
-body.embed > main > section {
+body.embed main > section {
 	box-shadow: none;
 	width: 100%;
 }
@@ -250,10 +250,9 @@ body.embed > main > section {
 }
 
 @media print {
+	header,
 	footer,
-	wn-topbar,
-	wn-right-nav,
-	wn-site-nav {
+	main > aside {
 		display: none;
 	}
 
