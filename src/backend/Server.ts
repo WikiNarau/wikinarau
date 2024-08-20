@@ -127,7 +127,7 @@ const parseCookiesRaw = (req: http.IncomingMessage) => {
 	for (const cookie of cookies) {
 		const s = cookie.split("=");
 		if (s.length === 2) {
-			const key = s[0];
+			const key = s[0].trim();
 			const val = decodeURIComponent(s[1]);
 			ret[key] = val;
 		}
