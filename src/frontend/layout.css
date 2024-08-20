@@ -52,6 +52,7 @@ footer {
 	width: 100%;
 	display: block;
 	border-top: solid 2px var(--sl-color-primary-600);
+	border-bottom: solid 2px var(--sl-color-primary-600);
 }
 
 #footer {
