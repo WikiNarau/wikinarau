@@ -3,6 +3,7 @@ import { User } from "./User";
 import { utime } from "../common/util";
 import { getSession, setSession } from "./db";
 import { DBID } from "./db/db";
+import type { Socket } from "./Socket";
 
 export interface DBSession {
 	createdAt: number;
@@ -11,6 +12,8 @@ export interface DBSession {
 
 export class Session {
 	private static idMap: Map<string, Session> = new Map();
+	public readonly socketSet = new Set<Socket>();
+	private _user: User | undefined;
 
 	static async create(): Promise<Session> {
 		const id = randomBytes(30).toString("base64");
@@ -19,6 +22,13 @@ export class Session {
 		await setSession(id, ses.serialize());
 		Session.idMap.set(id, ses);
 		return ses;
+	}
+
+	public async forEachSocket(fun: (s: Socket) => void | Promise<void>) {
+		console.log(`forEachSocket: ${this.socketSet.size}`);
+		for (const socket of this.socketSet) {
+			await fun(socket);
+		}
 	}
 
 	public async save() {
@@ -52,9 +62,25 @@ export class Session {
 		}
 	}
 
+	public get user(): User | undefined {
+		return this._user;
+	}
+
+	public set user(user: User | undefined) {
+		if (this._user) {
+			this._user.sessionSet.delete(this);
+		}
+		this._user = user;
+		if (user) {
+			user.sessionSet.add(this);
+		}
+	}
+
 	constructor(
 		public readonly id: string,
 		private readonly createdAt: Date,
-		public user?: User,
-	) {}
+		user?: User,
+	) {
+		this.user = user;
+	}
 }

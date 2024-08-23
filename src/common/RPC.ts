@@ -31,7 +31,10 @@ export class RPCQueue {
 	private _flush: () => void;
 	private flushTO?: ReturnType<typeof setTimeout>;
 	private callThis: any;
-	private callMap = new Map<string, (v: unknown) => Promise<unknown>>();
+	private callMap = new Map<
+		string,
+		(v: unknown) => unknown | Promise<unknown>
+	>();
 
 	constructor(private flushHandler: (packet: RPCPacket) => boolean) {
 		this._flush = this.flush.bind(this);
@@ -42,7 +45,10 @@ export class RPCQueue {
 		return this;
 	}
 
-	setCallHandler(name: string, handler: (v: unknown) => Promise<unknown>) {
+	setCallHandler(
+		name: string,
+		handler: (v: unknown) => unknown | Promise<unknown>,
+	) {
 		this.callMap.set(name, handler);
 		return this;
 	}

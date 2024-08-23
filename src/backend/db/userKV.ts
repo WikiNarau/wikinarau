@@ -1,5 +1,5 @@
 import { KVPermissions } from "../../common/types";
-import { db } from "./db";
+import { db, DBID } from "./db";
 
 const kvCreate = db.prepare(
 	"INSERT INTO userKVEntry (user, key, createdAt, permissions, value) VALUES (?,?,?,?,?);",
@@ -13,8 +13,8 @@ const kvGet = db.prepare(
 const kvGetAll = db.prepare("SELECT * from userKVEntry WHERE user = ?;");
 
 export interface DBKVEntry {
-	id: number;
-	user: number;
+	id: DBID;
+	user: DBID;
 	key: string;
 
 	createdAt: number;
@@ -23,7 +23,7 @@ export interface DBKVEntry {
 }
 
 export const kvGetEntry = async (
-	user: number,
+	user: DBID,
 	key: string,
 ): Promise<DBKVEntry | null> => {
 	try {
@@ -33,7 +33,7 @@ export const kvGetEntry = async (
 	}
 };
 
-export const kvGetAllEntries = async (user: number): Promise<DBKVEntry[]> => {
+export const kvGetAllEntries = async (user: DBID): Promise<DBKVEntry[]> => {
 	try {
 		return kvGetAll.all(user) as DBKVEntry[];
 	} catch {
@@ -42,17 +42,18 @@ export const kvGetAllEntries = async (user: number): Promise<DBKVEntry[]> => {
 };
 
 export const kvSetEntry = async (
-	user: number,
+	user: DBID,
 	key: string,
 	permissions: KVPermissions,
 	value: string,
+	createdAt = +Date.now(),
 ): Promise<void> => {
 	try {
 		const old = await kvGetEntry(user, key);
 		if (old) {
-			kvUpdate.run(+Date.now(), permissions, value, old.id);
+			kvUpdate.run(createdAt, permissions, value, old.id);
 		} else {
-			kvCreate.run(user, key, +Date.now(), permissions, value);
+			kvCreate.run(user, key, createdAt, permissions, value);
 		}
 	} catch {
 		return;

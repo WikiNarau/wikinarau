@@ -5,7 +5,12 @@ import { Lesson, LessonRole } from "./Lesson";
 import { RPCPacket, RPCQueue } from "../common/RPC";
 import { Entry } from "./Entry";
 import { Resource } from "./Resource";
-import { getResources, getRevisionHistory, updateContentRevision } from "./db";
+import {
+	getResources,
+	getRevisionHistory,
+	kvSetEntry,
+	updateContentRevision,
+} from "./db";
 import { closeSocket } from "./Server";
 import { User } from "./User";
 import { randomBytes } from "node:crypto";
@@ -20,6 +25,7 @@ export class Socket {
 	constructor(socket: WebSocket, session: Session) {
 		this.socket = socket;
 		this.session = session;
+		session.socketSet.add(this);
 		this.queue = new RPCQueue(this.flushHandler.bind(this));
 		this.queue.setCallThis(this);
 
@@ -36,6 +42,8 @@ export class Socket {
 		this.queue.setCallHandler("registerUser", this.registerUser);
 		this.queue.setCallHandler("loginUser", this.loginUser);
 		this.queue.setCallHandler("logoutUser", this.logoutUser);
+
+		this.queue.setCallHandler("kvEntrySet", this.kvEntrySet);
 
 		this.queue.setCallHandler("createLesson", this.createLesson);
 		this.queue.setCallHandler("joinLesson", this.joinLesson);
@@ -55,6 +63,38 @@ export class Socket {
 			this.lesson.leave(this);
 			this.lesson = undefined;
 		}
+	}
+
+	async kvEntrySet(args: unknown) {
+		if (typeof args !== "object" || !args) {
+			throw "Invalid args";
+		}
+		if (!("key" in args) || typeof args.key !== "string") {
+			throw "Invalid key";
+		}
+		if (!("createdAt" in args) || typeof args.createdAt !== "number") {
+			throw "Invalid createdAt";
+		}
+		if (!("permissions" in args) || typeof args.permissions !== "number") {
+			throw "Invalid permission bits";
+		}
+		if (!("value" in args) || typeof args.value !== "string") {
+			throw "Invalid value";
+		}
+
+		if (this.session.user) {
+			const userId = this.session.user.id || 0;
+			await kvSetEntry(
+				userId,
+				args.key,
+				args.permissions,
+				args.value,
+				args.createdAt,
+			);
+		}
+		(this.session.user || this.session).forEachSocket((socket) => {
+			socket.call("kvEntrySet", args);
+		});
 	}
 
 	async createLesson() {
@@ -233,5 +273,6 @@ export class Socket {
 
 	close() {
 		closeSocket(this);
+		this.session.socketSet.delete(this);
 	}
 }

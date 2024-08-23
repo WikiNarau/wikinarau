@@ -1,11 +1,14 @@
 import { createUser, DBUser, getUserById, getUserIdByEmail } from "./db/user";
 import { DBID } from "./db/db";
 import { hashPasswordSync, comparePasswordSync } from "./db";
+import type { Session } from "./Session";
+import type { Socket } from "./Socket";
 
 export type PrivilegeLevel = "admin" | "moderator" | "user";
 
 export class User {
 	private static readonly idMap = new Map<DBID, User>();
+	public readonly sessionSet = new Set<Session>();
 	public readonly id: DBID;
 	public readonly email: string;
 	public readonly privilegeLevel: PrivilegeLevel;
@@ -27,6 +30,17 @@ export class User {
 	static getByEmail(email: string) {
 		const id = getUserIdByEmail(email);
 		return id ? this.getById(id) : undefined;
+	}
+
+	public async forEachSession(fun: (s: Session) => void | Promise<void>) {
+		console.log(`forEachSession: ${this.sessionSet.size}`);
+		for (const session of this.sessionSet) {
+			await fun(session);
+		}
+	}
+
+	public async forEachSocket(fun: (s: Socket) => void | Promise<void>) {
+		this.forEachSession((ses) => ses.forEachSocket(fun));
 	}
 
 	static create(

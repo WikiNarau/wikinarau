@@ -4,6 +4,7 @@ import type {
 	KVPermissions,
 	KVSocket,
 } from "../../common/types";
+import { kvEntrySet, setCallHandler } from "./queue";
 
 export type KVWatcher = (value: any) => void;
 
@@ -33,8 +34,8 @@ const kvSetRaw = (
 	socket: KVSocket,
 	key: KVKey,
 	value: any,
-	permissions: number,
-	createdAt = +new Date(),
+	permissions: KVPermissions,
+	createdAt: number,
 ) => {
 	if (!key) {
 		return;
@@ -58,8 +59,15 @@ const kvSetRaw = (
 const kvGetRaw = (socket: KVSocket, key: KVKey): any =>
 	localMap.get(socket)?.get(key)?.value;
 
-export const kvSet = (key: KVKey, value: any, permissions: KVPermissions) =>
-	kvSetRaw("", key, value, permissions);
+export const kvSet = (
+	key: KVKey,
+	value: any,
+	permissions: KVPermissions,
+	createdAt = +new Date(),
+) => {
+	kvSetRaw("", key, value, permissions, createdAt);
+	kvEntrySet(key, permissions, value, createdAt);
+};
 
 export const kvGet = (key: KVKey, socket: KVSocket = "") =>
 	kvGetRaw(socket, key);
@@ -117,3 +125,24 @@ const initLocalMap = () => {
 	}
 };
 initLocalMap();
+
+setCallHandler("kvEntrySet", (args: unknown) => {
+	if (typeof args !== "object" || !args) {
+		throw "Invalid args";
+	}
+	if (!("key" in args) || typeof args.key !== "string") {
+		throw "Invalid key";
+	}
+	if (!("createdAt" in args) || typeof args.createdAt !== "number") {
+		throw "Invalid createdAt";
+	}
+	if (!("permissions" in args) || typeof args.permissions !== "number") {
+		throw "Invalid permission bits";
+	}
+	if (!("value" in args) || typeof args.value !== "string") {
+		throw "Invalid value";
+	}
+
+	console.log(args);
+	kvSetRaw("", args.key, args.value, args.permissions, args.createdAt);
+});

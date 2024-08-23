@@ -41,7 +41,7 @@ const queue = new RPCQueue(flushHandler);
 
 export const setCallHandler = (
 	name: string,
-	handler: (v: unknown) => Promise<unknown>,
+	handler: (v: unknown) => unknown | Promise<unknown>,
 ) => queue.setCallHandler(name, handler);
 
 export const flushNow = () => queue.flush();
@@ -99,3 +99,10 @@ export const createLesson = (): Promise<string> =>
 export const joinLesson = (id: string, role = "student"): Promise<void> =>
 	queue.call("joinLesson", { lesson: id, role });
 export const leaveLesson = (): Promise<void> => queue.call("leaveLesson", {});
+
+export const kvEntrySet = (
+	key: string,
+	permissions: number,
+	value: string,
+	createdAt: number,
+) => queue.call("kvEntrySet", { key, permissions, value, createdAt });
