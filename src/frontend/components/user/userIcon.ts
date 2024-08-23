@@ -1,5 +1,5 @@
 import { consume } from "@lit/context";
-import { html, css, LitElement, PropertyValueMap } from "lit";
+import { html, css, LitElement } from "lit";
 import { customElement, query } from "lit/decorators.js";
 import { UserState, userStateContext } from "../context";
 import { DialogLogin } from "../dialog";
@@ -21,7 +21,9 @@ export class UserIcon extends LitElement {
 
 	.name {
 		font-size: 1.2rem;
-		vertical-align: middle;
+		line-height: 1.35em;
+		vertical-align: bottom;
+		margin-left: 0.25rem;
 	}
 
 	sl-icon {
@@ -63,7 +65,7 @@ export class UserIcon extends LitElement {
 
 	render() {
 		const name = this.userState
-			? html`<wn-kv-text key="userName"></wn-kv-text>`
+			? html`<wn-kv-text key="userName" placeholder="Anonymous"></wn-kv-text>`
 			: html`Login`;
 		const iconName = this.userState ? "person" : "box-arrow-in-right";
 		if (!this.userState && this.drawer && this.drawer.open) {
@@ -71,7 +73,7 @@ export class UserIcon extends LitElement {
 		}
 		return html`
 		<div @click=${this.openModal}>
-			<sl-icon name="${iconName}"></sl-icon><span class="name"> ${name}</span>
+			<sl-icon name="${iconName}"></sl-icon><span class="name">${name}</span>
 		</div>
 		<sl-drawer class="user-drawer" label="User Menu" placement="end">
 			<wn-user-menu></wn-user-menu>

@@ -123,6 +123,10 @@ body.embed main > section {
 	width: 100%;
 }
 
+iframe {
+    border: none;
+}
+
 @media only screen and (max-width: 1280px) {
 	main > .right {
 		float: left;

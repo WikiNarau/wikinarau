@@ -92,7 +92,7 @@ export class DialogRegister extends LitElement {
 		return html`
 	<form @submit=${this.register}>
 		<sl-dialog label="Register" ?open=${this.open}>
-			<sl-input name="email" type="email" required label="E-Mail" placeholder="Enter your E-Mail, it will be kept private"></sl-input>
+			<sl-input autofocus name="email" type="email" required label="E-Mail" placeholder="Enter your E-Mail, it will be kept private"></sl-input>
 			<br/>
 			<sl-input name="password" type="password" required label="Password" placeholder="Enter a password"></sl-input>
 			<br/>

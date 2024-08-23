@@ -3,6 +3,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import type { Revision } from "../../../common/types";
 import { updateContentRevision } from "../../rpc";
 import { typographicStyles } from "../styles";
+import { showDialog } from "../dialog/dialog";
 
 @customElement("wn-history-revision")
 export class HistoryRevision extends LitElement {
@@ -20,24 +21,40 @@ export class HistoryRevision extends LitElement {
 		iframe {
 			border: none;
 		}
+		sl-icon-button {
+			font-size: 1.4rem;
+		}
+
 		`,
 	];
 	@property({ attribute: false })
 	revision?: Revision;
 
-	@state()
-	state: "" | "preview" | "viewCode" = "";
-
 	preview() {
-		this.state = "preview";
+		if (this.revision) {
+			const createdAt = new Date(this.revision.createdAt * 1000);
+			const iframeUri =
+				this.revision.uri +
+				"?embed=true&revision=" +
+				encodeURIComponent(this.revision.id);
+			showDialog(
+				`Preview of Version ${this.revision.id} from ${createdAt.toLocaleString()}`,
+				`<iframe loading="lazy" style="display: block; width: 100%; min-height: 80vh; box-sizing: border-box;" src="${iframeUri}"></iframe>`,
+			);
+		}
 	}
 
 	viewCode() {
-		this.state = "viewCode";
-	}
-
-	reset() {
-		this.state = "";
+		if (this.revision) {
+			const dialog = showDialog(
+				`Code for ${this.revision.id}`,
+				`<sl-textarea readonly rows=24></sl-textarea>`,
+			);
+			const textarea = dialog.querySelector("sl-textarea");
+			if (textarea) {
+				textarea.value = this.revision.content;
+			}
+		}
 	}
 
 	async revert() {
@@ -57,11 +74,6 @@ export class HistoryRevision extends LitElement {
 		if (!this.revision) {
 			return html`<h1>Error</h1>`;
 		}
-		const createdAt = new Date(this.revision.createdAt * 1000);
-		const iframeUri =
-			this.revision.uri +
-			"?embed=true&revision=" +
-			encodeURIComponent(this.revision.id);
 		return html`
 		<div class="wrap">
 			<div style="display: inline-block; padding: 0.35rem 0 0;">
@@ -74,22 +86,10 @@ export class HistoryRevision extends LitElement {
 					: null
 			}
 			<div style="float: right;">
-				<sl-icon-button @click=${this.preview} style="font-size:1.4rem;" name="eye" label="Preview"></sl-icon-button>
-				<sl-icon-button @click=${this.viewCode} style="font-size:1.4rem;" name="code" label="View code"></sl-icon-button>
-				<sl-icon-button @click=${this.revert} style="font-size:1.4rem;" name="arrow-counterclockwise" label="Revert to this version"></sl-icon-button>
+				<sl-icon-button @click=${this.preview} name="eye" label="Preview"></sl-icon-button>
+				<sl-icon-button @click=${this.viewCode} name="code" label="View code"></sl-icon-button>
+				<sl-icon-button @click=${this.revert} name="arrow-counterclockwise" label="Revert to this version"></sl-icon-button>
 			</div>
-			<sl-dialog @sl-hide=${this.reset} ?open=${
-				this.state === "viewCode"
-			} label="Code for ${this.revision.id}" style="--width: 50vw;">
-				<sl-textarea readonly rows=24 value=${this.revision.content}></sl-textarea>
-			</sl-dialog>
-			<sl-dialog @sl-hide=${this.reset} ?open=${
-				this.state === "preview"
-			} label="Preview of Version ${
-				this.revision.id
-			} from ${createdAt.toLocaleString()}" style="--width: 50vw;">
-				<iframe loading="lazy" style="display: block; width: 100%; min-height: 80vh; box-sizing: border-box;" src="${iframeUri}"></iframe>
-			</sl-dialog>
 		</div>
 		`;
 	}
