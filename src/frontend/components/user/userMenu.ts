@@ -25,8 +25,8 @@ export class UserMenu extends LitElement {
 		return html`
 		<section>
 			<table>
-				<tr><th>Name:</th><td><wn-kv-input permissions=${KVPermissionBits.Public} label="Your Name" key="userName"></wn-kv-input></td></tr>
-				<tr><th>Level:</th><td>${this.userState?.privilegeLevel || ""}</td></tr>
+				<tr><th>Name:</th><td><wn-kv-input permissions=${KVPermissionBits.Public} label="Anonymous" key="userName"></wn-kv-input></td></tr>
+				<tr><th>Type:</th><td>${this.userState?.privilegeLevel || ""}</td></tr>
 				<tr><th>Member since:</th><td><wn-datetime timestamp=${+new Date(this.userState?.createdAt || "") / 1000}></wn-datetime></td></tr>
 			</table>
 			<sl-button @click=${this.logout} label="Logout" variant="danger"><sl-icon name="box-arrow-right"></sl-icon> Logout</sl-button>

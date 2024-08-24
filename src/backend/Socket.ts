@@ -179,21 +179,17 @@ export class Socket {
 		if (user) {
 			this.session.user = user;
 			await this.session.save();
+			return user.serialize();
 		} else {
 			throw "Wrong E-Mail/Password combination";
 		}
-		return user;
 	}
 
-	async getSelf(_args: unknown) {
-		if (this.session.user) {
-			return this.session.user;
-		} else {
-			return null;
-		}
+	async getSelf() {
+		return this.session.user?.serialize();
 	}
 
-	async listResources(_args: unknown) {
+	async listResources() {
 		return await getResources();
 	}
 

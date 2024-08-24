@@ -14,6 +14,15 @@ export class User {
 	public readonly privilegeLevel: PrivilegeLevel;
 	public readonly createdAt: Date;
 
+	serialize() {
+		return {
+			id: this.id,
+			privilegeLevel: this.privilegeLevel,
+			createdAt: this.createdAt,
+			email: this.email,
+		};
+	}
+
 	static getById(id: DBID): User | undefined {
 		const old = User.idMap.get(id);
 		if (old) {
