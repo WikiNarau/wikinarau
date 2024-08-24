@@ -22,13 +22,13 @@ const setLesson = async (args: unknown) => {
 		}
 		lessonState = newLessonState;
 		document.dispatchEvent(new CustomEvent("lessonStateChange", {}));
-		console.log(lessonState);
 	} else {
 		if (lessonState) {
 			lessonState = null;
 			document.dispatchEvent(new CustomEvent("lessonStateChange", {}));
 		}
 	}
+	2;
 };
 setCallHandler("setLesson", setLesson);
 

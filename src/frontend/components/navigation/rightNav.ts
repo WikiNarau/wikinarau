@@ -57,6 +57,7 @@ a > sl-icon {
 		<a @click=${this.showLessonDialog} href=""><sl-icon name="mortarboard"></sl-icon>Teach</a>
 		<a @click=${this.showEmbedLink} href=""><sl-icon name="window"></sl-icon>Embed</a>
 		<a @click=${this.showPrintDialog} href=""><sl-icon name="printer"></sl-icon>Print</a>
-	</section>`;
+</section>
+<wn-lesson-panel></wn-lesson-panel>`;
 	}
 }

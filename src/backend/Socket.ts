@@ -8,6 +8,7 @@ import { Resource } from "./Resource";
 import {
 	getResources,
 	getRevisionHistory,
+	kvGetAllEntries,
 	kvSetEntry,
 	updateContentRevision,
 } from "./db";
@@ -44,6 +45,7 @@ export class Socket {
 		this.queue.setCallHandler("logoutUser", this.logoutUser);
 
 		this.queue.setCallHandler("kvEntrySet", this.kvEntrySet);
+		this.queue.setCallHandler("kvEntryGetAll", this.kvEntryGetAll);
 
 		this.queue.setCallHandler("createLesson", this.createLesson);
 		this.queue.setCallHandler("joinLesson", this.joinLesson);
@@ -52,6 +54,8 @@ export class Socket {
 		socket.on("error", this.error.bind(this));
 		socket.on("close", this.close.bind(this));
 		socket.on("message", this.message.bind(this));
+
+		this.call("setSocketID", this.id);
 	}
 
 	async call(fun: string, args: unknown): Promise<unknown> {
@@ -95,6 +99,25 @@ export class Socket {
 		(this.session.user || this.session).forEachSocket((socket) => {
 			socket.call("kvEntrySet", args);
 		});
+	}
+
+	async kvEntryGetAll(args: unknown) {
+		if (typeof args !== "object" || !args) {
+			throw "Invalid args";
+		}
+		if (!("createdAt" in args) || typeof args.createdAt !== "number") {
+			throw "Invalid createdAt";
+		}
+
+		if (this.session.user) {
+			const entries = await kvGetAllEntries(this.session.user.id);
+			for (const row of entries) {
+				console.log(row);
+				this.session.user.forEachSocket((socket) => {
+					socket.call("kvEntrySet", row);
+				});
+			}
+		}
 	}
 
 	async createLesson() {

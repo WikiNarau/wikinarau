@@ -3,10 +3,9 @@ import type { Revision, ServerResource } from "../../common/types";
 
 let ws: WebSocket | undefined;
 
-const messageHandler = (v: any) => {
-	const packet = JSON.parse(v.data);
-	queue.handlePacket(packet);
-};
+const messageHandler = (v: any) => queue.handlePacket(JSON.parse(v.data));
+
+export let socketID = "";
 
 let lastConnectionAttempt = 0;
 const flushHandler = (packet: RPCPacket) => {
@@ -25,10 +24,14 @@ const flushHandler = (packet: RPCPacket) => {
 				}/api-ws`,
 			);
 			ws.addEventListener("message", messageHandler);
-			ws.addEventListener("close", () => (ws = undefined));
+			ws.addEventListener("close", () => {
+				ws = undefined;
+				socketID = "";
+			});
 			ws.addEventListener("error", (e) => {
 				console.log(e);
 				ws = undefined;
+				socketID = "";
 			});
 		}, 0);
 	} else if (ws.readyState === ws.OPEN) {
@@ -43,6 +46,12 @@ export const setCallHandler = (
 	name: string,
 	handler: (v: unknown) => unknown | Promise<unknown>,
 ) => queue.setCallHandler(name, handler);
+
+setCallHandler("setSocketID", (args: unknown) => {
+	if (typeof args === "string") {
+		socketID = args;
+	}
+});
 
 export const flushNow = () => queue.flush();
 
@@ -59,6 +68,9 @@ export const updateContentRevision = (
 
 export const getSelf = () => queue.call("getSelf", {});
 
+export const kvEntryGetAll = () =>
+	queue.call("kvEntryGetAll", { createdAt: 0 });
+
 export const loginUser = async (email: string, password: string) => {
 	const user = await queue.call("loginUser", { email, password });
 	window.dispatchEvent(
@@ -68,6 +80,7 @@ export const loginUser = async (email: string, password: string) => {
 			detail: user,
 		}),
 	);
+	await kvEntryGetAll();
 	return user;
 };
 
@@ -76,6 +89,7 @@ export const registerUser = async (email: string, password: string) =>
 
 export const logoutUser = async () => {
 	await queue.call("logoutUser", {});
+	localStorage.clear();
 	window.dispatchEvent(
 		new CustomEvent("userChange", {
 			bubbles: true,

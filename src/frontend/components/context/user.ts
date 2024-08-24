@@ -45,9 +45,7 @@ export class UserStateElement extends LitElement {
 	}
 
 	private saveInLocalStorage() {
-		if (!this.state) {
-			window.localStorage.removeItem("wn-user-data");
-		} else {
+		if (this.state) {
 			window.localStorage.setItem(
 				"wn-user-data",
 				JSON.stringify({ ...this.state, "wn-ls-version": 1 }),

@@ -11,8 +11,6 @@ export class Lesson {
 	public readonly createdAt = new Date();
 
 	static getById(id: string): Lesson | undefined {
-		console.log(Lesson.idMap);
-		console.log(id);
 		return Lesson.idMap.get(id);
 	}
 

@@ -4,7 +4,7 @@ import type {
 	KVPermissions,
 	KVSocket,
 } from "../../common/types";
-import { kvEntrySet, setCallHandler } from "./queue";
+import { kvEntrySet, setCallHandler, socketID } from "./queue";
 
 export type KVWatcher = (value: any) => void;
 
@@ -24,6 +24,9 @@ const kvTriggerWatcher = (socket: KVSocket, key: KVKey, value: any) => {
 			console.error("Exception thrown in watcher for ${socket}:${key}");
 			console.error(e);
 		}
+	}
+	if (!socket && socketID) {
+		kvTriggerWatcher(socketID, key, value);
 	}
 };
 
@@ -56,8 +59,13 @@ const kvSetRaw = (
 	kvSetLocal(socket, key, entry);
 };
 
-const kvGetRaw = (socket: KVSocket, key: KVKey): any =>
-	localMap.get(socket)?.get(key)?.value;
+const kvGetRaw = (socket: KVSocket, key: KVKey): any => {
+	if (socket === socketID) {
+		return kvGetRaw("", key);
+	} else {
+		return localMap.get(socket)?.get(key)?.value;
+	}
+};
 
 export const kvSet = (
 	key: KVKey,
