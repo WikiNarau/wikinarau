@@ -9,7 +9,8 @@ export class Config {
 	public seedAdminPassword = "";
 
 	// This doesn't belong in Config, it should go into the DB in the long run
-	public footer = `All content is available under the Creative Commons <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">CC BY-SA 4.0 License</a>.<br/>
+	public footer =
+		`All content is available under the Creative Commons <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">CC BY-SA 4.0 License</a>.<br/>
 	By using this site, you agree to the <a href="/terms-of-use">Terms of Use</a> and <a href="/privacy">Privacy Policy</a>.`;
 
 	private checkEnvVars() {
