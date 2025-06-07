@@ -3,7 +3,7 @@ WORKDIR /app
 RUN apk --no-cache add curl
 
 COPY . .
-RUN npm ci && npm run build && npm ci --production
+RUN npm ci && npm run build && npm prune --production
 CMD [ "npm", "start" ]
 
 EXPOSE 2600
