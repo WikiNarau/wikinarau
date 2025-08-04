@@ -16,8 +16,8 @@
 	-moz-osx-font-smoothing: grayscale;
 
 	--font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-	--header-font-family: Avenir, Montserrat, Corbel, "URW Gothic",
-		source-sans-pro, sans-serif;
+	--header-font-family:
+		Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro, sans-serif;
 
 	--color-text: #242424;
 	--color-background: #eee;
